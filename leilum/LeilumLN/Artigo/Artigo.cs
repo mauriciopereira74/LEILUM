@@ -2,7 +2,7 @@
 
 
 
-namespace Leilum.Artigo {
+namespace Leilum.LeilumLN.Artigo {
 
     public class Artigo{
         private int id_artigo;
