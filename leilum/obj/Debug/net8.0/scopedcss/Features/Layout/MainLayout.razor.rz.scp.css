@@ -1,0 +1,15 @@
+.header-content[b-rmwfmauosw] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Adjust the padding as needed */
+}
+
+.header-content img[b-rmwfmauosw] {
+    max-height: 50px; /* Adjust the max-height as needed */
+}
+
+.logout[b-rmwfmauosw] {
+    order: 999; /* Adjust the order number as needed to move the logout button to the bottom */
+    margin-top: auto; /* Use margin-top:auto to push the logout button to the bottom */
+}

@@ -1,0 +1,97 @@
+/* _content/leilum/Features/auth/Auth.razor.rz.scp.css */
+/* Auth.razor.css */
+.container[b-lhzfuq4orp] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.main[b-lhzfuq4orp] {
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.logo-container[b-lhzfuq4orp] {
+    margin-bottom: 20px; /* Add spacing between the logo and other elements */
+    text-align: center; /* Center the logo horizontally */
+    background-color: #555;
+}
+
+h3[b-lhzfuq4orp] {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.or-divider[b-lhzfuq4orp] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.or-divider[b-lhzfuq4orp]::before,
+.or-divider[b-lhzfuq4orp]::after {
+    content: "";
+    flex-grow: 1;
+    height: 1px;
+    background-color: #ccc;
+    margin: 0 10px;
+}
+
+.or-text[b-lhzfuq4orp] {
+    padding: 0 10px;
+    color: #555;
+}
+
+div[b-lhzfuq4orp] {
+    margin-bottom: 15px;
+}
+
+label[b-lhzfuq4orp] {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[b-lhzfuq4orp] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button[b-lhzfuq4orp] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover[b-lhzfuq4orp] {
+    background-color: #0056b3;
+}
+/* _content/leilum/Features/Layout/MainLayout.razor.rz.scp.css */
+.header-content[b-rmwfmauosw] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Adjust the padding as needed */
+}
+
+.header-content img[b-rmwfmauosw] {
+    max-height: 50px; /* Adjust the max-height as needed */
+}
+
+.logout[b-rmwfmauosw] {
+    order: 999; /* Adjust the order number as needed to move the logout button to the bottom */
+    margin-top: auto; /* Use margin-top:auto to push the logout button to the bottom */
+}

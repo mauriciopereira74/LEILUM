@@ -1,0 +1,59 @@
+@layout LoginLayout
+@page "/l"
+@using leilum.Data
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div class="main">
+        <!-- Add space for the logo here -->
+        <div class="logo-container">
+            <!-- Insert your logo image tag or component here -->
+            <img src="/images/logo.png" alt="Logo">
+        </div>
+
+        <h3>Login</h3>
+
+        <div>
+            <label for="email">Email:</label>
+            <input id="email" @bind="email" />
+        </div>
+
+        <div>
+            <label for="password">Password:</label>
+            <input id="password" type="password" @bind="password" />
+        </div>
+
+        <button @onclick="HandleLogin">Login</button>
+
+        <div class="or-divider">
+            <span class="or-text">or</span>
+        </div>
+
+        <button @onclick="HandleCreate" style="margin-top: 5px;">Signup</button>
+    </div>
+</div>
+
+@code {
+    private string  email;
+    private string password;
+
+    private void HandleLogin()
+    {
+        // Add your login logic here
+        // For simplicity, we'll just print the credentials to the console
+        Console.WriteLine($"Email: {email}, Password: {password}");
+    }
+
+    private void HandleCreate()
+    {
+        // Add your login logic here
+        // For simplicity, we'll just print the credentials to the console
+        Console.WriteLine($"Email: {email}, Password: {password}");
+    }
+}
+
+@code {
+    // Import the CSS file
+    private string cssFile = "Auth.razor.css";
+}
+
