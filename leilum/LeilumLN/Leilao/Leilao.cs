@@ -3,7 +3,7 @@
 
 
 
-namespace Leilum.Leilao{
+namespace Leilum.LeilumLN.Leilao{
 
     public class Leilao{
 

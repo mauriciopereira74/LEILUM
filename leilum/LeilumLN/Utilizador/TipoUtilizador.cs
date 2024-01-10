@@ -2,7 +2,7 @@
 
 
 
-namespace Leilum.Utilizador{
+namespace Leilum.LeilumLN.Utilizador{
 
     public class TipoUtilizador{
 

@@ -2,7 +2,7 @@
 
 
 
-namespace Leilum.Categoria{
+namespace Leilum.LeilumLN.Categoria{
 
     public class Regra{
         private int id_regra;

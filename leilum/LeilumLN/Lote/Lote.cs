@@ -2,7 +2,7 @@
 
 
 
-namespace Leilum.Lote{
+namespace Leilum.LeilumLN.Lote{
 
     public class Lote{
 
