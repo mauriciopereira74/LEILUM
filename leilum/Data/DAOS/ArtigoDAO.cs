@@ -8,10 +8,11 @@ namespace Leilum.Data.DAOS
 
         public static ArtigoDAO getInstance()
         {
-            if(this.singleton == null)
+            if(singleton == null)
             {
-                this.singleton = new ArtigoDAO();
+                singleton = new ArtigoDAO();
             }
+            return singleton;
         }
 
         
