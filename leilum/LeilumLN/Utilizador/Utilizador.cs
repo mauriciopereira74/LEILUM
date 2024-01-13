@@ -5,12 +5,7 @@
 namespace Leilum.LeilumLN.Utilizador{
 
     public class Utilizador{
-
-<<<<<<< Updated upstream
-        private string email;
-        private string password;
-        private int id_tipoUtilizador;
-=======
+        
         private string email { get; set; }
         private string password { get; set; }
         private int idTipoUtilizador { get; set; }
@@ -108,6 +103,5 @@ namespace Leilum.LeilumLN.Utilizador{
         {
             return new Utilizador(email,password,idTipoUtilizador,fotoPerfil,contribuinte,nome,morada,nacionalidade,contacto,dataNascimento,metodoPagamento,iban);
         }
->>>>>>> Stashed changes
     }
 }

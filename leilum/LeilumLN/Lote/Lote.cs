@@ -11,9 +11,6 @@ namespace Leilum.LeilumLN.Lote{
         private int id_comprador;
         private int id_avaliador;
         private string imgPath;
-        
-<<<<<<< Updated upstream
-=======
 
         public Lote(int idLote, int idComitente, int idComprador, int idAvaliador, string imgPath){
             this.id_lote = idLote;
@@ -69,6 +66,5 @@ namespace Leilum.LeilumLN.Lote{
             Lote result = new Lote(id_lote,id_comitente,id_comprador,id_avaliador,imgPath);
             return result;
         }
->>>>>>> Stashed changes
     }
 }

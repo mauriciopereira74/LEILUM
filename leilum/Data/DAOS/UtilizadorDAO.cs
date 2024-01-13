@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 using Dapper;
 using System.Data.SqlClient;
 using Leilum.LeilumLN.Utilizador;
@@ -48,7 +46,8 @@ namespace Leilum.Data.DAOS
                                 DateOnly dataNascimento = new DateOnly(aux.Year, aux.Month, aux.Day);
                                 int metodoPagamento = Convert.ToInt32(reader["MetodoPagamento"]);
                                 string? iban = Convert.ToString(reader["Iban"]);
-                                result = new Utilizador(email, password, tipoUtilizador, contribuinte, nome, morada,
+                                string imgPath = Convert.ToString(reader["FotoPerfilPath"]);
+                                result = new Utilizador(email, password, tipoUtilizador, imgPath, contribuinte, nome, morada,
                                     nacionalidade, contacto, dataNascimento, metodoPagamento, iban);
                             }
                         }
@@ -67,8 +66,8 @@ namespace Leilum.Data.DAOS
         
             string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador) VALUES ('" +
                                 value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador() + "');";
-            string sql_cmdInfoUser = "INSERT INTO Utilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, idUtilizador) VALUES ('" +
-                                     value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador() + "');";
+            string sql_cmdInfoUser = "INSERT INTO InfoUtilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, idUtilizador, FotoPerfilPath) VALUES ('" +
+                                     value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador() + "','" + value.getFotoPerfil() + "');";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -233,4 +232,3 @@ namespace Leilum.Data.DAOS
         }
     }
 }
->>>>>>> Stashed changes

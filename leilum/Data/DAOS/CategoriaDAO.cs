@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 using Dapper;
 using System.Data.SqlClient;
 using Leilum.LeilumLN.Categoria;
@@ -200,4 +199,4 @@ namespace Leilum.Data.DAOS
         }
     }
 }
->>>>>>> Stashed changes
+

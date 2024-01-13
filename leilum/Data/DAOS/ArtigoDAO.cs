@@ -1,4 +1,6 @@
-
+using Leilum.LeilumLN.Artigo;
+using Dapper;
+using System.Data.SqlClient;
 
 namespace Leilum.Data.DAOS
 {
@@ -8,17 +10,11 @@ namespace Leilum.Data.DAOS
 
         public static ArtigoDAO getInstance()
         {
-            if(this.singleton == null)
+            if (singleton == null)
             {
-<<<<<<< Updated upstream
-                this.singleton = new ArtigoDAO();
-            }
-        }
-
-        
-=======
                 singleton = new ArtigoDAO();
             }
+
             return singleton;
         }
 
@@ -34,30 +30,33 @@ namespace Leilum.Data.DAOS
                     Artigo aux = con.QueryFirst<Artigo>(sql_cmd);
                     result = aux;
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return result;
         }
 
         public void put(int key, Artigo value)
         {
             string sql_cmd = "INSERT INTO Artigo (idArtigo, Designacao, Caracteristicas, Descricao, idLote) VALUES '" +
-                                value.getId_Artigo() + "','" + value.getDesignacao() + "','" + value.getCaracteristicas() + "','" +
-                                value.getDescricao() + "','" + value.getLoteId() + "');";
-            try 
+                             value.getId_Artigo() + "','" + value.getDesignacao() + "','" + value.getCaracteristicas() +
+                             "','" +
+                             value.getDescricao() + "','" + value.getLoteId() + "');";
+            try
             {
-                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
                     }
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
@@ -67,21 +66,22 @@ namespace Leilum.Data.DAOS
         {
             Artigo? artigo = get(key);
             string sql_cmd = $"DELETE FROM LEILUM.Artigo Where idArtigo = {key}";
-            try 
+            try
             {
-                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return artigo;
         }
 
@@ -89,25 +89,26 @@ namespace Leilum.Data.DAOS
         {
             ICollection<int> keys = new HashSet<int>();
             string sql_cmd = "SELECT idArtigo FROM Artigo";
-            try 
+            try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
                     {
                         conn.Open();
                         IEnumerable<int> aux = conn.Query<int>(sql_cmd);
-                        foreach(int key in aux)
+                        foreach (int key in aux)
                         {
                             keys.Add(key);
                         }
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return keys;
         }
 
@@ -115,25 +116,26 @@ namespace Leilum.Data.DAOS
         {
             ICollection<Artigo> artigos = new HashSet<Artigo>();
             string sql_cmd = "SELECT * FROM Artigo";
-            try 
+            try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
                     {
                         conn.Open();
                         IEnumerable<Artigo> aux = conn.Query<Artigo>(sql_cmd);
-                        foreach(Artigo artigo in aux)
+                        foreach (Artigo artigo in aux)
                         {
                             artigos.Add(artigo);
                         }
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return artigos;
         }
 
@@ -143,14 +145,14 @@ namespace Leilum.Data.DAOS
             string sql_cmd = "SELECT COUNT(*) FROM Artigo";
             try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
                     {
                         conn.Open();
-                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            if(reader.Read())
+                            if (reader.Read())
                             {
                                 size = reader.GetInt32(0);
                             }
@@ -162,6 +164,7 @@ namespace Leilum.Data.DAOS
             {
                 throw new Exception(e.Message);
             }
+
             return size;
         }
 
@@ -176,25 +179,26 @@ namespace Leilum.Data.DAOS
             string sql_cmd = $"SELECT * FROM Artigo Where idArtigo = {idArtigo}";
             try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
                     {
                         conn.Open();
-                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            if(reader.Read())
+                            if (reader.Read())
                             {
                                 result = true;
                             }
                         }
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return result;
         }
 
@@ -202,6 +206,6 @@ namespace Leilum.Data.DAOS
         {
             return this.constainsKey(value.getId_Artigo());
         }
->>>>>>> Stashed changes
     }
 }
+    
