@@ -25,6 +25,57 @@ namespace Leilum.Data
         }        
         
         // Utilizadores
+
+       public bool existsEmail(string email)
+        {
+            return this.utilizadorDAO.existsEmail(email);
+        }
+
+        public bool existsNIF(int nif)
+        {
+            return this.utilizadorDAO.existsNIF(nif);
+        }
+
+        public bool existsUtilizador(int nif)
+        {
+            return this.utilizadorDAO.containsNif(nif);
+        }
+
+        public bool existsUtilizador(Utilizador utilizador)
+        {
+            return this.utilizadorDAO.containsValue(utilizador);
+        }
+
+        public Utilizador getUtilizador(int nif)
+        {
+            return this.utilizadorDAO.getByNif(nif);
+        }
+
+         public Utilizador getUtilizadorWithEmail(string email)
+        {
+            return this.utilizadorDAO.getUtilizadorWithEmail(email);
+        }
+
+        public void addUtilizador(Utilizador utilizador)
+        {
+            this.utilizadorDAO.put(utilizador.getContribuinte(), utilizador);
+        }
+
+        public void removeUtilizador(int nif)
+        {
+            this.utilizadorDAO.remove(nif);
+        }
+
+        public void removeUtilizador(string email)
+        {
+            this.utilizadorDAO.remove(this.utilizadorDAO.getUtilizadorWithEmail(email).getContribuinte());
+        }
+
+        public ICollection<Utilizador> getAllUtilizadores()
+        {
+            return this.utilizadorDAO.values();
+        }
+
         
         //Verifica Email
         

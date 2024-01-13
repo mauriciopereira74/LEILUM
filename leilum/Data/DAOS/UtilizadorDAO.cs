@@ -17,7 +17,7 @@ namespace Leilum.Data.DAOS
             return singleton;
         }
 
-        public static Utilizador? get(int Email)
+        public Utilizador getUtilizadorWithEmail(string Email)
         {
             Utilizador? result = null;
             string sql_cmd = "SELECT * FROM Utilizador" + 
@@ -61,7 +61,27 @@ namespace Leilum.Data.DAOS
             return result;
         }
 
-        public void put(string key, Utilizador value)
+        public Utilizador getByNif(int nif)
+        {
+            Utilizador? utilizador = null;
+            string s_cmd = $"SELECT * FROM dbo.Utilizador where contribuinte = '{nif}'";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    Utilizador aux = con.QueryFirst<Utilizador>(s_cmd);
+                    utilizador = aux;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new DAOException(e.Message);
+            }
+            return utilizador;
+        }
+
+        public void put(int key, Utilizador value)
         {
         
             string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador) VALUES ('" +
@@ -90,10 +110,10 @@ namespace Leilum.Data.DAOS
             }
         }
 
-        public Utilizador? remove(int key)
+        public Utilizador? remove(int nif)
         {
-            Utilizador? Utilizador = get(key);
-            string sql_cmd = $"DELETE FROM Utilizador Where Email = {key}";
+            Utilizador? Utilizador = getByNif(nif);
+            string sql_cmd = $"DELETE FROM Utilizador Where Email = {Utilizador.getEmail()}";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -197,7 +217,7 @@ namespace Leilum.Data.DAOS
             return this.size() == 0;
         }
 
-        public bool constainsKey(string emailUtilizador)
+        public bool existsEmail(string emailUtilizador)
         {
             bool result = false;
             string sql_cmd = $"SELECT * FROM Utilizador Where Email = {emailUtilizador}";
@@ -226,9 +246,57 @@ namespace Leilum.Data.DAOS
             return result;
         }
 
+        public bool containsNif(int nif)
+        {
+            bool result = false;
+            string s_cmd = "SELECT * FROM dbo.Utilizador WHERE contribuinte = " + nif;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using (SqlCommand cmd = new SqlCommand(s_cmd, con))
+                    {
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw new DAOException("Erro no containsKey do UtilizadorDAO");
+            }
+            return result;
+        }
+
         public bool containsValue(Utilizador value)
         {
-            return this.constainsKey(value.getEmail());
+            return containsNif(value.getContribuinte());
+        }
+
+        public bool existsNIF(int nif)
+        {
+            bool result = false;
+            string s_cmd = $"SELECT * FROM dbo.Utilizador where nif = '{nif}'";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    IEnumerable<Utilizador> aux = con.Query<Utilizador>(s_cmd);
+                    result = aux.Count() == 1;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new DAOException(e.Message);
+            }
+            return result;
         }
     }
 }

@@ -1,6 +1,5 @@
 @layout LoginLayout
 @page "/l"
-@using leilum.Data
 @inject NavigationManager NavigationManager
 
 <div class="container">
@@ -39,16 +38,34 @@
 
     private void HandleLogin()
     {
-        // Add your login logic here
-        // For simplicity, we'll just print the credentials to the console
-        Console.WriteLine($"Email: {email}, Password: {password}");
+       ILeilumLN ef = new LeilumLNFacade();
+        if (ef.existsEmail(email)) // utilizador existe?
+        {
+            Utilizador user = ef.getUtilizadorWithEmail(email);
+            if (user.getPassword().Equals(password)) // a palavra passe é correcta?
+            {
+                //CurrentUser.setCurrentUser(user); // serve para as outras páginas saberem quem é que está na sessão
+
+            }
+            else
+            {
+                //popupRef.Show("A palavra passe é incorrecta.", "Password inválida", "35%", "35%");
+            }
+        }
+        else
+        {
+            //....
+        }
     }
 
     private void HandleCreate()
     {
-        // Add your login logic here
-        // For simplicity, we'll just print the credentials to the console
-        Console.WriteLine($"Email: {email}, Password: {password}");
+        ILeilumLN ef = new LeilumLNFacade();
+        if(!ef.existsEmail(email)){
+            Utilizador user = new Utilizador(email,password,0);
+            ef.adicionaConta(user);
+        }
+        
     }
 }
 
