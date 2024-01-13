@@ -9,6 +9,9 @@ namespace Leilum.Data
         private CategoriaDAO categoriaDAO;
         private RegraDAO regraDAO;
         private UtilizadorDAO utilizadorDAO;
+        private LeilaoDAO leilaoDao;
+        private LoteDAO loteDao;
+        private LicitacaoDAO licitacaoDao;
 
         public LeilumDLFacade()
         {
@@ -16,7 +19,51 @@ namespace Leilum.Data
             this.categoriaDAO = CategoriaDAO.getInstance();
             this.regraDAO = RegraDAO.getInstance();
             this.utilizadorDAO = UtilizadorDAO.getInstance();
+            this.leilaoDao = LeilaoDAO.getInstance();
+            this.loteDao = LoteDAO.getInstance();
+            this.licitacaoDao = LicitacaoDAO.getInstance();
         }        
-
+        
+        // Utilizadores
+        
+        //Verifica Email
+        
+        //Verifica Password
+        
+        // Get Utilizador
+        
+        // Regista Utilizador
+        
+        // Atualiza perfil utilizador
+        
+        // Atualiza tipo de utilizador (Admin)
+        
+        //Leilao
+        
+        // Get Leilao
+        
+        // Get lista de leilões em curso e outro para leilões terminados
+        
+        // Cria Leilao inclui adicionar artigos e lotes! (Verificar se a classe do Lote tem uma lista de artigos)
+        
+        // Atualiza Leilao
+        
+        // Realiza Licitação
+        
+        // Get maior licitação de um leilão
+        
+        // Get tempo Restante
+        
+        // Categoria
+        
+        // Get categoria
+        
+        // Cria Categoria
+        
+        // Regras
+        
+        // Get Regra
+        
+        // Cria Regra (Admin)
     }
 }
