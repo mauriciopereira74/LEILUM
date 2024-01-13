@@ -619,3 +619,6 @@ leilum/leilum.csproj
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+*.xml
+/.idea
