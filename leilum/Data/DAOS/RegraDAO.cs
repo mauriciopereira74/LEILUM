@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream
+=======
 using Dapper;
 using System.Data.SqlClient;
 using Leilum.LeilumLN.Categoria;
@@ -39,7 +41,7 @@ namespace Leilum.Data.DAOS
 
         public void put(int key, Regra value)
         {
-            string sql_cmd = "INSERT INTO LEILUM.Regra (idRegra, TempoMinimo, TempoMaximo, ValorMinimo, ValorMaximo) VALUES ('" +
+            string sql_cmd = "INSERT INTO Regra (idRegra, TempoMinimo, TempoMaximo, ValorMinimo, ValorMaximo) VALUES ('" +
                                 value.getIdRegra() + "','" + value.getTempoMinimo() + "','" + value.getTempoMaximo() + "','" + value.getValorMinimo() + "','" + value.getValorMaximo()  + "');";
             try 
             {
@@ -82,7 +84,7 @@ namespace Leilum.Data.DAOS
         public ICollection<int> keys()
         {
             ICollection<int> keys = new HashSet<int>();
-            string sql_cmd = "SELECT idRegra FROM LEILUM.Regra";
+            string sql_cmd = "SELECT idRegra FROM Regra";
             try 
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -108,7 +110,7 @@ namespace Leilum.Data.DAOS
         public ICollection<Regra> values()
         {
             ICollection<Regra> Regras = new HashSet<Regra>();
-            string sql_cmd = "SELECT * FROM LEILUM.Regra";
+            string sql_cmd = "SELECT * FROM Regra";
             try 
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -134,7 +136,7 @@ namespace Leilum.Data.DAOS
         public int size()
         {
             int size = 0;
-            string sql_cmd = "SELECT COUNT(*) FROM LEILUM.Regra";
+            string sql_cmd = "SELECT COUNT(*) FROM Regra";
             try
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -198,3 +200,4 @@ namespace Leilum.Data.DAOS
         }
     }
 }
+>>>>>>> Stashed changes

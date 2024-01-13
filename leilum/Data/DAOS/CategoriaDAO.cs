@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream
+=======
 using Dapper;
 using System.Data.SqlClient;
 using Leilum.LeilumLN.Categoria;
@@ -39,7 +41,7 @@ namespace Leilum.Data.DAOS
 
         public void put(int key, Categoria value)
         {
-            string sql_cmd = "INSERT INTO LEILUM.Categoria (idCategoria, Designacao, Regra) VALUES ('" +
+            string sql_cmd = "INSERT INTO Categoria (idCategoria, Designacao, Regra) VALUES ('" +
                                 value.getIdCategoria() + "','" + value.getDesignacao() + "','" + value.getIdRegras() +"');";
             try 
             {
@@ -82,7 +84,7 @@ namespace Leilum.Data.DAOS
         public ICollection<int> keys()
         {
             ICollection<int> keys = new HashSet<int>();
-            string sql_cmd = "SELECT idCategoria FROM LEILUM.Categoria";
+            string sql_cmd = "SELECT idCategoria FROM Categoria";
             try 
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -108,7 +110,7 @@ namespace Leilum.Data.DAOS
         public ICollection<Categoria> values()
         {
             ICollection<Categoria> Categorias = new HashSet<Categoria>();
-            string sql_cmd = "SELECT * FROM LEILUM.Categoria";
+            string sql_cmd = "SELECT * FROM Categoria";
             try 
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -134,7 +136,7 @@ namespace Leilum.Data.DAOS
         public int size()
         {
             int size = 0;
-            string sql_cmd = "SELECT COUNT(*) FROM LEILUM.Categoria";
+            string sql_cmd = "SELECT COUNT(*) FROM Categoria";
             try
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -198,3 +200,4 @@ namespace Leilum.Data.DAOS
         }
     }
 }
+>>>>>>> Stashed changes

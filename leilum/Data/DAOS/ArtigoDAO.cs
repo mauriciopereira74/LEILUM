@@ -1,6 +1,4 @@
-using Dapper;
-using System.Data.SqlClient;
-using Leilum.LeilumLN.Artigo;
+
 
 namespace Leilum.Data.DAOS
 {
@@ -10,8 +8,15 @@ namespace Leilum.Data.DAOS
 
         public static ArtigoDAO getInstance()
         {
-            if(singleton == null)
+            if(this.singleton == null)
             {
+<<<<<<< Updated upstream
+                this.singleton = new ArtigoDAO();
+            }
+        }
+
+        
+=======
                 singleton = new ArtigoDAO();
             }
             return singleton;
@@ -39,7 +44,7 @@ namespace Leilum.Data.DAOS
 
         public void put(int key, Artigo value)
         {
-            string sql_cmd = "INSERT INTO LEILUM.Artigo (idArtigo, Designacao, Caracteristicas, Descricao, idLote) VALUES ('" +
+            string sql_cmd = "INSERT INTO Artigo (idArtigo, Designacao, Caracteristicas, Descricao, idLote) VALUES '" +
                                 value.getId_Artigo() + "','" + value.getDesignacao() + "','" + value.getCaracteristicas() + "','" +
                                 value.getDescricao() + "','" + value.getLoteId() + "');";
             try 
@@ -83,7 +88,7 @@ namespace Leilum.Data.DAOS
         public ICollection<int> keys()
         {
             ICollection<int> keys = new HashSet<int>();
-            string sql_cmd = "SELECT idArtigo FROM LEILUM.Artigo";
+            string sql_cmd = "SELECT idArtigo FROM Artigo";
             try 
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -109,7 +114,7 @@ namespace Leilum.Data.DAOS
         public ICollection<Artigo> values()
         {
             ICollection<Artigo> artigos = new HashSet<Artigo>();
-            string sql_cmd = "SELECT * FROM LEILUM.Artigo";
+            string sql_cmd = "SELECT * FROM Artigo";
             try 
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -135,7 +140,7 @@ namespace Leilum.Data.DAOS
         public int size()
         {
             int size = 0;
-            string sql_cmd = "SELECT COUNT(*) FROM LEILUM.Artigo";
+            string sql_cmd = "SELECT COUNT(*) FROM Artigo";
             try
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -197,5 +202,6 @@ namespace Leilum.Data.DAOS
         {
             return this.constainsKey(value.getId_Artigo());
         }
+>>>>>>> Stashed changes
     }
 }

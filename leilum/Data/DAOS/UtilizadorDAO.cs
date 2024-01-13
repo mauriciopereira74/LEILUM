@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream
+=======
 using Dapper;
 using System.Data.SqlClient;
 using Leilum.LeilumLN.Utilizador;
@@ -20,9 +22,9 @@ namespace Leilum.Data.DAOS
         public static Utilizador? get(int Email)
         {
             Utilizador? result = null;
-            string sql_cmd = "SELECT * FROM LEILUM.Utilizador" + 
-                             "INNER JOIN LEILUM.InfoUtilizador ON LEILUM.UTILIZADOR.Email = LEILUM.InfoUtilizador.idUtilizador" + 
-                             $"Where LEILUM.Utilizador.Email = '{Email}';";
+            string sql_cmd = "SELECT * FROM Utilizador" + 
+                             "INNER JOIN InfoUtilizador ON UTILIZADOR.Email = InfoUtilizador.idUtilizador" + 
+                             $"Where Utilizador.Email = '{Email}';";
             try
             {
                 using (SqlConnection con = new(DAOConfig.GetConnectionString()))
@@ -63,9 +65,9 @@ namespace Leilum.Data.DAOS
         public void put(string key, Utilizador value)
         {
         
-            string sql_cmdUser = "INSERT INTO LEILUM.Utilizador (Email, Password, TipoUtilizador) VALUES ('" +
+            string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador) VALUES ('" +
                                 value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador() + "');";
-            string sql_cmdInfoUser = "INSERT INTO LEILUM.Utilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, idUtilizador) VALUES ('" +
+            string sql_cmdInfoUser = "INSERT INTO Utilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, idUtilizador) VALUES ('" +
                                      value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador() + "');";
             try 
             {
@@ -92,7 +94,7 @@ namespace Leilum.Data.DAOS
         public Utilizador? remove(int key)
         {
             Utilizador? Utilizador = get(key);
-            string sql_cmd = $"DELETE FROM LEILUM.Utilizador Where Email = {key}";
+            string sql_cmd = $"DELETE FROM Utilizador Where Email = {key}";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -114,7 +116,7 @@ namespace Leilum.Data.DAOS
         public ICollection<int> keys()
         {
             ICollection<int> keys = new HashSet<int>();
-            string sql_cmd = "SELECT Email FROM LEILUM.Utilizador";
+            string sql_cmd = "SELECT Email FROM Utilizador";
             try 
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -140,7 +142,7 @@ namespace Leilum.Data.DAOS
         public ICollection<Utilizador> values()
         {
             ICollection<Utilizador> Utilizadors = new HashSet<Utilizador>();
-            string sql_cmd = "SELECT * FROM LEILUM.Utilizador";
+            string sql_cmd = "SELECT * FROM Utilizador";
             try 
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -166,7 +168,7 @@ namespace Leilum.Data.DAOS
         public int size()
         {
             int size = 0;
-            string sql_cmd = "SELECT COUNT(*) FROM LEILUM.Utilizador";
+            string sql_cmd = "SELECT COUNT(*) FROM Utilizador";
             try
             {
                 using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -231,3 +233,4 @@ namespace Leilum.Data.DAOS
         }
     }
 }
+>>>>>>> Stashed changes

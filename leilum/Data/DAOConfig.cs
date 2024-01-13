@@ -4,16 +4,16 @@ namespace Leilum.Data
 {
     internal class DAOConfig
     {
-        public const string USER = "";
-        public const string PASSWORD = "";
-        public const string MACHINE = "";
-        public const string DATABASE = "LEILUM";
+        private const string USER = "leilum";
+        private const string PASSWORD = "leilum";
+        //public const string MACHINE = "";
+        private const string DATABASE = "LEILUM";
 
 
         public static string GetConnectionString()
         {
             SqlConnectionStringBuilder conn = new SqlConnectionStringBuilder();
-            conn.DataSource = MACHINE;
+            //conn.DataSource = MACHINE;
             conn.UserID = USER;
             conn.Password = PASSWORD;
             conn.InitialCatalog = DATABASE;

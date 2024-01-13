@@ -20,6 +20,7 @@ CREATE TABLE Utilizador (
 	Email VARCHAR(45) NOT NULL,
 	Password VARCHAR(45) NOT NULL,
 	TipoUtilizador INT NOT NULL,
+	FotoPerfilPath VARCHAR(500) NOT NULL,
 	FOREIGN KEY (TipoUtilizador) REFERENCES TIPOUTILIZADOR (Tipo),
 	PRIMARY KEY (Email)
 );
@@ -53,7 +54,7 @@ CREATE TABLE Lote (
 -- DROP TABLE Artigo;
 CREATE TABLE Artigo (
 	idArtigo INT NOT NULL,
-	Desiganacao VARCHAR(45) NOT NULL,
+	Designacao VARCHAR(45) NOT NULL,
 	Caracteristicas TEXT NOT NULL,
 	Descricao TEXT NOT NULL,
 	idLote INT NOT NULL,

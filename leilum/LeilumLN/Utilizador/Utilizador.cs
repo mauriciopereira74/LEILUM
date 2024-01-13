@@ -1,13 +1,20 @@
 
 
-namespace Leilum.LeilumLN.Utilizador
-{
+
+
+namespace Leilum.LeilumLN.Utilizador{
 
     public class Utilizador{
 
+<<<<<<< Updated upstream
+        private string email;
+        private string password;
+        private int id_tipoUtilizador;
+=======
         private string email { get; set; }
         private string password { get; set; }
         private int idTipoUtilizador { get; set; }
+        private string fotoPerfil { get; set; }
         private int contribuinte { get; set; }
         private string nome { get; set; }
         private string morada { get; set; }
@@ -17,10 +24,11 @@ namespace Leilum.LeilumLN.Utilizador
         private int metodoPagamento { get; set; }
         private string iban { get; set; }
         
-        public Utilizador(string email, string password, int idTipoUtilizador, int contribuinte, string nome, string morada, string nacionalidade, string contacto, DateOnly dataNascimento, int metodoPagamento, string iban){
+        public Utilizador(string email, string password, int idTipoUtilizador, string fotoPerfil, int contribuinte, string nome, string morada, string nacionalidade, string contacto, DateOnly dataNascimento, int metodoPagamento, string iban){
             this.email = email;
             this.password = password;
             this.idTipoUtilizador = idTipoUtilizador;
+            this.fotoPerfil = fotoPerfil;
             this.contribuinte = contribuinte;
             this.nome = nome;
             this.morada = morada;
@@ -44,6 +52,16 @@ namespace Leilum.LeilumLN.Utilizador
         public int getTipoUtilizador()
         {
             return this.idTipoUtilizador;
+        }
+
+        public string getFotoPerfil()
+        {
+            return this.fotoPerfil;
+        }
+
+        public void setFotoPerfil(string path)
+        {
+            this.fotoPerfil = path;
         }
 
         public int getContribuinte()
@@ -88,7 +106,8 @@ namespace Leilum.LeilumLN.Utilizador
         
         public Utilizador Clone()
         {
-            return new Utilizador(email,password,idTipoUtilizador,contribuinte,nome,morada,nacionalidade,contacto,dataNascimento,metodoPagamento,iban);
+            return new Utilizador(email,password,idTipoUtilizador,fotoPerfil,contribuinte,nome,morada,nacionalidade,contacto,dataNascimento,metodoPagamento,iban);
         }
+>>>>>>> Stashed changes
     }
 }
