@@ -1,49 +1,94 @@
 
 
-
-
-namespace Leilum.LeilumLN.Utilizador{
+namespace Leilum.LeilumLN.Utilizador
+{
 
     public class Utilizador{
 
-        private string email;
-        private string password;
-        private int id_tipoUtilizador;
-    
-
-        public Utilizador(string email, string password, int idTipoUtilizador){
+        private string email { get; set; }
+        private string password { get; set; }
+        private int idTipoUtilizador { get; set; }
+        private int contribuinte { get; set; }
+        private string nome { get; set; }
+        private string morada { get; set; }
+        private string nacionalidade { get; set; }
+        private string contacto { get; set; }
+        private DateOnly dataNascimento { get; set; }
+        private int metodoPagamento { get; set; }
+        private string iban { get; set; }
+        
+        public Utilizador(string email, string password, int idTipoUtilizador, int contribuinte, string nome, string morada, string nacionalidade, string contacto, DateOnly dataNascimento, int metodoPagamento, string iban){
             this.email = email;
             this.password = password;
-            this.id_tipoUtilizador = idTipoUtilizador;
+            this.idTipoUtilizador = idTipoUtilizador;
+            this.contribuinte = contribuinte;
+            this.nome = nome;
+            this.morada = morada;
+            this.nacionalidade = nacionalidade;
+            this.contacto = contacto;
+            this.dataNascimento = dataNascimento;
+            this.metodoPagamento = metodoPagamento;
+            this.iban = iban;
         }
 
-        public string getEmail(){
-            return email;
+        public string getEmail()
+        {
+            return this.email;
         }
 
-        public void setEmail(string email){
-            this.email = email;
+        public string getPassword()
+        {
+            return this.password;
         }
 
-        public string getPassword(){
-            return password;
+        public int getTipoUtilizador()
+        {
+            return this.idTipoUtilizador;
         }
 
-        public void setPassword(string password){
-            this.password = password;
+        public int getContribuinte()
+        {
+            return this.contribuinte;
         }
 
-        public int getIdTipoUtilizador(){
-            return id_tipoUtilizador;
+        public string getNome()
+        {
+            return this.nome;
         }
 
-        public void setIdTipoUtilizador(int idTipoUtilizador){
-            this.id_tipoUtilizador = idTipoUtilizador;
+        public string getMorada()
+        {
+            return this.morada;
         }
 
-        public Utilizador Clone(){
-            Utilizador result = new Utilizador(email,password,id_tipoUtilizador);
-            return result;
+        public string getNacionalidade()
+        {
+            return this.nacionalidade;
+        }
+
+        public string getContacto()
+        {
+            return this.contacto;
+        }
+
+        public DateOnly getDataNascimento()
+        {
+            return this.dataNascimento;
+        }
+
+        public int getMetodoPagamento()
+        {
+            return this.metodoPagamento;
+        }
+
+        public string getIban()
+        {
+            return this.iban;
+        }
+        
+        public Utilizador Clone()
+        {
+            return new Utilizador(email,password,idTipoUtilizador,contribuinte,nome,morada,nacionalidade,contacto,dataNascimento,metodoPagamento,iban);
         }
     }
 }

@@ -1,0 +1,200 @@
+using Dapper;
+using System.Data.SqlClient;
+using Leilum.LeilumLN.Categoria;
+
+namespace Leilum.Data.DAOS
+{
+    internal class CategoriaDAO
+    {
+        private static CategoriaDAO? singleton = null;
+
+        public static CategoriaDAO getInstance()
+        {
+            if(singleton == null)
+            {
+                singleton = new CategoriaDAO();
+            }
+            return singleton;
+        }
+
+        public static Categoria? get(int idCategoria)
+        {
+            Categoria? result = null;
+            string sql_cmd = $"SELECT * FROM LEILUM.Categoria WHERE idCategoria = '{idCategoria}'";
+            try
+            {
+                using (SqlConnection con = new(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    Categoria aux = con.QueryFirst<Categoria>(sql_cmd);
+                    result = aux;
+                }
+            } 
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return result;
+        }
+
+        public void put(int key, Categoria value)
+        {
+            string sql_cmd = "INSERT INTO LEILUM.Categoria (idCategoria, Designacao, Regra) VALUES ('" +
+                                value.getIdCategoria() + "','" + value.getDesignacao() + "','" + value.getIdRegras() +"');";
+            try 
+            {
+                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using(SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    {
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            } catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public Categoria? remove(int key)
+        {
+            Categoria? Categoria = get(key);
+            string sql_cmd = $"DELETE FROM LEILUM.Categoria Where idCategoria = {key}";
+            try 
+            {
+                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using(SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    {
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            } 
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return Categoria;
+        }
+
+        public ICollection<int> keys()
+        {
+            ICollection<int> keys = new HashSet<int>();
+            string sql_cmd = "SELECT idCategoria FROM LEILUM.Categoria";
+            try 
+            {
+                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    {
+                        conn.Open();
+                        IEnumerable<int> aux = conn.Query<int>(sql_cmd);
+                        foreach(int key in aux)
+                        {
+                            keys.Add(key);
+                        }
+                    }
+                }
+            } 
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return keys;
+        }
+
+        public ICollection<Categoria> values()
+        {
+            ICollection<Categoria> Categorias = new HashSet<Categoria>();
+            string sql_cmd = "SELECT * FROM LEILUM.Categoria";
+            try 
+            {
+                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    {
+                        conn.Open();
+                        IEnumerable<Categoria> aux = conn.Query<Categoria>(sql_cmd);
+                        foreach(Categoria Categoria in aux)
+                        {
+                            Categorias.Add(Categoria);
+                        }
+                    }
+                }
+            } 
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return Categorias;
+        }
+
+        public int size()
+        {
+            int size = 0;
+            string sql_cmd = "SELECT COUNT(*) FROM LEILUM.Categoria";
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    {
+                        conn.Open();
+                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if(reader.Read())
+                            {
+                                size = reader.GetInt32(0);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return size;
+        }
+
+        public bool isEmpty()
+        {
+            return this.size() == 0;
+        }
+
+        public bool constainsKey(int idCategoria)
+        {
+            bool result = false;
+            string sql_cmd = $"SELECT * FROM Categoria Where idCategoria = {idCategoria}";
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    {
+                        conn.Open();
+                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if(reader.Read())
+                            {
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            } 
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return result;
+        }
+
+        public bool containsValue(Categoria value)
+        {
+            return this.constainsKey(value.getIdCategoria());
+        }
+    }
+}
