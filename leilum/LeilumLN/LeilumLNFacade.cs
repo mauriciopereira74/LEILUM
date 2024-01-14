@@ -34,5 +34,9 @@ namespace leilum.LeilumLN
             }
             return false;
         }
+
+        public void addLeilao(Leilao leilao){
+            this.db.addLeilao(leilao);
+        }
     }
 }

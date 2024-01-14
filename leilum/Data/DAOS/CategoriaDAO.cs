@@ -18,25 +18,55 @@ namespace Leilum.Data.DAOS
             return singleton;
         }
 
-        public static Categoria? get(int idCategoria)
-        {
-            Categoria? result = null;
-            string sql_cmd = $"SELECT * FROM LEILUM.Categoria WHERE idCategoria = '{idCategoria}'";
-            try
-            {
-                using (SqlConnection con = new(DAOConfig.GetConnectionString()))
-                {
-                    con.Open();
-                    Categoria aux = con.QueryFirst<Categoria>(sql_cmd);
-                    result = aux;
+        public Categoria get(int categoriaId){
+            
+            Categoria? resultado = null;
+            string s_cmd = $"SELECT * FROM db.Categoria WHERE idCategoria = {categoriaId}";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    conn.Open();
+
+                    var categoria = null;
+                    var designacao = null;
+                    var regra = null;
+
+                    dynamic row = conn.Query(s_cmd).FirstOrDefault();
+
+                    if (row != null){
+                        categoria = row.idCategoria;
+                        designacao = row.Designacao;
+                        regra = row.Regra;
+                    }
+                    string s_cmd2 = $"SELECT * FROM db.Regra WHERE idRegra = {regra}";
+                    Regra r = conn.QueryFirst<Regra>(s_cmd2);
+
+                    resultado = new Categoria(categoriaId,designacao,r);
                 }
-            } 
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
+            } catch (Exception e){
+                throw new DAOException(e.Message);
             }
-            return result;
+            return resultado;
         }
+
+        // public static Categoria? get(int idCategoria)
+        // {
+        //     Categoria? result = null;
+        //     string sql_cmd = $"SELECT * FROM LEILUM.Categoria WHERE idCategoria = '{idCategoria}'";
+        //     try
+        //     {
+        //         using (SqlConnection con = new(DAOConfig.GetConnectionString()))
+        //         {
+        //             con.Open();
+        //             Categoria aux = con.QueryFirst<Categoria>(sql_cmd);
+        //             result = aux;
+        //         }
+        //     } 
+        //     catch (Exception e)
+        //     {
+        //         throw new Exception(e.Message);
+        //     }
+        //     return result;
+        // }
 
         public void put(int key, Categoria value)
         {

@@ -7,13 +7,13 @@ namespace Leilum.LeilumLN.Categoria{
     public class Categoria{
         private int id_categoria;
         private string designacao;
-        private int id_regras;
+        private Regra regra;
     
     
-        public Categoria(int idCategoria, string designacao, int idRegras){
+        public Categoria(int idCategoria, string designacao, Regra regra){
             this.id_categoria = idCategoria;
             this.designacao = designacao;
-            this.id_regras = idRegras;
+            this.regra = regra;
         }
 
         public int getIdCategoria(){
@@ -32,16 +32,16 @@ namespace Leilum.LeilumLN.Categoria{
             this.designacao = designacao;
         }
 
-        public int getIdRegras(){
-            return id_regras;
+        public Regra getRegra(){
+            return regra;
         }
 
-        public void setIdRegras(int idRegras){
-            this.id_regras = idRegras;
+        public void setRegra(Regra regra){
+            this.regra = regra;
         }
 
         public Categoria Clone(){
-            Categoria result = new Categoria(id_categoria,designacao,id_regras);
+            Categoria result = new Categoria(id_categoria,designacao,regra);
             return result;
         }
     }
