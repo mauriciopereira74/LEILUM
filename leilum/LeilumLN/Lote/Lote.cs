@@ -1,4 +1,4 @@
-
+using Leilum.LeilumLN.Artigo;
 
 
 
@@ -11,13 +11,15 @@ namespace Leilum.LeilumLN.Lote{
         private int id_comprador;
         private int id_avaliador;
         private string imgPath;
+        private ArtigoDAO artigos;
 
-        public Lote(int idLote, int idComitente, int idComprador, int idAvaliador, string imgPath){
+        public Lote(int idLote, int idComitente, int idComprador, int idAvaliador, string imgPath, ArtigoDAO artigos){
             this.id_lote = idLote;
             this.id_comitente = idComitente;
             this.id_comprador = idComprador;
             this.id_avaliador = idAvaliador;
             this.imgPath = imgPath;
+            this.artigos = artigos;
         }
 
         public int getIdLote(){
@@ -62,8 +64,23 @@ namespace Leilum.LeilumLN.Lote{
             this.imgPath = path;
         }
 
+        public void addArtigo(Artigo a) {
+            int idArtigo = a.getId_Artigo();
+            artigos.Add(idArtigo,a);
+        }
+
+        public List<Artigo> getArtigos(){
+            List<Artigo> lista = new List<Artigo>();
+            foreach (Artigo artigo in artigos.Values){
+                lista.Add(artigo);
+            }
+            return lista;
+        }
+
+
+
         public Lote Clone(){
-            Lote result = new Lote(id_lote,id_comitente,id_comprador,id_avaliador,imgPath);
+            Lote result = new Lote(id_lote,id_comitente,id_comprador,id_avaliador,imgPath,artigos);
             return result;
         }
     }

@@ -264,5 +264,37 @@ namespace Leilum.Data.DAOS
             }
             return result;
         }
+
+        public Utilizador getAvaliador(string avaliadorEmail){
+            
+            Utilizador? resultado = null;
+            string s_cmd = $"SELECT * FROM db.Utilizador WHERE Email = {avaliadorEmail}";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    conn.Open();
+                    Utilizador a = conn.QueryFirst<Utilizador>(s_cmd);
+                    resultado = a;
+                }
+            } catch (Exception e){
+                throw new DAOException(e.Message);
+            }
+            return resultado;
+        }
+
+        public Utilizador getComitente(string comitenteEmail){
+
+            Utilizador? resultado = null;
+            string s_cmd = $"SELECT * FROM db.Utilizador WHERE Email = {comitenteEmail}";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    conn.Open();
+                    Utilizador c = conn.QueryFirst<Utilizador>(s_cmd);
+                    resultado = c;
+                }
+            } catch (Exception e){
+                throw new DAOException(e.Message);
+            }
+            return resultado;
+        }
     }
 }

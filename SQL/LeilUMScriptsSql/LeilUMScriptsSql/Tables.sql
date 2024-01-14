@@ -20,7 +20,6 @@ CREATE TABLE Utilizador (
 	Email VARCHAR(45) NOT NULL,
 	Password VARCHAR(45) NOT NULL,
 	TipoUtilizador INT NOT NULL,
-	FotoPerfilPath VARCHAR(500) NOT NULL,
 	FOREIGN KEY (TipoUtilizador) REFERENCES TIPOUTILIZADOR (Tipo),
 	PRIMARY KEY (Email)
 );
@@ -35,6 +34,7 @@ CREATE TABLE InfoUtilizador (
 	DataNascimento DATE NOT NULL,
 	MetodoPagamento INT NOT NULL,
 	Iban VARCHAR(45) NOT NULL,
+	FotoPerfilPath VARCHAR(500) NOT NULL,
 	idUtilizador VARCHAR(45) NOT NULL,
 	FOREIGN KEY (idUtilizador) REFERENCES Utilizador (Email),
 	PRIMARY KEY (Contribuinte));

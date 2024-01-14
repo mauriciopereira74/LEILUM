@@ -1,5 +1,6 @@
 using Leilum.Data.DAOS;
 using Leilum.LeilumLN.Utilizador;
+using Leilum.LeilumLN.Leilao;
 
 namespace Leilum.Data
 {
@@ -77,37 +78,82 @@ namespace Leilum.Data
         }
 
         
-        //Verifica Email
-        
-        //Verifica Password
-        
-        // Get Utilizador
-        
+        //Verifica Utilizador 
+        public bool verificaUtilizador(string email, string password) {
+            Utilizador u = this.utilizadorDAO.getUtilizadorWithEmail(email);
+            if (u != null) {
+                if (u.getPassword() == password) return true;
+            }
+            return false;
+        }
+                
         // Regista Utilizador
-        
+        public void registaUtilizador(Utilizador u) {
+            if (existsEmail(u.getEmail())) {
+                Console.Write("Já existe um Utilizador com esse email!");
+                return;
+            }
+            addUtilizador(u);
+        }
+
         // Atualiza perfil utilizador
-        
+        public void atualizaPerfil(Utilizador u) {
+            removeUtilizador(u.getEmail());
+            addUtilizador(u);
+        }
+
         // Atualiza tipo de utilizador (Admin)
         
         //Leilao
-        
-        // Get Leilao
-        
+        public Leilao getLeilao(int idLeilao){
+            return this.leilaoDao.get(idLeilao);
+        }
+
         // Get lista de leilões em curso e outro para leilões terminados
+        public ICollection<Leilao> getLeiloesEmCurso(){
+            return this.leilaoDao.getLeiloesEmCurso();
+        }
+
+        public ICollection<Leilao> getLeiloesTerminaods(){
+            return this.leilaoDao.getLeiloesTerminaods();
+        }
         
         // Cria Leilao inclui adicionar artigos e lotes! (Verificar se a classe do Lote tem uma lista de artigos)
         
+        public void adicionaLeilao(Leilao leilao){
+            this.leilaoDao.adicionaLeilao(leilao);
+        }
+
         // Atualiza Leilao
         
-        // Realiza Licitação
+        // Adiciona uma Licitação
+        public void addLicitacao(Licitacao licitacao) {
+            this.licitacaoDao.put(licitacao.getIdLicitacao(),licitacao);
+        }
+
+        // Remove uma Licitação
+        public void removeLicitacao(int idLicitacao) {
+            this.licitacaoDao.remove(idLicitacao);
+        }
         
-        // Get maior licitação de um leilão
+        // Get maior licitação de um leilão (Acho que não é preciso)
         
-        // Get tempo Restante
+        // Get tempo restante de um leilao
+        public DateTime tempoRestante(Leilao leilao) {
+            TimeSpan diferenca = leilao.getDuracao() - DateTime.now;
+            return diferenca;
+        }
         
         // Categoria
         
         // Get categoria
+        public Categoria getCategoria(int idCategoria) {
+            return this.categoriaDAO.get(idCategoria);
+        }
+
+        
+
+
         
         // Cria Categoria
         
