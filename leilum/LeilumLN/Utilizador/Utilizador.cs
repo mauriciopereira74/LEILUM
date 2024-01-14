@@ -15,10 +15,15 @@ namespace Leilum.LeilumLN.Utilizador{
         private int metodoPagamento { get; set; }
         private string? iban { get; set; }
         
+
+        public Utilizador(){
+            
+        }
         public Utilizador(string email, string password, int idTipoUtilizador){
             this.email = email;
             this.password = password;
             this.idTipoUtilizador = idTipoUtilizador;
+            this.fotoPerfil = null;
         }
 
         public Utilizador(string email, string password, int idTipoUtilizador, string fotoPerfil, int contribuinte, string nome, string morada, string nacionalidade, string contacto, DateOnly dataNascimento, int metodoPagamento, string iban){

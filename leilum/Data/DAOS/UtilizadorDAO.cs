@@ -17,46 +17,21 @@ namespace Leilum.Data.DAOS
             return singleton;
         }
 
-        public Utilizador getUtilizadorWithEmail(string Email)
+        public Utilizador getUtilizadorWithEmail(string email)
         {
             Utilizador? result = null;
-            string sql_cmd = "SELECT * FROM Utilizador" + 
-                             "INNER JOIN InfoUtilizador ON UTILIZADOR.Email = InfoUtilizador.idUtilizador" + 
-                             $"Where Utilizador.Email = '{Email}';";
+            string s_cmd = $"SELECT * FROM dbo.Utilizador where Email = '{email}'";
             try
             {
-                using (SqlConnection con = new(DAOConfig.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
-                    {
-                        con.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                string? email = Convert.ToString(reader["Email"]);
-                                string? password = Convert.ToString(reader["Password"]);
-                                int tipoUtilizador = Convert.ToInt32(reader["idUtilizador"]);
-                                int contribuinte = Convert.ToInt32(reader["Contribuinte"]);
-                                string? nome = Convert.ToString(reader["Nome"]);
-                                string? morada = Convert.ToString(reader["Morada"]);
-                                string? nacionalidade = Convert.ToString(reader["Nacionalidade"]);
-                                string? contacto = Convert.ToString(reader["Contacto"]);
-                                DateTime aux = Convert.ToDateTime(reader["DataNascimento"]);
-                                DateOnly dataNascimento = new DateOnly(aux.Year, aux.Month, aux.Day);
-                                int metodoPagamento = Convert.ToInt32(reader["MetodoPagamento"]);
-                                string? iban = Convert.ToString(reader["Iban"]);
-                                string imgPath = Convert.ToString(reader["FotoPerfilPath"]);
-                                result = new Utilizador(email, password, tipoUtilizador, imgPath, contribuinte, nome, morada,
-                                    nacionalidade, contacto, dataNascimento, metodoPagamento, iban);
-                            }
-                        }
-                    }
+                    con.Open();
+                    result = con.QueryFirst<Utilizador>(s_cmd);
                 }
-            } 
+            }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new DAOException(e.Message);
             }
             return result;
         }
@@ -217,31 +192,22 @@ namespace Leilum.Data.DAOS
             return this.size() == 0;
         }
 
-        public bool existsEmail(string emailUtilizador)
+        public bool existsEmail(string email)
         {
             bool result = false;
-            string sql_cmd = $"SELECT * FROM Utilizador Where Email = {emailUtilizador}";
+            string s_cmd = $"SELECT * FROM dbo.Utilizador where Email = '{email}'";
             try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
-                    {
-                        conn.Open();
-                        using(SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            
-                            if(reader.Read())
-                            {
-                                result = true;
-                            }
-                        }
-                    }
+                    con.Open();
+                    IEnumerable<Utilizador> aux = con.Query<Utilizador>(s_cmd);
+                    result = aux.Count() == 1;
                 }
-            } 
+            }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new DAOException(e.Message);
             }
             return result;
         }

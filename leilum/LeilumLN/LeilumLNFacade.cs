@@ -14,9 +14,9 @@ namespace leilum.LeilumLN
             this.db = new LeilumDLFacade();
         }
 
-         public bool existsEmail(string email){
+        public bool existsEmail(string email){
             return db.existsEmail(email);
-         }
+        }
 
         public Utilizador getUtilizadorWithEmail(string email){
             return db.getUtilizadorWithEmail(email);
