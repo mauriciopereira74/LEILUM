@@ -1,6 +1,6 @@
-
-
-
+using Leilum.LeilumLN.Utilizador;
+using Leilum.LeilumLN.Lote;
+using Leilum.LeilumLN.Categoria;
 
 
 namespace Leilum.LeilumLN.Leilao{
@@ -13,16 +13,16 @@ namespace Leilum.LeilumLN.Leilao{
         private double valorAbertura;
         private double valorBase;
         private double valorMinimo;
-        private double valorAtual;
+        private Licitacao licitacaoAtual;
         private int estado;
-        private int avaliador;
-        private int id_comitente;
-        private int lote_id; 
-        private int categoria_id;
+        private Utilizador avaliador;
+        private Utilizador comitente;
+        private Lote lote; 
+        private Categoria categoria;
 
 
         public Leilao(int nrLeilao, string titulo, DateTime duracao, double valorAbertura, double valorBase, double valorMinimo, double valorAtual, int estado
-                     , int avaliador, int idComitente, int loteId, int categoriaId){
+                     , Utilizador avaliador, Utilizador comitente, Lote lote, Categoria categoria){
 
             this.nrLeilao = nrLeilao;
             this.titulo = titulo;
@@ -33,9 +33,9 @@ namespace Leilum.LeilumLN.Leilao{
             this.valorAtual = valorAtual;
             this.estado = estado;
             this.avaliador = avaliador;
-            this.id_comitente = idComitente;
-            this.lote_id = loteId;
-            this.categoria_id = categoriaId;
+            this.comitente = comitente;
+            this.lote = lote;
+            this.categoria = categoria;
         }
 
         public int getNrLeilao(){
@@ -102,40 +102,46 @@ namespace Leilum.LeilumLN.Leilao{
             this.estado = estado;
         }
 
-        public int getAvaliador(){
+        public Utilizador getAvaliador(){
             return avaliador;
         }
 
-        public void setAvaliador(int avaliador){
+        public void setAvaliador(Utilizador avaliador){
             this.avaliador = avaliador;
         }
 
-        public int getIdComitente(){
-            return id_comitente;
+        public Utilizador getComitente(){
+            return comitente;
         }
 
-        public void setIdComitente(int idComitente){
-            this.id_comitente = idComitente;
+        public void setComitente(Utilizador comitente){
+            this.comitente = comitente;
         }
 
-        public int getIdLote(){
-            return lote_id;
+        public Lote getLote(){
+            return lote;
         }
 
-        public void setLoteId(int loteId){
-            this.lote_id = loteId;
+        public void setLote(Lote lote){
+            this.lote = lote;
         }
 
-        public int getCategoriaId(){
-            return categoria_id;
+        public Categoria getCategoria(){
+            return categoria;
         }
 
-        public void setCategoriaId(int categoriaId){
-            this.categoria_id = categoriaId;
+        public void setCategoria(Categoria categoria){
+            this.categoria = categoria;
         }
+
+        public bool emCurso() {
+            return (this.estado == 1);
+        }
+
+
 
         public Leilao Clone(){
-            Leilao result = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,id_comitente,lote_id,categoria_id);
+            Leilao result = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
             return result;
         }
     }

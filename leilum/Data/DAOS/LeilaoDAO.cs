@@ -1,6 +1,10 @@
 using Dapper;
 using System.Data.SqlClient;
 using Leilum.LeilumLN.Leilao;
+using Leilum.Data.DAOS.UtilizadorDAO;
+using Leilum.Data.DAOS.LoteDAO;
+using Leilum.Data.DAOS.CategoriaDAO;
+using Leilum.Data.DAOS.ArtigoDAO;
 
 namespace Leilum.Data.DAOS
 {
@@ -196,6 +200,63 @@ namespace Leilum.Data.DAOS
         public bool containsValue(Leilao value)
         {
             return this.constainsKey(value.getNrLeilao());
+        }
+
+        public ICollection<Leilao> getLeiloesEmCurso(){
+            ICollection<Leilao> leiloesAtivos = new HashSet<Leilao>();
+            string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 1";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    conn.Open();
+                    IEnumerable<dynamic> leiloes = conn.Query<dynamic>(s_cmd);
+                    foreach (var leilaoAux in leiloes){
+
+                        DateTime duracao = leilaoAux.duracao as DateTime?;
+
+                        Licitacao licitacao = getLicitacao(leilaoAux.licitacao);
+
+                        Utilizador avaliador = getAvaliador(leilaoAux.avaliador);
+
+                        Utilizador comitente = getComitente(leilaoAux.comitente);
+
+                        Lote lote = getLote(leilaoAux.lote);
+
+                        Categoria categoria = getCategoria(leilaoAux.categoria);
+
+                        Leilao leilao = new Leilao((int)leilaoAux.nrLeilao,(string)leilaoAux.titulo,duracao,(double)leilaoAux.valorAbertura,(double)leilaoAux.valorBase,(double)leilaoAux.valorMinimo
+                                                  ,licitacao,(int)leilaoAux.estado,avaliador,comitente,lote,categoria);
+
+                        leiloesAtivos.Add(leilao);
+                    }
+                }
+            }
+        }
+
+        public ICollection<Leilao> getLeiloesTerminados(){
+            ICollection<Leilao> leiloesTerminados = new HashSet<Leilao>();
+            string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 0";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    conn.Open();
+                    IEnumerable<Leilao> leiloes = conn.Query<Leilao>(s_cmd);
+                    foreach (Leilao leilao in leiloes){
+
+                        Utilizador avaliador = getAvaliador(leilao.getAvaliador());
+
+                        Utilizador comitente = getComitente(leilao.getComitente());
+
+                        Lote lote = getLote(leilao.getLote());
+
+                        Categoria categoria = getCategoria(leilao.getCategoria());
+
+                        leilao.setAvaliador(avaliador);
+                        leilao.setComitente(comitente);
+                        leilao.setLote(lote);
+                        leilao.setCategoria(categoria);
+                        leiloesAtivos.Add(leilao);
+                    }
+                }
+            }
         }
     }
 }
