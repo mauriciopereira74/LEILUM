@@ -26,8 +26,8 @@ namespace Leilum.Data
         
         // Utilizadores
 
-       public bool existsEmail(string email)
-        {
+        public bool existsEmail(string email)
+        {   
             return this.utilizadorDAO.existsEmail(email);
         }
 
