@@ -1,9 +1,8 @@
-using Leilum.LeilumLN.Utilizador;
-using Leilum.LeilumLN.Lote;
-using Leilum.LeilumLN.Categoria;
+using Leilum.LeilumLN.LoteLN;
+using Leilum.LeilumLN.UtilizadorLN;
+using Leilum.LeilumLN.CategoriaLN;
 
-
-namespace Leilum.LeilumLN.Leilao{
+namespace Leilum.LeilumLN.LeilaoLN{
 
     public class Leilao{
 
@@ -21,7 +20,7 @@ namespace Leilum.LeilumLN.Leilao{
         private Categoria categoria;
 
 
-        public Leilao(int nrLeilao, string titulo, DateTime duracao, double valorAbertura, double valorBase, double valorMinimo, double valorAtual, int estado
+        public Leilao(int nrLeilao, string titulo, DateTime duracao, double valorAbertura, double valorBase, double valorMinimo, Licitacao licitacaoAtual, int estado
                      , Utilizador avaliador, Utilizador comitente, Lote lote, Categoria categoria){
 
             this.nrLeilao = nrLeilao;
@@ -30,7 +29,7 @@ namespace Leilum.LeilumLN.Leilao{
             this.valorAbertura = valorAbertura;
             this.valorBase = valorBase;
             this.valorMinimo = valorMinimo;
-            this.valorAtual = valorAtual;
+            this.licitacaoAtual = licitacaoAtual;
             this.estado = estado;
             this.avaliador = avaliador;
             this.comitente = comitente;
@@ -86,12 +85,12 @@ namespace Leilum.LeilumLN.Leilao{
             this.valorMinimo = valorMinimo;
         }
 
-        public double getValorAtual(){
-            return valorAtual;
+        public double getLicitacaoAtual(){
+            return licitacaoAtual.getValor();
         }
 
-        public void setValorAtual(double valorAtual){
-            this.valorAtual = valorAtual;
+        public void setLicitacaoAtual(Licitacao licitacao){
+            this.licitacaoAtual = licitacao;
         }
 
         public int getEstado(){
@@ -139,9 +138,8 @@ namespace Leilum.LeilumLN.Leilao{
         }
 
 
-
         public Leilao Clone(){
-            Leilao result = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
+            Leilao result = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,licitacaoAtual,estado,avaliador,comitente,lote,categoria);
             return result;
         }
     }

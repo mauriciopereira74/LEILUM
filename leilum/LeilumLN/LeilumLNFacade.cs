@@ -1,6 +1,6 @@
 
-using Leilum.LeilumLN.Leilao;
-using Leilum.LeilumLN.Utilizador;
+using Leilum.LeilumLN.LeilaoLN;
+using Leilum.LeilumLN.UtilizadorLN;
 using Leilum.Data;
 
 namespace leilum.LeilumLN
@@ -35,8 +35,10 @@ namespace leilum.LeilumLN
             return false;
         }
 
+        /*
         public void addLeilao(Leilao leilao){
             this.db.addLeilao(leilao);
         }
+        */
     }
 }

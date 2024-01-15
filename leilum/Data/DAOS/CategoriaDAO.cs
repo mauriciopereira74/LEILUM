@@ -1,7 +1,7 @@
 
 using Dapper;
 using System.Data.SqlClient;
-using Leilum.LeilumLN.Categoria;
+using Leilum.LeilumLN.CategoriaLN;
 
 namespace Leilum.Data.DAOS
 {
@@ -26,9 +26,9 @@ namespace Leilum.Data.DAOS
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     conn.Open();
 
-                    var categoria = null;
-                    var designacao = null;
-                    var regra = null;
+                    var categoria=0;
+                    var designacao = "";
+                    var regra = 0;
 
                     dynamic row = conn.Query(s_cmd).FirstOrDefault();
 
@@ -71,7 +71,7 @@ namespace Leilum.Data.DAOS
         public void put(int key, Categoria value)
         {
             string sql_cmd = "INSERT INTO Categoria (idCategoria, Designacao, Regra) VALUES ('" +
-                                value.getIdCategoria() + "','" + value.getDesignacao() + "','" + value.getIdRegras() +"');";
+                                value.getIdCategoria() + "','" + value.getDesignacao() + "','" + value.getRegra() +"');";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))

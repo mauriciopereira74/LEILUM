@@ -1,4 +1,4 @@
-using Leilum.LeilumLN.Artigo;
+using Leilum.LeilumLN.ArtigoLN;
 using Dapper;
 using System.Data.SqlClient;
 

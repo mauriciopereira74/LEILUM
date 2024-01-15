@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Leilum.LeilumLN.Utilizador;
+using Leilum.LeilumLN.UtilizadorLN;
 
 namespace leilum.Features.auth
 {

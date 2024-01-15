@@ -1,8 +1,5 @@
 
-
-
-
-namespace Leilum.LeilumLN.Leilao{
+namespace Leilum.LeilumLN.LeilaoLN{
 
     public class Licitacao{
 

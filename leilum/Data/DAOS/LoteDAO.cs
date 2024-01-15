@@ -1,6 +1,6 @@
 using Dapper;
 using System.Data.SqlClient;
-using Leilum.LeilumLN.Lote;
+using Leilum.LeilumLN.LoteLN;
 
 namespace Leilum.Data.DAOS
 {

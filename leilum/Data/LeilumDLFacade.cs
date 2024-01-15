@@ -1,6 +1,7 @@
 using Leilum.Data.DAOS;
-using Leilum.LeilumLN.Utilizador;
-using Leilum.LeilumLN.Leilao;
+using Leilum.LeilumLN.UtilizadorLN;
+using Leilum.LeilumLN.LeilaoLN;
+using Leilum.LeilumLN.CategoriaLN;
 
 namespace Leilum.Data
 {
@@ -105,6 +106,7 @@ namespace Leilum.Data
         // Atualiza tipo de utilizador (Admin)
         
         //Leilao
+        /*
         public Leilao getLeilao(int idLeilao){
             return this.leilaoDao.get(idLeilao);
         }
@@ -123,7 +125,7 @@ namespace Leilum.Data
         public void adicionaLeilao(Leilao leilao){
             this.leilaoDao.adicionaLeilao(leilao);
         }
-
+        */
         // Atualiza Leilao
         
         // Adiciona uma Licitação
@@ -139,9 +141,12 @@ namespace Leilum.Data
         // Get maior licitação de um leilão (Acho que não é preciso)
         
         // Get tempo restante de um leilao
-        public DateTime tempoRestante(Leilao leilao) {
-            TimeSpan diferenca = leilao.getDuracao() - DateTime.now;
-            return diferenca;
+        public DateTime TempoRestante(Leilao leilao)
+        {
+            TimeSpan diferenca = leilao.getDuracao() - DateTime.Now;
+            DateTime tempoFuturo = DateTime.Now + diferenca;
+
+            return tempoFuturo;
         }
         
         // Categoria

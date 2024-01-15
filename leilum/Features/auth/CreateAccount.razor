@@ -1,5 +1,5 @@
 @layout LoginLayout
-@page "/"
+@page "/create"
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authStateProvider
 
@@ -15,61 +15,131 @@
         </RadzenCard>
     </RadzenColumn>
     <RadzenColumn Size="12" SizeMD="6">
-        <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12">
-            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-6">
-                Login
-            </RadzenText>
-            <RadzenTemplateForm Data=@("SimpleLogin")>
-                <RadzenLogin AllowResetPassword="false" Username=@email Password=@password AllowRememberMe="false"
-                        LoginText="LogIn" UserText="Email" PasswordText="Password"
-                        UserRequired="Email necessario"
-                        PasswordRequired="Password necessaria"
-                        RegisterText="Criar Conta"
-                        RegisterMessageText="Ainda não tens conta?"
-                        Login="@(args => HandleLogin(args))"
-                        Register="@(args => HandleCreate())"/>
-            </RadzenTemplateForm>
-        </RadzenCard>
+        <div Class="rz-p-0 rz-p-md-12">
+            <RadzenRow Gap="1rem">
+                <RadzenColumn Size="12" SizeSM="6">
+                    <RadzenStack>
+                        <RadzenFormField Text="Upload Photo" Variant=@variant>
+                            <RadzenCard>
+                                <RadzenFileInput @bind-Value=@file @bind-FileName=@filename @bind-FileSize=@fileSize TValue="string" class="w-100" 
+                                    Change=@(args => OnChange(args, "FileInput")) Error=@(args => OnError(args, "FileInput")) InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})"/>
+                                </RadzenCard>
+                        </RadzenFormField>
+                        <RadzenFormField Text="Email" Variant=@variant>
+                            <RadzenTextBox @bind-Value="@email" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="Password" Variant="@variant">
+                            <ChildContent>
+                                <RadzenTextBox @bind-Value="@password" Visible="@(!flag)" />
+                                <RadzenPassword @bind-Value="@password" Visible="@flag" />
+                            </ChildContent>
+                            <End>
+                                <RadzenButton Icon="@(flag ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
+                            </End>
+                        </RadzenFormField>
+                        <RadzenFormField Text="Name" Variant=@variant>
+                            <RadzenTextBox @bind-Value="@name" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="Contact" Variant="@variant">
+                            <RadzenTextBox @bind-Value="@contact" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="Address" Variant=@variant>
+                            <RadzenTextBox @bind-Value="@address" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="Birth Date" Variant=@variant>
+                            <RadzenDatePicker @bind-Value="@birth" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="Nationality" Variant=@variant>
+                            <RadzenTextBox @bind-Value="@nationality" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="NIF" Variant=@variant>
+                            <RadzenNumeric @bind-Value="@nif" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="Payment Method" Variant="@variant">
+                            <Start>
+                                <RadzenIcon Icon="credit_card" />
+                            </Start>
+                            <ChildContent>
+                                <RadzenNumeric @bind-Value="@pay" />
+                            </ChildContent>
+                        </RadzenFormField>
+                        <RadzenFormField Text="IBAN" Variant=@variant>
+                            <RadzenTextBox @bind-Value="@iban" />
+                        </RadzenFormField>        
+                    </RadzenStack>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Register" ></RadzenButton>
+                </RadzenColumn>
+            </RadzenRow>
+        </div>
     </RadzenColumn>
 </RadzenRow>
 
 
 @code {
-    private string?  email;
-    private string? password;
-
-    private async Task HandleLogin(LoginArgs args)
+    Variant variant = Variant.Outlined;
+    Utilizador user;
+    string file = "";
+    string filename = "";
+    long? fileSize;
+    string email = "";
+    string password = "";
+    bool flag = true;
+    string name = "";
+    string contact= "";
+    string address = "";
+    DateOnly birth;
+    string nationality = "";
+    int nif;
+    int pay;
+    string iban = "";
+    
+    void TogglePassword()
     {
-        ILeilumLN ef = new LeilumLNFacade();
-        if (ef.existsEmail(args.Username)) // utilizador existe?
-        {
-            Utilizador user = ef.getUtilizadorWithEmail(args.Username);
-            if (user.getPassword().Equals(args.Password)) // a palavra passe é correcta?
-            {
-                CurrentUser.setCurrentUser(user); // serve para as outras páginas saberem quem é que está na sessão
+        flag = !flag;
+    }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //companyNames = dbContext.Customers.Select(c => c.CompanyName).Distinct();
+    }
+
+    void OnChange(string value, string name)
+    {
+        Console.WriteLine($"{name} value changed");
+    }
+
+    void OnError(UploadErrorEventArgs args, string name)
+    {
+        Console.WriteLine($"{args.Message}");
+    }
+
+    private async void register()
+    {
+        if (file != null && filename != null && fileSize != null && email != null &&
+            password != null && name != null && contact != null && address != null &&
+            birth != null && nationality != null && nif != null && pay != null)
+        {
+            Utilizador user = new Utilizador(email,password,1,filename,nif,name,address,nationality,contact,birth,pay,iban);
+
+            ILeilumLN ef = new LeilumLNFacade();
+
+            if(!ef.existsEmail(user.getEmail())){
+                ef.adicionaConta(user);
                 var customAuthStateProvider = (AuthStateProvider)authStateProvider;
-                await customAuthStateProvider.UpdateAuthenticationState(new UserSession
-                {
-                    email = user.getEmail(),
-                    tipo = user.getTipoUtilizador().ToString()
-                });
-                NavigationManager.NavigateTo("/welcome", true);
-            }
-            else
-            {
-                //await ShowBusyDialog(true, "A palavra passe é incorreta.");
+                    await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+                    {
+                        email = user.getEmail(),
+                        tipo = user.getTipoUtilizador().ToString()
+                    });
+                    NavigationManager.NavigateTo("/welcome", true);
             }
         }
         else
         {
-            //await ShowBusyDialog(true, "Utilizador não encontrado.");
+            // At least one variable is null
+            // Your logic here
         }
-    }
 
-
-    private void HandleCreate()
-    {
-        NavigationManager.NavigateTo("/create", true);
     }
 }

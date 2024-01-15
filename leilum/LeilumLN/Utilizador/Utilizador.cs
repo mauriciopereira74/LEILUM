@@ -1,4 +1,4 @@
-namespace Leilum.LeilumLN.Utilizador{
+namespace Leilum.LeilumLN.UtilizadorLN{
 
     public class Utilizador{
         

@@ -1,6 +1,6 @@
 
-using Leilum.LeilumLN.Leilao;
-using Leilum.LeilumLN.Utilizador;
+using Leilum.LeilumLN.LeilaoLN;
+using Leilum.LeilumLN.UtilizadorLN;
 
 namespace leilum.LeilumLN
 {

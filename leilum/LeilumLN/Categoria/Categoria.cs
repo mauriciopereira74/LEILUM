@@ -1,8 +1,5 @@
 
-
-
-
-namespace Leilum.LeilumLN.Categoria{
+namespace Leilum.LeilumLN.CategoriaLN{
     
     public class Categoria{
         private int id_categoria;

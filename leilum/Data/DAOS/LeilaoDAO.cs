@@ -1,10 +1,9 @@
 using Dapper;
 using System.Data.SqlClient;
-using Leilum.LeilumLN.Leilao;
-using Leilum.Data.DAOS.UtilizadorDAO;
-using Leilum.Data.DAOS.LoteDAO;
-using Leilum.Data.DAOS.CategoriaDAO;
-using Leilum.Data.DAOS.ArtigoDAO;
+using Leilum.LeilumLN.LeilaoLN;
+using Leilum.LeilumLN.UtilizadorLN;
+using Leilum.LeilumLN.LoteLN;
+using Leilum.LeilumLN.CategoriaLN;
 
 namespace Leilum.Data.DAOS
 {
@@ -45,7 +44,7 @@ namespace Leilum.Data.DAOS
         {
             string sql_cmd = "INSERT INTO Leilao (idLeilao, Titulo, Duracao, ValorAbertura, ValorBase, ValorMinimo, Estado, Avaliador, Comitente, Lote, Categoria) VALUES ('" +
                                 value.getNrLeilao() + "','" + value.getTitutlo() + "','" + value.getDuracao() + "','" +
-                                value.getValorAbertura() + "','" + value.getValorBase() + "','" + value.getValorMinimo() + "','" + value.getEstado() + "','" + value.getAvaliador() + "','" + value.getIdComitente() + "','" + value.getIdLote() + "','" + value.getCategoriaId() + "');";
+                                value.getValorAbertura() + "','" + value.getValorBase() + "','" + value.getValorMinimo() + "','" + value.getEstado() + "','" + value.getAvaliador() + "','" + value.getComitente() + "','" + value.getLote() + "','" + value.getCategoria() + "');";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -202,6 +201,7 @@ namespace Leilum.Data.DAOS
             return this.constainsKey(value.getNrLeilao());
         }
 
+        /*
         public ICollection<Leilao> getLeiloesEmCurso(){
             ICollection<Leilao> leiloesAtivos = new HashSet<Leilao>();
             string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 1";
@@ -211,7 +211,7 @@ namespace Leilum.Data.DAOS
                     IEnumerable<dynamic> leiloes = conn.Query<dynamic>(s_cmd);
                     foreach (var leilaoAux in leiloes){
 
-                        DateTime duracao = leilaoAux.duracao as DateTime?;
+                        DateTime duracao = (DateTime)(leilaoAux.duracao as DateTime?);
 
                         Licitacao licitacao = getLicitacao(leilaoAux.licitacao);
 
@@ -229,6 +229,8 @@ namespace Leilum.Data.DAOS
                         leiloesAtivos.Add(leilao);
                     }
                 }
+            } catch{
+
             }
         }
 
@@ -256,7 +258,10 @@ namespace Leilum.Data.DAOS
                         leiloesAtivos.Add(leilao);
                     }
                 }
+            } catch{
+
             }
         }
+        */
     }
 }
