@@ -6,13 +6,13 @@ namespace Leilum.LeilumLN.LoteLN{
     public class Lote{
 
         private int id_lote;
-        private int id_comitente;
-        private int id_comprador;
-        private int id_avaliador;
+        private string id_comitente;
+        private string id_comprador;
+        private string id_avaliador;
         private string imgPath;
         private List<Artigo> artigos;
 
-        public Lote(int idLote, int idComitente, int idComprador, int idAvaliador, string imgPath, List<Artigo> artigos){
+        public Lote(int idLote, string idComitente, string idComprador, string idAvaliador, string imgPath, List<Artigo> artigos){
             this.id_lote = idLote;
             this.id_comitente = idComitente;
             this.id_comprador = idComprador;
@@ -29,27 +29,27 @@ namespace Leilum.LeilumLN.LoteLN{
             this.id_lote = idLote;
         }
 
-        public int getIdComitente(){
+        public string getIdComitente(){
             return id_comitente;
         }
 
-        public void setIdComitente(int idComitente){
+        public void setIdComitente(string idComitente){
             this.id_comitente = idComitente;
         }
 
-        public int getIdComprador(){
+        public string getIdComprador(){
             return id_comprador;
         }
 
-        public void setIdComprador(int idComprador){
+        public void setIdComprador(string idComprador){
             this.id_comprador = idComprador;
         }
 
-        public int getIdAvaliador(){
+        public string getIdAvaliador(){
             return id_avaliador;
         }
 
-        public void setIdAvaliador(int idAvaliador){
+        public void setIdAvaliador(string idAvaliador){
             this.id_avaliador = idAvaliador;
         }
 
@@ -64,7 +64,6 @@ namespace Leilum.LeilumLN.LoteLN{
         }
 
         public void addArtigo(Artigo a) {
-            int idArtigo = a.getId_Artigo();
             artigos.Add(a);
         }
 

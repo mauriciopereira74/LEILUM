@@ -20,7 +20,7 @@ namespace Leilum.Data.DAOS
             return singleton;
         }
 
-        public static Leilao? get(int idLeilao)
+        public Leilao? get(int idLeilao)
         {
             Leilao? result = null;
             string sql_cmd = $"SELECT * FROM LEILUM.Leilao WHERE idLeilao = '{idLeilao}'";
@@ -43,7 +43,7 @@ namespace Leilum.Data.DAOS
         public void put(int key, Leilao value)
         {
             string sql_cmd = "INSERT INTO Leilao (idLeilao, Titulo, Duracao, ValorAbertura, ValorBase, ValorMinimo, Estado, Avaliador, Comitente, Lote, Categoria) VALUES ('" +
-                                value.getNrLeilao() + "','" + value.getTitutlo() + "','" + value.getDuracao() + "','" +
+                                value.getNrLeilao() + "','" + value.getTitulo() + "','" + value.getDuracao() + "','" +
                                 value.getValorAbertura() + "','" + value.getValorBase() + "','" + value.getValorMinimo() + "','" + value.getEstado() + "','" + value.getAvaliador() + "','" + value.getComitente() + "','" + value.getLote() + "','" + value.getCategoria() + "');";
             try 
             {
@@ -200,68 +200,6 @@ namespace Leilum.Data.DAOS
         {
             return this.constainsKey(value.getNrLeilao());
         }
-
-        /*
-        public ICollection<Leilao> getLeiloesEmCurso(){
-            ICollection<Leilao> leiloesAtivos = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 1";
-            try{
-                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
-                    conn.Open();
-                    IEnumerable<dynamic> leiloes = conn.Query<dynamic>(s_cmd);
-                    foreach (var leilaoAux in leiloes){
-
-                        DateTime duracao = (DateTime)(leilaoAux.duracao as DateTime?);
-
-                        Licitacao licitacao = getLicitacao(leilaoAux.licitacao);
-
-                        Utilizador avaliador = getAvaliador(leilaoAux.avaliador);
-
-                        Utilizador comitente = getComitente(leilaoAux.comitente);
-
-                        Lote lote = getLote(leilaoAux.lote);
-
-                        Categoria categoria = getCategoria(leilaoAux.categoria);
-
-                        Leilao leilao = new Leilao((int)leilaoAux.nrLeilao,(string)leilaoAux.titulo,duracao,(double)leilaoAux.valorAbertura,(double)leilaoAux.valorBase,(double)leilaoAux.valorMinimo
-                                                  ,licitacao,(int)leilaoAux.estado,avaliador,comitente,lote,categoria);
-
-                        leiloesAtivos.Add(leilao);
-                    }
-                }
-            } catch{
-
-            }
-        }
-
-        public ICollection<Leilao> getLeiloesTerminados(){
-            ICollection<Leilao> leiloesTerminados = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 0";
-            try{
-                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
-                    conn.Open();
-                    IEnumerable<Leilao> leiloes = conn.Query<Leilao>(s_cmd);
-                    foreach (Leilao leilao in leiloes){
-
-                        Utilizador avaliador = getAvaliador(leilao.getAvaliador());
-
-                        Utilizador comitente = getComitente(leilao.getComitente());
-
-                        Lote lote = getLote(leilao.getLote());
-
-                        Categoria categoria = getCategoria(leilao.getCategoria());
-
-                        leilao.setAvaliador(avaliador);
-                        leilao.setComitente(comitente);
-                        leilao.setLote(lote);
-                        leilao.setCategoria(categoria);
-                        leiloesAtivos.Add(leilao);
-                    }
-                }
-            } catch{
-
-            }
-        }
-        */
+        
     }
 }

@@ -265,7 +265,7 @@ namespace Leilum.Data.DAOS
             return result;
         }
 
-        public Utilizador getAvaliador(string avaliadorEmail){
+        public static Utilizador getAvaliador(string avaliadorEmail){
             
             Utilizador? resultado = null;
             string s_cmd = $"SELECT * FROM db.Utilizador WHERE Email = {avaliadorEmail}";
@@ -281,7 +281,7 @@ namespace Leilum.Data.DAOS
             return resultado;
         }
 
-        public Utilizador getComitente(string comitenteEmail){
+        public static Utilizador getComitente(string comitenteEmail){
 
             Utilizador? resultado = null;
             string s_cmd = $"SELECT * FROM db.Utilizador WHERE Email = {comitenteEmail}";
