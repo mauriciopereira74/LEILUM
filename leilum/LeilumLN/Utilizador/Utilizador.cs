@@ -11,7 +11,7 @@ namespace Leilum.LeilumLN.UtilizadorLN{
         private string? morada { get; set; }
         private string? nacionalidade { get; set; }
         private string? contacto { get; set; }
-        private DateOnly dataNascimento { get; set; }
+        private DateTime dataNascimento { get; set; }
         private int metodoPagamento { get; set; }
         private string? iban { get; set; }
         
@@ -26,7 +26,7 @@ namespace Leilum.LeilumLN.UtilizadorLN{
             this.fotoPerfil = null;
         }
 
-        public Utilizador(string email, string password, int idTipoUtilizador, string fotoPerfil, int contribuinte, string nome, string morada, string nacionalidade, string contacto, DateOnly dataNascimento, int metodoPagamento, string iban){
+        public Utilizador(string email, string password, int idTipoUtilizador, string fotoPerfil, int contribuinte, string nome, string morada, string nacionalidade, string contacto, DateTime dataNascimento, int metodoPagamento, string iban){
             this.email = email;
             this.password = password;
             this.idTipoUtilizador = idTipoUtilizador;
@@ -91,7 +91,7 @@ namespace Leilum.LeilumLN.UtilizadorLN{
             return this.contacto;
         }
 
-        public DateOnly getDataNascimento()
+        public DateTime getDataNascimento()
         {
             return this.dataNascimento;
         }
