@@ -207,7 +207,7 @@ namespace Leilum.Data.DAOS
             return this.constainsKey(value.getId_Artigo());
         }
 
-        public static List<Artigo> getArtigosLote(int LoteId){
+        public List<Artigo> getArtigosLote(int LoteId){
             List<Artigo> artigos = new List<Artigo>();
             string s_cmd = $"SELECT * FROM db.Artigo WHERE idLote = {LoteId}";
             try{

@@ -136,9 +136,9 @@ namespace Leilum.Data
                                 int loteId = Convert.ToInt32(reader["Lote"]);
                                 int categoriaId = Convert.ToInt32(reader["Categoria"]);
 
-                                Licitacao licitacao = LicitacaoDAO.get(licitacaoAtual);
-                                Utilizador avaliador = UtilizadorDAO.get(avaliadorEmail);
-                                Utilizador comitente = UtilizadorDAO.get(comitenteEmail);
+                                Licitacao licitacao = this.licitacaoDao.get(licitacaoAtual);
+                                Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
+                                Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
                                 Categoria categoria = getCategoria(categoriaId);
 
@@ -176,9 +176,9 @@ namespace Leilum.Data
                                 int loteId = Convert.ToInt32(reader["Lote"]);
                                 int categoriaId = Convert.ToInt32(reader["Categoria"]);
 
-                                Licitacao licitacao = LicitacaoDAO.get(licitacaoAtual);
-                                Utilizador avaliador = UtilizadorDAO.get(avaliadorEmail);
-                                Utilizador comitente = UtilizadorDAO.get(comitenteEmail);
+                                Licitacao licitacao = this.licitacaoDao.get(licitacaoAtual);
+                                Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
+                                Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
                                 Categoria categoria = getCategoria(categoriaId);
 
@@ -250,7 +250,7 @@ namespace Leilum.Data
                                 string? designacao = Convert.ToString(reader["Designacao"]);
                                 int idRegra = Convert.ToInt32(reader["Regra"]);
 
-                                Regra regra = RegraDAO.get(idRegra);
+                                Regra regra = this.regraDAO.get(idRegra);
 
                                 result = new Categoria(idCategoria,designacao,regra);
                             }
@@ -310,7 +310,7 @@ namespace Leilum.Data
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
                                 string? pathImg = Convert.ToString(reader["Imgpath"]);
 
-                                lote = new Lote(idLote,comitenteEmail,compradorEmail,avaliadorEmail,pathImg,ArtigoDAO.getArtigosLote(LoteId));
+                                lote = new Lote(idLote,comitenteEmail,compradorEmail,avaliadorEmail,pathImg,this.artigoDAO.getArtigosLote(LoteId));
                             }
                         }
                     }
