@@ -67,7 +67,7 @@
                             <RadzenTextBox @bind-Value="@iban" />
                         </RadzenFormField>        
                     </RadzenStack>
-                <RadzenButton ButtonType="ButtonType.Submit" Text="Register" ></RadzenButton>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Register" Click="@(() => register())" ></RadzenButton>
                 </RadzenColumn>
             </RadzenRow>
         </div>
@@ -115,11 +115,14 @@
 
     private async void register()
     {
-        if (file != null && filename != null && fileSize != null && email != null &&
-            password != null && name != null && contact != null && address != null &&
-            birth != null && nationality != null && nif != null && pay != null)
+        if (//file != null && filename != null && fileSize != null && email != null &&
+            //password != null && name != null && contact != null && address != null &&
+            //birth != null && nationality != null && nif != null && pay != null
+            true)
         {
-            Utilizador user = new Utilizador(email,password,1,filename,nif,name,address,nationality,contact,birth,pay,iban);
+            //Utilizador user = new Utilizador(email,password,1,filename,nif,name,address,nationality,contact,birth,pay,iban);
+
+            Utilizador user = new Utilizador("teste@leilum.pt","admin",1,"filename",242786570,"LEILUM","Rua do Bacanau","PT","930530031",birth,2,"PT5000002342342");
 
             ILeilumLN ef = new LeilumLNFacade();
 

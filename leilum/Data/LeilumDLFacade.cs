@@ -63,7 +63,7 @@ namespace Leilum.Data
 
         public void addUtilizador(Utilizador utilizador)
         {
-            this.utilizadorDAO.put(utilizador.getContribuinte(), utilizador);
+            this.utilizadorDAO.put(utilizador);
         }
 
         public void removeUtilizador(int nif)

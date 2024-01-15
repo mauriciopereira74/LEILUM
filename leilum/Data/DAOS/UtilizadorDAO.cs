@@ -56,26 +56,25 @@ namespace Leilum.Data.DAOS
             return utilizador;
         }
 
-        public void put(int key, Utilizador value)
+        public void put(Utilizador value)
         {
         
-            string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador) VALUES ('" +
-                                value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador() + "');";
-            string sql_cmdInfoUser = "INSERT INTO InfoUtilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, idUtilizador, FotoPerfilPath) VALUES ('" +
-                                     value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador() + "','" + value.getFotoPerfil() + "');";
+            string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador, FotoPerfilPath) VALUES ('" +
+                                value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador()  + "','" + value.getFotoPerfil() + "');";
+            string sql_cmdInfoUser = "INSERT INTO InfoUtilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, idUtilizador) VALUES ('" +
+                                     value.getContribuinte() + "','" + value.getNome() + "','" + value.getMorada() + "','" + value.getNacionalidade()+ "','" + value.getContacto() + "','" + value.getDataNascimento() + "','" + value.getMetodoPagamento() + "','" + value.getIban() + "','" + value.getTipoUtilizador() + "');";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
+                    con.Open();
                     using(SqlCommand cmd = new SqlCommand(sql_cmdUser, con))
                     {
-                        con.Open();
                         cmd.ExecuteNonQuery();
                     }
 
                     using (SqlCommand cmd2 = new SqlCommand(sql_cmdInfoUser, con))
                     {
-                        con.Open();
                         cmd2.ExecuteNonQuery();
                     }
                 }
