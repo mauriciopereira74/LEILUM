@@ -17,7 +17,7 @@ namespace Leilum.Data.DAOS
             return singleton;
         }
 
-        public static Regra? get(int idRegra)
+        public Regra? get(int idRegra)
         {
             Regra? result = null;
             string sql_cmd = $"SELECT * FROM LEILUM.Regra WHERE idRegra = '{idRegra}'";
