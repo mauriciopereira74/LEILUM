@@ -148,24 +148,37 @@ namespace Leilum.Data
 
             return tempoFuturo;
         }
-        
-        // Categoria
-        
+                
         // Get categoria
         public Categoria getCategoria(int idCategoria) {
             return this.categoriaDAO.get(idCategoria);
         }
-
         
+        // Adiciona Categoria
+        public void addCategoria(Categoria categoria) {
+            this.categoriaDAO.put(categoria.getIdCategoria(),categoria);
+        }
 
-
-        
-        // Cria Categoria
-        
-        // Regras
+        // Remove Categoria
+        public void removeCategoria(int idCategoria) {
+            this.categoriaDAO.remove(idCategoria);
+        }
         
         // Get Regra
+        public Regra getRegra(int idRegra) {
+            return this.regraDAO.get(idRegra);
+        }
         
-        // Cria Regra (Admin)
+        // Adiciona Regra (Admin)
+        public void addRegra(Regra regra)
+        {
+            this.regraDAO.put(regra.getIdRegra(),regra);
+        }
+        
+        // Remove Regra (Admin)
+        public void removeRegra(int idRegra)
+        {
+            this.regraDAO.remove(idRegra);
+        }
     }
 }
