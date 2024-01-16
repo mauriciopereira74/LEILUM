@@ -59,10 +59,10 @@ namespace Leilum.Data.DAOS
         public void put(Utilizador value)
         {
         
-            string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador, FotoPerfilPath) VALUES ('" +
-                                value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador()  + "','" + value.getFotoPerfil() + "');";
-            string sql_cmdInfoUser = "INSERT INTO InfoUtilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, idUtilizador) VALUES ('" +
-                                     value.getContribuinte() + "','" + value.getNome() + "','" + value.getMorada() + "','" + value.getNacionalidade()+ "','" + value.getContacto() + "','" + value.getDataNascimento() + "','" + value.getMetodoPagamento() + "','" + value.getIban() + "','" + value.getTipoUtilizador() + "');";
+            string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador) VALUES ('" +
+                                value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador()  +  "');";
+            string sql_cmdInfoUser = "INSERT INTO InfoUtilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, FotoPerfilPath, idUtilizador) VALUES ('" +
+                                     value.getContribuinte() + "','" + value.getNome() + "','" + value.getMorada() + "','" + value.getNacionalidade()+ "','" + value.getContacto() + "','" + value.getDataNascimento() + "','" + value.getMetodoPagamento() + "','" + value.getIban() + "','" +  value.getFotoPerfil() + "','" + value.getEmail() + "');";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -72,7 +72,6 @@ namespace Leilum.Data.DAOS
                     {
                         cmd.ExecuteNonQuery();
                     }
-
                     using (SqlCommand cmd2 = new SqlCommand(sql_cmdInfoUser, con))
                     {
                         cmd2.ExecuteNonQuery();
