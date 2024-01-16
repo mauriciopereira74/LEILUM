@@ -38,7 +38,7 @@ namespace Leilum.Data
         public Regra getRegra(int idRegra);
         public void addRegra(Regra regra);
         public void removeRegra(int idRegra);
-        //public void adicionaArtigo(Artigo artigo);
+        public void adicionaArtigo(Artigo artigo);
         public int quantidadeArtigos();
         public int quantidadeLotes();
         public ICollection<Leilao> getLeiloesComitentes(string uComitente);
