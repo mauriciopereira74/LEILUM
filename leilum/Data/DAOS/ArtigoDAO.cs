@@ -206,6 +206,26 @@ namespace Leilum.Data.DAOS
         {
             return this.constainsKey(value.getId_Artigo());
         }
+
+        public List<Artigo> getArtigosLote(int LoteId){
+            List<Artigo> artigos = new List<Artigo>();
+            string s_cmd = $"SELECT * FROM db.Artigo WHERE idLote = {LoteId}";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    using (SqlCommand cmd = new SqlCommand(s_cmd, conn)){
+                        conn.Open();
+                        IEnumerable<Artigo> aux = conn.Query<Artigo>(s_cmd);
+                        foreach (Artigo artigo in aux)
+                        {
+                            artigos.Add(artigo);
+                        }
+                    }
+                }
+            } catch (Exception e){
+                throw new Exception(e.Message);
+            }
+            return artigos;
+        }
     }
 }
     

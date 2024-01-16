@@ -48,8 +48,8 @@ else
     private IEnumerable<Card>? _cards;
     protected override async Task OnInitializedAsync(){
        try{
-          string domainName = NavigationManager.Uri;
-          _cards = await Http.GetFromJsonAsync<IEnumerable<Card>>(domainName+"data/cards.json");
+          //string domainName = NavigationManager.Uri;
+          //_cards = await Http.GetFromJsonAsync<IEnumerable<Card>>(domainName+"data/cards.json");
        }
        catch (HttpRequestException ex){
           Console.WriteLine($"There was a problem loading amiibos data: {ex.Message}");

@@ -45,7 +45,7 @@ namespace Leilum.LeilumLN.LeilaoLN{
             this.nrLeilao = nrLeilao;
         }
 
-        public string getTitutlo(){
+        public string getTitulo(){
             return titulo;
         }
 

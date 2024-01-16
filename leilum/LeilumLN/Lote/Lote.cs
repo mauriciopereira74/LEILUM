@@ -52,6 +52,7 @@ namespace Leilum.LeilumLN.LoteLN{
 
         public void setAvaliador(Utilizador avaliador){
             this.avaliador = avaliador;
+
         }
 
         public string getImgPath()
@@ -65,7 +66,6 @@ namespace Leilum.LeilumLN.LoteLN{
         }
 
         public void addArtigo(Artigo a) {
-            int idArtigo = a.getId_Artigo();
             artigos.Add(a);
         }
 
