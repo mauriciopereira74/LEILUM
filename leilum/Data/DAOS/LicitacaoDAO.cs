@@ -33,7 +33,7 @@ namespace Leilum.Data.DAOS
         //     return resultado;
         // }
 
-        public static Licitacao? get(int idLicitacao)
+        public Licitacao? get(int idLicitacao)
         {
             Licitacao? result = null;
             string sql_cmd = $"SELECT * FROM LEILUM.Licitacao WHERE idLicitacao = '{idLicitacao}'";
