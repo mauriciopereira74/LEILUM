@@ -58,30 +58,51 @@ namespace Leilum.Data.DAOS
 
         public void put(Utilizador value)
         {
-        
-            string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador) VALUES ('" +
-                                value.getEmail() + "','" + value.getPassword() + "','" + value.getTipoUtilizador()  +  "');";
-            string sql_cmdInfoUser = "INSERT INTO InfoUtilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, FotoPerfilPath, idUtilizador) VALUES ('" +
-                                     value.getContribuinte() + "','" + value.getNome() + "','" + value.getMorada() + "','" + value.getNacionalidade()+ "','" + value.getContacto() + "','" + value.getDataNascimento() + "','" + value.getMetodoPagamento() + "','" + value.getIban() + "','" +  value.getFotoPerfil() + "','" + value.getEmail() + "');";
-            try 
+            string sql_cmdUser = "INSERT INTO Utilizador (Email, Password, TipoUtilizador) VALUES (@Email, @Password, @TipoUtilizador);";
+
+            string sql_cmdInfoUser = "INSERT INTO InfoUtilizador (Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, FotoPerfilPath, idUtilizador) " +
+                                    "VALUES (@Contribuinte, @Nome, @Morada, @Nacionalidade, @Contacto, @DataNascimento, @MetodoPagamento, @Iban, @FotoPerfil, @idUtilizador);";
+
+            try
             {
-                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
                     con.Open();
-                    using(SqlCommand cmd = new SqlCommand(sql_cmdUser, con))
+
+                    using (SqlCommand cmd = new SqlCommand(sql_cmdUser, con))
                     {
+                        // Adicionar parâmetros para evitar SQL injection
+                        cmd.Parameters.AddWithValue("@Email", value.getEmail());
+                        cmd.Parameters.AddWithValue("@Password", value.getPassword());
+                        cmd.Parameters.AddWithValue("@TipoUtilizador", value.getTipoUtilizador());
+
                         cmd.ExecuteNonQuery();
                     }
+
                     using (SqlCommand cmd2 = new SqlCommand(sql_cmdInfoUser, con))
                     {
+                        // Adicionar parâmetros para evitar SQL injection
+                        cmd2.Parameters.AddWithValue("@Contribuinte", value.getContribuinte());
+                        cmd2.Parameters.AddWithValue("@Nome", value.getNome());
+                        cmd2.Parameters.AddWithValue("@Morada", value.getMorada());
+                        cmd2.Parameters.AddWithValue("@Nacionalidade", value.getNacionalidade());
+                        cmd2.Parameters.AddWithValue("@Contacto", value.getContacto());
+                        cmd2.Parameters.AddWithValue("@DataNascimento", value.getDataNascimento().Date);
+                        cmd2.Parameters.AddWithValue("@MetodoPagamento", value.getMetodoPagamento());
+                        cmd2.Parameters.AddWithValue("@Iban", value.getIban());
+                        cmd2.Parameters.AddWithValue("@FotoPerfil", value.getFotoPerfil());
+                        cmd2.Parameters.AddWithValue("@idUtilizador", value.getEmail());
+
                         cmd2.ExecuteNonQuery();
                     }
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
+
 
         public Utilizador? remove(int nif)
         {
