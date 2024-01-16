@@ -1,22 +1,23 @@
 
 using Leilum.LeilumLN.ArtigoLN;
+using Leilum.LeilumLN.UtilizadorLN;
 
 namespace Leilum.LeilumLN.LoteLN{
 
     public class Lote{
 
         private int id_lote;
-        private string id_comitente;
-        private string id_comprador;
-        private string id_avaliador;
+        private Utilizador comitente;
+        private Utilizador comprador;
+        private Utilizador avaliador;
         private string imgPath;
         private List<Artigo> artigos;
 
-        public Lote(int idLote, string idComitente, string idComprador, string idAvaliador, string imgPath, List<Artigo> artigos){
+        public Lote(int idLote, Utilizador comitente, Utilizador comprador, Utilizador avaliador, string imgPath, List<Artigo> artigos){
             this.id_lote = idLote;
-            this.id_comitente = idComitente;
-            this.id_comprador = idComprador;
-            this.id_avaliador = idAvaliador;
+            this.comitente = comitente;
+            this.comprador = comprador;
+            this.avaliador = avaliador;
             this.imgPath = imgPath;
             this.artigos = artigos;
         }
@@ -29,28 +30,29 @@ namespace Leilum.LeilumLN.LoteLN{
             this.id_lote = idLote;
         }
 
-        public string getIdComitente(){
-            return id_comitente;
+        public Utilizador getComitente(){
+            return comitente;
         }
 
-        public void setIdComitente(string idComitente){
-            this.id_comitente = idComitente;
+        public void setComitente(Utilizador comitente){
+            this.comitente = comitente;
         }
 
-        public string getIdComprador(){
-            return id_comprador;
+        public Utilizador getComprador(){
+            return comprador;
         }
 
-        public void setIdComprador(string idComprador){
-            this.id_comprador = idComprador;
+        public void setComprador(Utilizador comprador){
+            this.comprador = comprador;
         }
 
-        public string getIdAvaliador(){
-            return id_avaliador;
+        public Utilizador getAvaliador(){
+            return avaliador;
         }
 
-        public void setIdAvaliador(string idAvaliador){
-            this.id_avaliador = idAvaliador;
+        public void setAvaliador(Utilizador avaliador){
+            this.avaliador = avaliador;
+
         }
 
         public string getImgPath()
@@ -77,7 +79,7 @@ namespace Leilum.LeilumLN.LoteLN{
 
 
         public Lote Clone(){
-            Lote result = new Lote(id_lote,id_comitente,id_comprador,id_avaliador,imgPath,artigos);
+            Lote result = new Lote(id_lote,comitente,comprador,avaliador,imgPath,artigos);
             return result;
         }
     }

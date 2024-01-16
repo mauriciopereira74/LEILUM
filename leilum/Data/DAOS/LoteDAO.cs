@@ -17,7 +17,7 @@ namespace Leilum.Data.DAOS
             return singleton;
         }
 
-        public static Lote? get(int idLote)
+        public Lote? get(int idLote)
         {
             Lote? result = null;
             string sql_cmd = $"SELECT * FROM LEILUM.Lote WHERE idLote = '{idLote}'";
@@ -40,8 +40,8 @@ namespace Leilum.Data.DAOS
         public void put(int key, Lote value)
         {
             string sql_cmd = "INSERT INTO Lote (idLote, Comitente, Comprador, Avaliador, Imgpath) VALUES ('" +
-                                value.getIdLote() + "','" + value.getIdComitente() + "','" + value.getIdComprador() + "','" +
-                                value.getIdAvaliador() + "','" + value.getImgPath() + "');";
+                                value.getIdLote() + "','" + value.getComitente() + "','" + value.getComprador() + "','" +
+                                value.getAvaliador() + "','" + value.getImgPath() + "');";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
