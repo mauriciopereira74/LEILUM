@@ -350,15 +350,21 @@ namespace Leilum.Data
         
         
         // Função para buscar os leilões em que o Utilizador foi Comitente
-        public ICollection<Leilao> getLeiloesComitentes(string uComitente){
+        public ICollection<Leilao> getLeiloesComitentes(string uComitente)
+        {
             ICollection<Leilao> leiloesComitente = new HashSet<Leilao>();
             string s_cmd = "SELECT * FROM db.Leilao WHERE Comitente = {uComitente}";
-            try{
-                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
-                    using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using (SqlCommand cmd = new SqlCommand(s_cmd, conn))
+                    {
                         conn.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader()){
-                            if (reader.Read()){
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
                                 DateTime duracao = Convert.ToDateTime(reader["Duracao"]);
@@ -378,19 +384,25 @@ namespace Leilum.Data
                                 Lote lote = this.loteDao.get(loteId);
                                 Categoria categoria = getCategoria(categoriaId);
 
-                                Leilao leilao = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,licitacao,estado,avaliador,comitente,lote,categoria);
+                                Leilao leilao = new Leilao(nrLeilao, titulo, duracao, valorAbertura, valorBase,
+                                    valorMinimo, licitacao, estado, avaliador, comitente, lote, categoria);
                                 leiloesComitente.Add(leilao);
                             }
-                            return leiloesComitente;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return leiloesComitente;
         }
 
-
-        // Lote
-
-        public Lote getLote(int LoteId){
+        public Lote getLote(int loteId){
 
             Lote? lote = null;
-            string s_cmd = $"SELECT * FROM db.Lote WHERE idLote = {LoteId}";
+            string s_cmd = $"SELECT * FROM db.Lote WHERE idLote = {loteId}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd, conn)){
@@ -403,8 +415,11 @@ namespace Leilum.Data
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
                                 string? pathImg = Convert.ToString(reader["Imgpath"]);
 
-                                lote = new Lote(idLote,comitenteEmail,compradorEmail,avaliadorEmail,pathImg,this.artigoDAO.getArtigosLote(LoteId));
-
+                                Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
+                                Utilizador comprador = this.utilizadorDAO.getUtilizadorWithEmail(compradorEmail);
+                                Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
+                                
+                                lote = new Lote(idLote,comitente,comprador,avaliador,pathImg,this.artigoDAO.getArtigosLote(loteId));
                             }
                         }
                     }
@@ -412,7 +427,6 @@ namespace Leilum.Data
             } catch (Exception e){
                 throw new Exception(e.Message);
             }
-
             return lote;
         }
 

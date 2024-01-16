@@ -84,6 +84,5 @@ namespace leilum.LeilumLN
         
         // Função para buscar leilões em que o Utilizador ganhou
         
-
     }
 }
