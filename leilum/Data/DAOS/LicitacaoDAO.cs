@@ -55,8 +55,8 @@ namespace Leilum.Data.DAOS
 
         public void put(int key, Licitacao value)
         {
-            string sql_cmd = "INSERT INTO Licitacao (idLicitacao, Valor, Licitador, Leilao) VALUES ('" +
-                                value.getIdLicitacao() + "','" + value.getValor() + "','" + value.getIdLicitador() + "','" +
+            string sql_cmd = $"INSERT INTO Licitacao (idLicitacao, Valor, Licitador, Leilao) VALUES ('" +
+                                key + "','" + value.getValor() + "','" + value.getIdLicitador() + "','" +
                                 value.getIdLeilao() + "');";
             try 
             {

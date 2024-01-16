@@ -114,6 +114,48 @@ namespace Leilum.Data
             return this.leilaoDao.get(idLeilao);
         }
 
+        // Get lista de leilões em curso e outro para leilões terminados e outro para leiloes pendentes
+
+        public ICollection<Leilao> getLeiloesPendentes(){
+            ICollection<Leilao> leiloesPendentes = new HashSet<Leilao>();
+            string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 2";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            if (reader.Read()){
+                                int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
+                                string? titulo = Convert.ToString(reader["Titulo"]);
+                                DateTime duracao = Convert.ToDateTime(reader["Duracao"]);
+                                double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
+                                double valorBase = Convert.ToDouble(reader["ValorBase"]);
+                                double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
+                                int licitacaoAtual = Convert.ToInt32(reader["LicitacaoAtual"]);
+                                int estado = Convert.ToInt32(reader["Estado"]);
+                                string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
+                                string? comitenteEmail = Convert.ToString(reader["Comitente"]);
+                                int loteId = Convert.ToInt32(reader["Lote"]);
+                                int categoriaId = Convert.ToInt32(reader["Categoria"]);
+
+                                Licitacao licitacao = this.licitacaoDao.get(licitacaoAtual);
+                                Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
+                                Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
+                                Lote lote = getLote(loteId);
+                                Categoria categoria = getCategoria(categoriaId);
+
+                                Leilao leilao = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,licitacao,estado,avaliador,comitente,lote,categoria);
+                                leiloesPendentes.Add(leilao);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e){
+                throw new Exception(e.Message);
+            }
+            return leiloesPendentes;
+        }
+
         public ICollection<Leilao> getLeiloesEmCurso(){
             ICollection<Leilao> leiloesAtivos = new HashSet<Leilao>();
             string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 1";
@@ -193,15 +235,7 @@ namespace Leilum.Data
             }
             return leiloesTerminados;
         }
-
-        // Get lista de leilões em curso e outro para leilões terminados
-        // public ICollection<Leilao> getLeiloesEmCurso(){
-        //     return this.leilaoDao.getLeiloesEmCurso();
-        // }
-
-        // public ICollection<Leilao> getLeiloesTerminaods(){
-        //     return this.leilaoDao.getLeiloesTerminaods();
-        // }
+        
         
         // Cria Leilao inclui adicionar artigos e lotes! (Verificar se a classe do Lote tem uma lista de artigos)
         
@@ -233,9 +267,6 @@ namespace Leilum.Data
         }
                 
         // Get categoria
-        // public Categoria getCategoria(int idCategoria) {
-        //     return this.categoriaDAO.get(idCategoria);
-        // }
 
         public Categoria getCategoria(int CategoriaId){
             Categoria? result = null;
@@ -319,6 +350,10 @@ namespace Leilum.Data
                 throw new Exception(e.Message);
             }
             return lote;
+        }
+
+        public void adicionaArtigo(Artigo artigo){
+            this.artigoDAO.put(artigo.getId_Artigo(),artigo);
         }
     }
 }
