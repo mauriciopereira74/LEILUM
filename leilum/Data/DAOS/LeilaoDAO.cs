@@ -13,10 +13,11 @@ namespace Leilum.Data.DAOS
 
         public static LeilaoDAO getInstance()
         {
-            if(singleton == null)
+            if (singleton == null)
             {
                 singleton = new LeilaoDAO();
             }
+
             return singleton;
         }
 
@@ -32,11 +33,12 @@ namespace Leilum.Data.DAOS
                     Leilao aux = con.QueryFirst<Leilao>(sql_cmd);
                     result = aux;
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return result;
         }
 
@@ -47,15 +49,16 @@ namespace Leilum.Data.DAOS
                                 value.getValorAbertura() + "','" + value.getValorBase() + "','" + value.getValorMinimo() + "','" + value.getEstado() + "','" + value.getAvaliador() + "','" + value.getComitente() + "','" + value.getLote() + "','" + value.getCategoria() + "');";
             try 
             {
-                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
                     }
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
@@ -65,21 +68,22 @@ namespace Leilum.Data.DAOS
         {
             Leilao? leilao = get(key);
             string sql_cmd = $"DELETE FROM LEILUM.Leilao Where idLeilao = {key}";
-            try 
+            try
             {
-                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
                     {
                         con.Open();
                         cmd.ExecuteNonQuery();
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return leilao;
         }
 
@@ -87,25 +91,26 @@ namespace Leilum.Data.DAOS
         {
             ICollection<int> keys = new HashSet<int>();
             string sql_cmd = "SELECT idLeilao FROM Leilao";
-            try 
+            try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
                     {
                         conn.Open();
                         IEnumerable<int> aux = conn.Query<int>(sql_cmd);
-                        foreach(int key in aux)
+                        foreach (int key in aux)
                         {
                             keys.Add(key);
                         }
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return keys;
         }
 
@@ -113,25 +118,26 @@ namespace Leilum.Data.DAOS
         {
             ICollection<Leilao> leiloes = new HashSet<Leilao>();
             string sql_cmd = "SELECT * FROM Leilao";
-            try 
+            try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
                     {
                         conn.Open();
                         IEnumerable<Leilao> aux = conn.Query<Leilao>(sql_cmd);
-                        foreach(Leilao leilao in aux)
+                        foreach (Leilao leilao in aux)
                         {
                             leiloes.Add(leilao);
                         }
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return leiloes;
         }
 
@@ -141,14 +147,14 @@ namespace Leilum.Data.DAOS
             string sql_cmd = "SELECT COUNT(*) FROM Leilao";
             try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
                     {
                         conn.Open();
-                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            if(reader.Read())
+                            if (reader.Read())
                             {
                                 size = reader.GetInt32(0);
                             }
@@ -160,6 +166,7 @@ namespace Leilum.Data.DAOS
             {
                 throw new Exception(e.Message);
             }
+
             return size;
         }
 
@@ -174,25 +181,26 @@ namespace Leilum.Data.DAOS
             string sql_cmd = $"SELECT * FROM Leilao Where idLeilao = {idLeilao}";
             try
             {
-                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
-                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
                     {
                         conn.Open();
-                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            if(reader.Read())
+                            if (reader.Read())
                             {
                                 result = true;
                             }
                         }
                     }
                 }
-            } 
+            }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
             return result;
         }
 
