@@ -1,8 +1,10 @@
 @layout LoginLayout
 @page "/create"
+@using System.Text
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authStateProvider
 @inject NotificationService NotificationService
+@inject HttpClient HttpClient
 
 <RadzenRow Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 800px; overflow: hidden;">
     <RadzenColumn Size="12" SizeMD="6">
@@ -24,8 +26,7 @@
                         <RadzenStack>
                             <RadzenFormField Text="Profile Photo" Variant=@variant>
                                 <RadzenCard>
-                                    <RadzenFileInput @bind-Value=@user.file @bind-FileName=@user.filename @bind-FileSize=@user.fileSize TValue="string" class="w-100"
-                                                     Change=@(args => OnChange(args, "FileInput")) Error=@(args => OnError(args, "FileInput")) InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "select file" } })"/>
+                                    <RadzenFileInput @bind-Value=@user.file @bind-FileName=@user.filename @bind-FileSize=@user.fileSize TValue="string" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" Change=@HandleFileChange/>
                                 </RadzenCard>
                             </RadzenFormField>
                             
@@ -190,6 +191,33 @@
 
     userAux user = new userAux();
     
+    private async Task HandleFileChange()
+    {
+        // Crie um objeto MultipartFormDataContent
+        using (var content = new MultipartFormDataContent())
+        {
+            // Converta a string para um StreamContent
+            var streamContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(user.file)));
+
+            // Adicione o conteúdo do arquivo ao MultipartFormDataContent
+            content.Add(streamContent, "file", user.filename);
+
+            // Faça a chamada HTTP para o endpoint do serviço
+            var response = await HttpClient.PostAsync("api/file/upload", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Upload bem-sucedido
+                Console.WriteLine("Upload bem-sucedido!");
+            }
+            else
+            {
+                // Lidar com falha no upload
+                Console.WriteLine($"Falha no upload: {response.ReasonPhrase}");
+            }
+        }
+    }
+    
     ICollection<string> payMethod = new List<string>()
     {
         "Check", "Bank Transfer", "Cash"
@@ -235,25 +263,9 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        //companyNames = dbContext.Customers.Select(c => c.CompanyName).Distinct();
     }
-
-    void OnChange(string value, string name)
-    {
-        Console.WriteLine($"{name} value changed");
-    }
-
-    void OnError(UploadErrorEventArgs args, string name)
-    {
-        Console.WriteLine($"{args.Message}");
-    }
-
     private async void register()
     {
-        // if (file != null && filename != null && fileSize != null && email != null &&
-        //     password != null && name != null && contact != null && address != null &&
-        //     birth != null && nationality != null && nif != null)
-        // {
             switch (this.user.auxPay)
             {
                 case "Check":
@@ -278,6 +290,7 @@
                         email = userNew.getEmail(),
                         tipo = userNew.getTipoUtilizador().ToString()
                     });
+                    CurrentUser.setCurrentUser(userNew);
                     NavigationManager.NavigateTo("/welcome", true);
             }
         }
