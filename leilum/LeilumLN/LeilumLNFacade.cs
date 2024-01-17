@@ -25,12 +25,12 @@ namespace leilum.LeilumLN
             return db.getUtilizadorWithEmail(email);
         }
 
-        public bool validateNewAccount(string email){
-            return !db.existsEmail(email);
+        public bool validateNewAccount(string email, int nif){
+            return !db.existsEmail(email) && !db.existsNIF(nif);
         }
 
         public bool adicionaConta(Utilizador utilizador){
-            if (this.validateNewAccount(utilizador.getEmail()))
+            if (this.validateNewAccount(utilizador.getEmail(),utilizador.getContribuinte()))
             {
                 this.db.addUtilizador(utilizador);
                 return true;

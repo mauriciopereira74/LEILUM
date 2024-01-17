@@ -19,14 +19,35 @@ namespace Leilum.Data.DAOS
 
         public Utilizador getUtilizadorWithEmail(string email)
         {
-            Utilizador? result = null;
-            string s_cmd = $"SELECT * FROM dbo.Utilizador where Email = '{email}'";
+            Utilizador result = null;
+            string s_cmd = $" SELECT U.Email, U.Password, U.TipoUtilizador, I.Contribuinte, I.Nome, I.Morada, I.Nacionalidade, I.DataNascimento, I.Contacto, I.MetodoPagamento, I.Iban, I.FotoPerfilPath, I.idUtilizador FROM dbo.Utilizador U LEFT JOIN dbo.InfoUtilizador I ON U.Email = I.idUtilizador WHERE U.Email = '{email}'";
+            
             try
             {
                 using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
                     con.Open();
-                    result = con.QueryFirst<Utilizador>(s_cmd);
+                    // Execute the query and retrieve the result
+                    var utilizadorInfo = con.QueryFirstOrDefault(s_cmd);
+
+                    // Check if a record with the specified Email exists
+                    if (utilizadorInfo != null)
+                    {
+                        // Manually create a Utilizador object using the retrieved values
+                        result = new Utilizador();
+                        result.setEmail(utilizadorInfo.Email);
+                        result.setTipoUtilizador(utilizadorInfo.TipoUtilizador);
+                        result.setPassword(utilizadorInfo.Password);
+                        result.setContribuinte(utilizadorInfo.Contribuinte);
+                        result.setNome(utilizadorInfo.Nome);
+                        result.setMorada(utilizadorInfo.Morada);
+                        result.setNacionalidade(utilizadorInfo.Nacionalidade);
+                        result.SetDataNascimento(utilizadorInfo.DataNascimento);
+                        result.setContacto(utilizadorInfo.Contacto);
+                        result.setMetodoPagamento(utilizadorInfo.MetodoPagamento);
+                        result.setIban(utilizadorInfo.Iban);
+                        result.setFotoPerfil(utilizadorInfo.FotoPerfilPath);
+                    }
                 }
             }
             catch (Exception e)
@@ -227,7 +248,7 @@ namespace Leilum.Data.DAOS
         public bool containsNif(int nif)
         {
             bool result = false;
-            string s_cmd = "SELECT * FROM dbo.Utilizador WHERE contribuinte = " + nif;
+            string s_cmd = "SELECT * FROM dbo.InfoUtilizador WHERE contribuinte = " + nif;
             try
             {
                 using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -260,20 +281,43 @@ namespace Leilum.Data.DAOS
         public bool existsNIF(int nif)
         {
             bool result = false;
-            string s_cmd = $"SELECT * FROM dbo.Utilizador where nif = '{nif}'";
+            string s_cmd = $"SELECT Contribuinte, Nome, Morada, Nacionalidade, Contacto, DataNascimento, MetodoPagamento, Iban, FotoPerfilPath, idUtilizador FROM dbo.InfoUtilizador WHERE Contribuinte = '{nif}'";
+            
             try
             {
                 using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
                     con.Open();
-                    IEnumerable<Utilizador> aux = con.Query<Utilizador>(s_cmd);
-                    result = aux.Count() == 1;
+
+                    // Execute the query and retrieve the result
+                    var infoUtilizador = con.QueryFirstOrDefault(s_cmd);
+
+                    // Check if a record with the specified Contribuinte exists
+                    if (infoUtilizador != null)
+                    {
+                        // Manually create a Utilizador object using the retrieved values
+                        Utilizador u = new Utilizador();
+                        u.setEmail(infoUtilizador.idUtilizador);
+                        u.setTipoUtilizador(infoUtilizador.idUtilizador);
+                        u.setContribuinte(infoUtilizador.Contribuinte);
+                        u.setNome(infoUtilizador.Nome);
+                        u.setMorada(infoUtilizador.Morada);
+                        u.setNacionalidade(infoUtilizador.Nacionalidade);
+                        u.SetDataNascimento(infoUtilizador.DataNascimento);
+                        u.setContacto(infoUtilizador.Contacto);
+                        u.setMetodoPagamento(infoUtilizador.MetodoPagamento);
+                        u.setIban(infoUtilizador.Iban);
+                        u.setFotoPerfil(infoUtilizador.FotoPerfilPath);
+
+                        result = true; // A record with the specified Contribuinte exists
+                    }
                 }
             }
             catch (Exception e)
             {
                 throw new DAOException(e.Message);
             }
+
             return result;
         }
 

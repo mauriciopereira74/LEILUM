@@ -40,7 +40,7 @@ namespace Leilum.Data
 
         public bool existsNIF(int nif)
         {
-            return this.utilizadorDAO.existsNIF(nif);
+            return this.utilizadorDAO.containsNif(nif);
         }
 
         public bool existsUtilizador(int nif)

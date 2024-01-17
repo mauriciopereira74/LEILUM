@@ -61,14 +61,29 @@ namespace Leilum.LeilumLN.UtilizadorLN{
             return this.email;
         }
 
+        public void setEmail(string email)
+        {
+            this.email = email;
+        }
+
         public string getPassword()
         {
             return this.password;
         }
 
+        public void setPassword(string pass)
+        {
+            this.password = pass;
+        }
+
         public int getTipoUtilizador()
         {
             return this.idTipoUtilizador;
+        }
+
+        public void setTipoUtilizador(int tipo)
+        {
+            this.idTipoUtilizador = tipo;
         }
 
         public string getFotoPerfil()
@@ -86,9 +101,19 @@ namespace Leilum.LeilumLN.UtilizadorLN{
             return this.contribuinte;
         }
 
+        public void setContribuinte(int contribuinte)
+        {
+            this.contribuinte=contribuinte;
+        }
+
         public string getNome()
         {
             return this.nome;
+        }
+
+        public void setNome(string nome)
+        {
+            this.nome=nome;
         }
 
         public string getMorada()
@@ -96,14 +121,29 @@ namespace Leilum.LeilumLN.UtilizadorLN{
             return this.morada;
         }
 
+        public void setMorada(string morada)
+        {
+            this.morada=morada;
+        }
+
         public string getNacionalidade()
         {
             return this.nacionalidade;
         }
 
+        public void setNacionalidade(string nacionalidade)
+        {
+            this.nacionalidade=nacionalidade;
+        }
+
         public string getContacto()
         {
             return this.contacto;
+        }
+
+        public void setContacto(string contacto)
+        {
+            this.contacto=contacto;
         }
 
         public string getDataNascimentoSTR()
@@ -115,14 +155,29 @@ namespace Leilum.LeilumLN.UtilizadorLN{
             return this.dataNascimento;
         }
 
+        public void SetDataNascimento(DateTime date)
+        {
+            this.dataNascimento = DateOnly.FromDateTime(date);
+        }
+
         public int getMetodoPagamento()
         {
             return this.metodoPagamento;
         }
 
+        public void setMetodoPagamento(int metodoPagamento)
+        {
+            this.metodoPagamento = metodoPagamento;
+        }
+
         public string getIban()
         {
             return this.iban;
+        }
+
+        public void setIban(string iban)
+        {
+            this.iban = iban;
         }
         
         public Utilizador Clone()

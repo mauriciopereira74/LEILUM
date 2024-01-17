@@ -10,7 +10,7 @@ namespace leilum.LeilumLN
 
         public Utilizador getUtilizadorWithEmail(string email);
 
-        public bool validateNewAccount(string email);
+        public bool validateNewAccount(string email, int nif);
 
         public bool adicionaConta(Utilizador utilizador);
 
