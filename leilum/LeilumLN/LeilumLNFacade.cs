@@ -21,6 +21,11 @@ namespace leilum.LeilumLN
             return db.existsEmail(email);
         }
 
+        public bool existsNIF(int nif)
+        {
+            return db.existsNIF(nif);
+        }
+
         public Utilizador getUtilizadorWithEmail(string email){
             return db.getUtilizadorWithEmail(email);
         }

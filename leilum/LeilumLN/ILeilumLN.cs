@@ -12,6 +12,8 @@ namespace leilum.LeilumLN
 
         public bool validateNewAccount(string email, int nif);
 
+        public bool existsNIF(int nif);
+
         public bool adicionaConta(Utilizador utilizador);
 
         // Leiloes
