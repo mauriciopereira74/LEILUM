@@ -1,0 +1,41 @@
+@page "/profile"
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider authStateProvider
+
+
+<div class="container">
+    <h3>Profile</h3>
+
+    @if (currentUser != null)
+    {
+        <div class="profile-container">
+            <div class="profile-info">
+                <div class="profile-image">
+                    <RadzenImage Path="@currentUser.getFotoPerfil()" Style="width: 100px; height: 100px; border-radius: 50%;" />
+                </div>
+                <div class="profile-details">
+                    <h4>@currentUser.getNome()</h4>
+                    <p>@currentUser.getEmail()</p>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p>Loading profile...</p>
+    }
+</div>
+
+@code {
+    Utilizador currentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch user details from your authentication system or wherever you store user information
+        // For example, you can use your CurrentUser class or authentication state
+        currentUser = CurrentUser.getCurrentUser();
+
+        // Simulate fetching data (replace this with your actual logic)
+        await Task.Delay(1000);
+    }
+}

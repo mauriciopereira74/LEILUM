@@ -11,6 +11,32 @@
                     <img src="/images/logo.png" alt="logo" />
                 </div>
             </RadzenLabel>
+            <RadzenProfileMenu Click="@ProfileMenu">
+                <Template>
+                    <AuthorizeView>
+                        <Authorized>
+                            <div class="profile-container">
+                                <img class="profile-image" src="/images/logo2.png" alt="avatar" />  
+                                <span class="profile-name">@getName()</span>
+                            </div>
+                        </Authorized>
+                        <NotAuthorized>
+                            <span class="profile-name">NO LOGIN</span>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </Template>
+                <ChildContent>
+                    <AuthorizeView>
+                        <Authorized>
+                            <RadzenProfileMenuItem Text="Profile" Icon="face"/>
+                            <RadzenProfileMenuItem Text="Logout" Icon="logout"/>
+                        </Authorized>
+                        <NotAuthorized>
+                            <RadzenProfileMenuItem Text="Login" Icon="login"/>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </ChildContent>
+            </RadzenProfileMenu>
         </div>
     </RadzenHeader>
     <RadzenSidebar Responsive="false" Style="width: max-content">
@@ -21,8 +47,6 @@
                     <RadzenPanelMenuItem Text="Suggest" Icon="grade" Click="@(() => NavigateTo("/suggest"))"/>
                     <RadzenPanelMenuItem Text="History" Icon="history" Click="@(() => NavigateTo("/history"))"/>
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
-                    <RadzenPanelMenuItem Text="Profile" Icon="face" Click="@(() => NavigateTo("/profile"))"/>
-                    <RadzenPanelMenuItem Text="Logout" Icon="logout" class="logout" Click="@(() => Logout())"/>
                 </Authorized>
                 <NotAuthorized>
                     <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/welcome"))"/>
@@ -41,17 +65,41 @@
 
 @code {
     bool sidebarExpanded = true;
+    Utilizador? currentUser = CurrentUser.getCurrentUser();
+
+    string getEmail()
+    {
+        return currentUser != null ? currentUser.getEmail() : string.Empty;
+    }
+
+    string getName()
+    {
+        return currentUser != null ? currentUser.getNome() : string.Empty;
+    }
+
+    string getPhoto()
+    {
+        return currentUser != null ? currentUser.getFotoPerfil() : string.Empty;
+    }
 
     void NavigateTo(string url)
     {
         navManager.NavigateTo(url);
     }
 
-    async void Logout()
-    {
-        var customAuthStateProvider = (auth.AuthStateProvider)authStateProvider;
-        await customAuthStateProvider.UpdateAuthenticationState(null);
-        navManager.NavigateTo("/", true);
-        CurrentUser.setCurrentUser(null);
+    public async void ProfileMenu(RadzenProfileMenuItem item)
+    {   
+        if(item.Text.Equals("Logout")){
+            var customAuthStateProvider = (auth.AuthStateProvider)authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(null);
+            navManager.NavigateTo("/", true);
+            CurrentUser.setCurrentUser(null);
+        }
+        else if(item.Text.Equals("Profile")){
+            navManager.NavigateTo("/profile", true);
+        }
+        else if(item.Text.Equals("Login")){
+            navManager.NavigateTo("/", true);
+        }
     }
 }

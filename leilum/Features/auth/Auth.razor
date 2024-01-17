@@ -47,7 +47,6 @@
             if (user.getPassword().Equals(args.Password)) // a palavra passe é correcta?
             {
                 CurrentUser.setCurrentUser(user); // serve para as outras páginas saberem quem é que está na sessão
-                Console.WriteLine(user.getDataNascimento());
 
                 var customAuthStateProvider = (AuthStateProvider)authStateProvider;
                 await customAuthStateProvider.UpdateAuthenticationState(new UserSession
