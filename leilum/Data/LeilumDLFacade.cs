@@ -63,6 +63,10 @@ namespace Leilum.Data
             return this.utilizadorDAO.getUtilizadorWithEmail(email);
         }
 
+        public void updateUtilizador(Utilizador utilizador){
+            this.utilizadorDAO.update(utilizador);
+        }
+
         public void addUtilizador(Utilizador utilizador)
         {
             this.utilizadorDAO.put(utilizador);
@@ -114,7 +118,7 @@ namespace Leilum.Data
         // Get Leilao
         public Leilao getLeilao(int idLeilao){
             Leilao? leilao = null;
-            string s_cmd = $"SELECT * FROM db.Leilao WHERE idLeilao = {idLeilao}";
+            string s_cmd = $"SELECT * FROM dbo.Leilao WHERE idLeilao = {idLeilao}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -201,7 +205,7 @@ namespace Leilum.Data
 
         public ICollection<Leilao> getLeiloesEmCurso(){
             ICollection<Leilao> leiloesAtivos = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 1";
+            string s_cmd = "SELECT * FROM dbo.Leilao WHERE Estado = 1";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -241,7 +245,7 @@ namespace Leilum.Data
 
         public ICollection<Leilao> getLeiloesTerminados(){
             ICollection<Leilao> leiloesTerminados = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 0";
+            string s_cmd = "SELECT * FROM dbo.Leilao WHERE Estado = 0";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -282,7 +286,7 @@ namespace Leilum.Data
         public ICollection<Leilao> getLeiloesParticipados(string utilizadorEmail){
             ICollection<Leilao> leiloesParticipados = new HashSet<Leilao>();
             List<int> idsLeiloes = new List<int>();
-            string sql_cmd = $"SELECT * FROM db.Licitacao WHERE Licitador = {utilizadorEmail}";
+            string sql_cmd = $"SELECT * FROM dbo.Licitacao WHERE Licitador = {utilizadorEmail}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(sql_cmd,conn)){
@@ -346,7 +350,7 @@ namespace Leilum.Data
 
         public Categoria getCategoria(int CategoriaId){
             Categoria? result = null;
-            string s_cmd = $"SELECT * FROM db.Categoria WHERE idCategoria = {CategoriaId}";
+            string s_cmd = $"SELECT * FROM dbo.Categoria WHERE idCategoria = {CategoriaId}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -420,7 +424,7 @@ namespace Leilum.Data
         public ICollection<Leilao> getLeiloesComitentes(string uComitente)
         {
             ICollection<Leilao> leiloesComitente = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM db.Leilao WHERE Comitente = {uComitente}";
+            string s_cmd = "SELECT * FROM dbo.Leilao WHERE Comitente = {uComitente}";
             try
             {
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -469,7 +473,7 @@ namespace Leilum.Data
         public Lote getLote(int loteId){
 
             Lote? lote = null;
-            string s_cmd = $"SELECT * FROM db.Lote WHERE idLote = {loteId}";
+            string s_cmd = $"SELECT * FROM dbo.Lote WHERE idLote = {loteId}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd, conn)){

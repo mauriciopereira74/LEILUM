@@ -21,6 +21,8 @@ namespace Leilum.Data
 
         public ICollection<Utilizador> getAllUtilizadores();
 
+        public void updateUtilizador(Utilizador utilizador);
+
         public bool existsEmail(string email);
         public bool existsNIF(int nif);
         public Utilizador getUtilizadorWithEmail(string email);
@@ -42,5 +44,6 @@ namespace Leilum.Data
         public int quantidadeArtigos();
         public int quantidadeLotes();
         public ICollection<Leilao> getLeiloesComitentes(string uComitente);
+        public ICollection<Leilao> getLeiloesEmCurso();
     }
 }

@@ -4,6 +4,7 @@
 
 @using leilum.Data;
 
+<PageTitle>Profile</PageTitle>
 
 <div class="container">
     <h3>Profile</h3>
@@ -14,7 +15,16 @@
             <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="1rem" Class="rz-p-4">
                 <RadzenImage Path="@currentUser.getFotoPerfil()" Style="width: 100px; height: 100px; border-radius: 50%;" />
                 <RadzenStack Gap="0" Style="text-align: center; margin-top: -10px;">
-                    <RadzenText TextStyle="TextStyle.Body1"><b>@currentUser.getNome()</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1">
+                        @if (isEditMode)
+                        {
+                            <InputText @bind-Value="newName" style="background-color: transparent; border: none; font-weight: bold; text-align: center;" />
+                        }
+                        else
+                        {
+                            <b>@currentUser.getNome()</b>
+                        }
+                    </RadzenText>
                 </RadzenStack>
             </RadzenStack>
             <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
@@ -24,40 +34,108 @@
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Email</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getEmail()</b></RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Password</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getPassword()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
+                            @if (isEditMode)
+                            {
+                                <InputText type="text"  @bind-Value="newPass" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                            }
+                            else
+                            {
+                                <b>@currentUser.getPassword()</b>
+                            }
+                        </RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Contact</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getContacto()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
+                            @if (isEditMode)
+                            {
+                                <InputText type="text" @bind-Value="newContact" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                            }
+                            else
+                            {
+                                <b>@currentUser.getContacto()</b>
+                            }
+                        </RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Adress</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getMorada()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
+                            @if (isEditMode)
+                            {
+                                <InputText type="text" @bind-Value="newAddress" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                            }
+                            else
+                            {
+                                <b>@currentUser.getMorada()</b>
+                            }
+                        </RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Birth Date</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getDataNascimentoSTR()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
+                            @if (isEditMode)
+                            {
+                                <RadzenDatePicker @bind-Value="newDate" DateFormat="MM/dd/yyyy" Class="custom-datepicker" />
+                            }
+                            else
+                            {
+                                <b>@currentUser.getDataNascimentoSTR()</b>
+                            }
+                        </RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Nationality</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getNacionalidade()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
+                            @if (isEditMode)
+                            {
+                                <InputText type="text" @bind-Value="newNaci" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                            }
+                            else
+                            {
+                                <b>@currentUser.getNacionalidade()</b>
+                            }
+                        </RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">TIN</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getContribuinte()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
+                            @if (isEditMode)
+                            {
+                                <InputNumber type="text" @bind-Value="newNif" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                            }
+                            else
+                            {
+                                <b>@currentUser.getContribuinte()</b>
+                            }
+                        </RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Payment Method</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getMetodoPagamento()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
+                            @if (isEditMode)
+                            {
+                                <InputNumber type="text" @bind-Value="newPag" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                            }
+                            else
+                            {
+                                <b>@currentUser.getMetodoPagamento()</b>
+                            }
+                        </RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">IBAN</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getIban()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
+                            @if (isEditMode)
+                            {
+                                <InputText type="text"  @bind-Value="newIban" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                            }
+                            else
+                            {
+                                <b>@currentUser.getIban()</b>
+                            }
+                        </RadzenText>
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenCard>
             <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.End" Gap="0">
-                <RadzenButton Variant="Variant.Text" Text="EDITAR" />
+                @if (isEditMode)
+                {   
+                    <RadzenButton Variant="Variant.Text" Text="Guardar" Click="SaveChanges" />
+                    <RadzenButton Variant="Variant.Text" Text="Sair" Click="ToggleEditMode" />
+                }
+                else
+                {
+                    <RadzenButton Variant="Variant.Text" Text="EDITAR" Click="ToggleEditMode" />
+                }
             </RadzenStack>
         </RadzenCard>
-
-        @* <div class="profile-container">
-            <div class="profile-info">
-                <div class="profile-image">
-                    
-                </div>
-                <div class="profile-details">
-                    <h4>@currentUser.getNome()</h4>
-                    <p>@currentUser.getEmail()</p>
-                </div>
-            </div>
-        </div> *@
     }
     else
     {
@@ -75,16 +153,77 @@
 
 @code {
     Utilizador currentUser;
+    bool isEditMode = false;
 
+    string? newFoto;
+    string? newName;
+    string? newPass;
+    string? newContact;
+
+    string? newAddress;
+    DateTime newDate;
+
+    string? newNaci;
+
+    int newNif;
+
+    int newPag;
+
+    string? newIban;
+    
     protected override async Task OnInitializedAsync()
     {
         // Fetch user details from your authentication system or wherever you store user information
         // For example, you can use your CurrentUser class or authentication state
         currentUser = CurrentUser.getCurrentUser();
+
+        if (currentUser != null)
+        {
+            newName = currentUser.getNome();
+            newPass = currentUser.getPassword();
+            newContact = currentUser.getContacto();
+            newAddress = currentUser.getMorada();
+            newDate = new DateTime(currentUser.getDataNascimento().Year, currentUser.getDataNascimento().Month, currentUser.getDataNascimento().Day);
+            newNaci = currentUser.getNacionalidade();
+            newNif = currentUser.getContribuinte();
+            newPag = currentUser.getMetodoPagamento();
+            newIban = currentUser.getIban();
+        }
+
         @* Console.WriteLine(currentUser.getFotoPerfil()); *@
         // Simulate fetching data (replace this with your actual logic)
         await Task.Delay(1000);
     }
 
+    void SaveChanges()
+    {
+        currentUser.setNome(newName);
+        currentUser.setPassword(newPass);
+        currentUser.setContacto(newContact);
+        currentUser.setMorada(newAddress);
+        currentUser.SetDataNascimento(newDate);
+        currentUser.setNacionalidade(newNaci);
+        currentUser.setContribuinte(newNif);
+        currentUser.setMetodoPagamento(newPag);
+        currentUser.setIban(newIban);
+
+        ILeilumLN ef = new LeilumLNFacade();
+        ef.updateUtilizador(currentUser);
+        isEditMode = false; // Sair do modo de edição após salvar
+    }
+    void ToggleEditMode()
+    {
+        isEditMode = !isEditMode;
+    }
+
     
 }
+
+<style>
+    .custom-datepicker input {
+        background-color: transparent !important;
+        border: none;
+        color: white !important;
+        font-weight: bold;
+    }
+</style>

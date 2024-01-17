@@ -34,6 +34,10 @@ namespace leilum.LeilumLN
             return !db.existsEmail(email) && !db.existsNIF(nif);
         }
 
+        public void updateUtilizador(Utilizador utilizador){
+             this.db.updateUtilizador(utilizador);
+        }
+
         public bool adicionaConta(Utilizador utilizador){
             if (this.validateNewAccount(utilizador.getEmail(),utilizador.getContribuinte()))
             {
@@ -41,6 +45,10 @@ namespace leilum.LeilumLN
                 return true;
             }
             return false;
+        }
+
+        public ICollection<Leilao> getLeiloesEmCurso(){
+            return this.db.getLeiloesEmCurso();
         }
 
 

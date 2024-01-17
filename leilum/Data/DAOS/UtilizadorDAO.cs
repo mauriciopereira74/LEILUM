@@ -104,6 +104,47 @@ namespace Leilum.Data.DAOS
             }
         }
 
+        public void update(Utilizador value)
+        {
+            string sql_cmdUser = "UPDATE Utilizador SET " +
+                                $"Password = '{value.getPassword()}', " +
+                                $"TipoUtilizador = '{value.getTipoUtilizador()}' " +
+                                $"WHERE Email = '{value.getEmail()}';";
+
+            string sql_cmdInfoUser = "UPDATE InfoUtilizador SET " +
+                                    $"Contribuinte = '{value.getContribuinte()}', " +
+                                    $"Nome = '{value.getNome()}', " +
+                                    $"Morada = '{value.getMorada()}', " +
+                                    $"Nacionalidade = '{value.getNacionalidade()}', " +
+                                    $"Contacto = '{value.getContacto()}', " +
+                                    $"DataNascimento = '{value.getDataNascimentoSTR()}', " +
+                                    $"MetodoPagamento = '{value.getMetodoPagamento()}', " +
+                                    $"Iban = '{value.getIban()}', " +
+                                    $"FotoPerfilPath = '{value.getFotoPerfil()}' " +
+                                    $"WHERE idUtilizador = '{value.getEmail()}';";
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmdUser, con))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    using (SqlCommand cmd2 = new SqlCommand(sql_cmdInfoUser, con))
+                    {
+                        cmd2.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+
         public Utilizador? remove(int nif)
         {
             Utilizador? Utilizador = getByNif(nif);

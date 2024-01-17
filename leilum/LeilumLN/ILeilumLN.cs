@@ -10,6 +10,8 @@ namespace leilum.LeilumLN
 
         public Utilizador getUtilizadorWithEmail(string email);
 
+        public void updateUtilizador(Utilizador utilizador);
+
         public bool validateNewAccount(string email, int nif);
 
         public bool existsNIF(int nif);
@@ -17,7 +19,7 @@ namespace leilum.LeilumLN
         public bool adicionaConta(Utilizador utilizador);
 
         // Leiloes
-        //public ICollection<Leilao> getLeiloesEmCurso();
+        public ICollection<Leilao> getLeiloesEmCurso();
 
         //public Leilao getLeilao(int nrLeilao);
     
