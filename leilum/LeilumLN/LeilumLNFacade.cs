@@ -92,6 +92,12 @@ namespace leilum.LeilumLN
         {
             this.db.adicionaArtigo(artigo);
         }
+
+        // Adiciona uma licitação a um leilão.
+        public bool addLicitacao(int idLeilao, string userEmail, double value)
+        {
+            return this.db.addLicitacao(value,idLeilao,userEmail);
+        }
         
         // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  
         

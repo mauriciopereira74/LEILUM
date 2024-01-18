@@ -5,6 +5,7 @@ using Leilum.LeilumLN.UtilizadorLN;
 using Leilum.LeilumLN.LeilaoLN;
 using Leilum.LeilumLN.CategoriaLN;
 using System.Data.SqlClient;
+using Dapper;
 using Leilum.LeilumLN.LoteLN;
 using Leilum.LeilumLN.ArtigoLN;
 
@@ -164,7 +165,7 @@ namespace Leilum.Data
 
         public ICollection<Leilao> getLeiloesPendentes(){
             ICollection<Leilao> leiloesPendentes = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM db.Leilao WHERE Estado = 2";
+            string s_cmd = "SELECT * FROM Leilao WHERE Estado = 2";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -321,8 +322,8 @@ namespace Leilum.Data
         }
         
         // Adiciona uma Licitação
-        public void addLicitacao(Licitacao licitacao) {
-            this.licitacaoDao.put(licitacao.getIdLicitacao(),licitacao);
+        public bool addLicitacao(Licitacao licitacao) {
+            return addLicitacao(licitacao.getValor(),licitacao.getIdLeilao(),licitacao.getIdLicitador());
         }
 
         // Remove uma Licitação
@@ -330,7 +331,78 @@ namespace Leilum.Data
             this.licitacaoDao.remove(idLicitacao);
         }
         
-        // Get maior licitação de um leilão (Acho que não é preciso)
+        public double? getMaiorLicitacao(int idLeilao)
+        {
+            string sql_cmd = $"SELECT ValorAtual FROM Leilao WHERE idLeilao = {idLeilao}";
+
+            double? result = null;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read() && !reader.IsDBNull(reader.GetOrdinal("ValorAtual")))
+                            {
+                                result = Convert.ToDouble(reader["ValorAtual"]);
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getMaiorLicitacao: " + e.Message);
+            }
+        }
+
+        public bool addLicitacao(double value, int idLeilao, string emailUser)
+        {
+            bool result = false;
+            using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+            {
+                con.Open();
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    try
+                    {
+                        string sql_cmd = "UPDATE Leilao SET ValorAtual = @value WHERE idLeilao = @idLeilao;";
+                        string sql_cmd2 = "INSERT INTO Licitacao (idLicitacao, Valor, Licitador, Leilao) VALUES (@idLicitacao, @value, @emailUser, @idLeilao);";
+                        string sql_cmd3 = $"SELECT ValorAtual FROM Leilao WHERE idLeilao = {idLeilao}";
+                        using (SqlCommand cmd = new SqlCommand(sql_cmd, con, transaction))
+                        using (SqlCommand cmd2 = new SqlCommand(sql_cmd2, con, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@value", value);
+                            cmd.Parameters.AddWithValue("@idLeilao", idLeilao);
+
+                            cmd2.Parameters.AddWithValue("@idLicitacao", licitacaoDao.size());
+                            cmd2.Parameters.AddWithValue("@value", value);
+                            cmd2.Parameters.AddWithValue("@emailUser", emailUser);
+                            cmd2.Parameters.AddWithValue("@idLeilao", idLeilao);
+
+                            cmd.ExecuteNonQuery();
+                            cmd2.ExecuteNonQuery();
+                            transaction.Commit();
+                            result = true;
+                            
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new DAOException("DLFACADEDAO addLicitacao: " + e.Message);
+                    }
+                }
+            }
+            return result;
+        }
         
         /* Get tempo restante de um leilao
         public DateTime TempoRestante(Leilao leilao)
@@ -495,6 +567,8 @@ namespace Leilum.Data
             }
             return lote;
         }
+
+
 
         public void adicionaArtigo(Artigo artigo){
             this.artigoDAO.put(artigo.getId_Artigo(),artigo);
