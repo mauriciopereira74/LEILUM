@@ -64,8 +64,6 @@ CREATE TABLE Artigo (
 -- DROP TABLE Regra;
 CREATE TABLE Regra (
 	idRegra INT NOT NULL,
-	TempoMinimo TIME NOT NULL,
-	TempoMaximo TIME NOT NULL,
 	ValorMinimo DECIMAL(6,2),
 	ValorMaximo DECIMAL(6,2),
 	PRIMARY KEY (idRegra));
@@ -82,12 +80,13 @@ CREATE TABLE Categoria (
 CREATE TABLE Leilao (
 	idLeilao INT NOT NULL,
 	Titulo VARCHAR(45) NOT NULL,
-	Duracao TIME NOT NULL,
-	ValorAbertura DECIMAL(6,2) NOT NULL,
-	ValorBase DECIMAL(6,2) NOT NULL,
-	ValorMinimo DECIMAL(6,2) NOT NULL,
+	DataFim DATETIME NOT NULL,
+	ValorAbertura DECIMAL(6,2) NULL, -- 50% do valor base do leilão
+	ValorBase DECIMAL(6,2) NULL, -- Valor da Avaliação do leilão
+	ValorMinimo DECIMAL(6,2) NOT NULL, -- Valor mais baixo pelo qual poderá licitar, corresponde a 85% do valor base. Se o valor de uma licitação estiver entre o valor de abertura e o valor minimo, então é considerado licitação condicional
+	ValorAtual DECIMAL(6,2) NOT NULL, -- Valor da licitação mais alta
 	Estado INT NOT NULL,
-	Avaliador VARCHAR(45) NOT NULL,
+	Avaliador VARCHAR(45) NULL,
 	Comitente VARCHAR(45) NOT NULL,
 	Lote INT NOT NULL,
 	Categoria INT NOT NULL,
@@ -98,7 +97,7 @@ CREATE TABLE Leilao (
 	PRIMARY KEY (idLeilao));
 
 -- DROP TABLE Licitacao;
-CREATE TABLE Licitacao (	
+CREATE TABLE Licitacao (
 	idLicitacao INT NOT NULL,
 	Valor DECIMAL(6,2) NOT NULL,
 	Licitador VARCHAR(45) NOT NULL,
