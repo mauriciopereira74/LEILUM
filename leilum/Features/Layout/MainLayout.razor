@@ -21,7 +21,7 @@
                             </div>
                         </Authorized>
                         <NotAuthorized>
-                            <span class="profile-name">NO LOGIN</span>
+                            <img class="profile-image" src="/images/no.png" alt="avatar" Style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px" />
                         </NotAuthorized>
                     </AuthorizeView>
                 </Template>
@@ -43,14 +43,14 @@
         <RadzenPanelMenu DisplayStyle="@(sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
             <AuthorizeView>
                 <Authorized>
-                    <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/welcome"))"/>
+                    <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/"))"/>
                     <RadzenPanelMenuItem Text="Suggest" Icon="grade" Click="@(() => NavigateTo("/suggest"))"/>
                     <RadzenPanelMenuItem Text="History" Icon="history" Click="@(() => NavigateTo("/history"))"/>
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
                 </Authorized>
                 <NotAuthorized>
-                    <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/welcome"))"/>
-                    <RadzenPanelMenuItem Text="Login" Icon="login" class="login" Click="@(() => NavigateTo("/"))"/>
+                    <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/"))"/>
+                    <RadzenPanelMenuItem Text="Login" Icon="login" class="login" Click="@(() => NavigateTo("/login"))"/>
                 </NotAuthorized>
             </AuthorizeView>
         </RadzenPanelMenu>
@@ -99,7 +99,7 @@
             navManager.NavigateTo("/profile", true);
         }
         else if(item.Text.Equals("Login")){
-            navManager.NavigateTo("/", true);
+            navManager.NavigateTo("/login", true);
         }
     }
 }

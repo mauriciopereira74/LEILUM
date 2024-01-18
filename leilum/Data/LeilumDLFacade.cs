@@ -127,8 +127,7 @@ namespace Leilum.Data
                             if (reader.Read()){
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                DateTime duracao = Convert.ToDateTime(reader["Duracao"]);
-                                double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
+                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));                                double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
                                 int licitacaoAtual = Convert.ToInt32(reader["LicitacaoAtual"]);
@@ -174,7 +173,7 @@ namespace Leilum.Data
                             if (reader.Read()){
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                DateTime duracao = Convert.ToDateTime(reader["Duracao"]);
+                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));
                                 double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
@@ -214,7 +213,7 @@ namespace Leilum.Data
                             if (reader.Read()){
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                DateTime duracao = Convert.ToDateTime(reader["Duracao"]);
+                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));
                                 double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
@@ -254,7 +253,7 @@ namespace Leilum.Data
                             if (reader.Read()){
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                DateTime duracao = Convert.ToDateTime(reader["Duracao"]);
+                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));
                                 double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
@@ -438,7 +437,7 @@ namespace Leilum.Data
                             {
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                DateTime duracao = Convert.ToDateTime(reader["Duracao"]);
+                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));
                                 double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);

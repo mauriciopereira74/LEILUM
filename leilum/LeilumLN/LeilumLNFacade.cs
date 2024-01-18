@@ -77,7 +77,7 @@ namespace leilum.LeilumLN
         }
         
         // Cria um Leilão
-        public void criaLeilao(string titulo, DateTime duracao, double valorAbertura, double valorBase,
+        public void criaLeilao(string titulo, TimeSpan duracao, double valorAbertura, double valorBase,
             double valorMinimo, Licitacao licitacaoAtual, int estado, Utilizador avaliador, Utilizador comitente,
             Lote lote, Categoria categoria)
         {

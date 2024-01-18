@@ -1,5 +1,5 @@
 @layout LoginLayout
-@page "/"
+@page "/login"
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authStateProvider
 
@@ -56,7 +56,7 @@
                     email = user.getEmail(),
                     tipo = user.getTipoUtilizador().ToString()
                 });
-                NavigationManager.NavigateTo("/welcome", true);
+                NavigationManager.NavigateTo("/", true);
             }
             else
             {

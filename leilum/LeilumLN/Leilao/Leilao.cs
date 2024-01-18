@@ -8,7 +8,7 @@ namespace Leilum.LeilumLN.LeilaoLN{
 
         private int nrLeilao;
         private string titulo;
-        private DateTime duracao;
+        private TimeSpan duracao;
         private double valorAbertura;
         private double valorBase;
         private double valorMinimo;
@@ -20,7 +20,7 @@ namespace Leilum.LeilumLN.LeilaoLN{
         private Categoria categoria;
 
 
-        public Leilao(int nrLeilao, string titulo, DateTime duracao, double valorAbertura, double valorBase, double valorMinimo, Licitacao licitacaoAtual, int estado
+        public Leilao(int nrLeilao, string titulo, TimeSpan duracao, double valorAbertura, double valorBase, double valorMinimo, Licitacao licitacaoAtual, int estado
                      , Utilizador avaliador, Utilizador comitente, Lote lote, Categoria categoria){
 
             this.nrLeilao = nrLeilao;
@@ -53,11 +53,11 @@ namespace Leilum.LeilumLN.LeilaoLN{
             this.titulo = titulo;
         }
 
-        public DateTime getDuracao(){
+        public TimeSpan getDuracao(){
             return duracao;
         }
 
-        public void setDuracao(DateTime duracao){
+        public void setDuracao(TimeSpan duracao){
             this.duracao = duracao;
         }
 
