@@ -20,14 +20,23 @@ namespace Leilum.Data.DAOS
         public Regra? get(int idRegra)
         {
             Regra? result = null;
-            string sql_cmd = $"SELECT * FROM LEILUM.Regra WHERE idRegra = '{idRegra}'";
+            string sql_cmd = $"SELECT * FROM Regra WHERE idRegra = '{idRegra}'";
             try
             {
                 using (SqlConnection con = new(DAOConfig.GetConnectionString()))
                 {
-                    con.Open();
-                    Regra aux = con.QueryFirst<Regra>(sql_cmd);
-                    result = aux;
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd,con)){
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            if (reader.Read()){
+                                int id_Regra = Convert.ToInt32(reader["idRegra"]);
+                                double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
+                                double valorMaximo = Convert.ToDouble(reader["ValorMaximo"]);
+
+                                result = new Regra(id_Regra,valorMinimo,valorMaximo);
+                            }
+                        }
+                    }
                 }
             } 
             catch (Exception e)
@@ -40,7 +49,7 @@ namespace Leilum.Data.DAOS
         public void put(int key, Regra value)
         {
             string sql_cmd = "INSERT INTO Regra (idRegra, TempoMinimo, TempoMaximo, ValorMinimo, ValorMaximo) VALUES ('" +
-                                value.getIdRegra() + "','" + value.getTempoMinimo() + "','" + value.getTempoMaximo() + "','" + value.getValorMinimo() + "','" + value.getValorMaximo()  + "');";
+                                value.getIdRegra() + "','" + value.getValorMinimo() + "','" + value.getValorMaximo()  + "');";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))

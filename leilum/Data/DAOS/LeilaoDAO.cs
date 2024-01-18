@@ -44,9 +44,9 @@ namespace Leilum.Data.DAOS
 
         public void put(int key, Leilao value)
         {
-            string sql_cmd = "INSERT INTO Leilao (idLeilao, Titulo, Duracao, ValorAbertura, ValorBase, ValorMinimo, Estado, Avaliador, Comitente, Lote, Categoria) VALUES ('" +
-                                value.getNrLeilao() + "','" + value.getTitulo() + "','" + value.getDuracao() + "','" +
-                                value.getValorAbertura() + "','" + value.getValorBase() + "','" + value.getValorMinimo() + "','" + value.getEstado() + "','" + value.getAvaliador() + "','" + value.getComitente() + "','" + value.getLote() + "','" + value.getCategoria() + "');";
+            string sql_cmd = "INSERT INTO Leilao (idLeilao, Titulo, Duracao, ValorAbertura, ValorBase, ValorMinimo, ValorAtual, Estado, Avaliador, Comitente, Lote, Categoria) VALUES ('" +
+                                value.getNrLeilao() + "','" + value.getTitulo() + "','" + value.getDataFinal() + "','" +
+                                value.getValorAbertura() + "','" + value.getValorBase() + "','" + value.getValorMinimo() + "','" + value.getvalorAtual() + "','" + value.getEstado() + "','" + value.getAvaliador() + "','" + value.getComitente() + "','" + value.getLote() + "','" + value.getCategoria() + "');";
             try 
             {
                 using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))

@@ -119,7 +119,7 @@ namespace Leilum.Data
         // Get Leilao
         public Leilao getLeilao(int idLeilao){
             Leilao? leilao = null;
-            string s_cmd = $"SELECT * FROM dbo.Leilao WHERE idLeilao = {idLeilao}";
+            string s_cmd = $"SELECT * FROM Leilao WHERE idLeilao = {idLeilao}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -128,23 +128,23 @@ namespace Leilum.Data
                             if (reader.Read()){
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));                                double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
+                                DateTime dataFinal = Convert.ToDateTime(reader["DataFim"]);
+                                double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
-                                int licitacaoAtual = Convert.ToInt32(reader["LicitacaoAtual"]);
+                                double valorAtual = Convert.ToDouble(reader["ValorAtual"]);
                                 int estado = Convert.ToInt32(reader["Estado"]);
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
                                 string? comitenteEmail = Convert.ToString(reader["Comitente"]);
                                 int loteId = Convert.ToInt32(reader["Lote"]);
                                 int categoriaId = Convert.ToInt32(reader["Categoria"]);
 
-                                Licitacao licitacao = this.licitacaoDao.get(licitacaoAtual);
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
                                 Categoria categoria = getCategoria(categoriaId);
 
-                                leilao = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,licitacao,estado,avaliador,comitente,lote,categoria);
+                                leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
                             }
                         }
                     }
@@ -171,27 +171,26 @@ namespace Leilum.Data
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
                         conn.Open();
                         using (SqlDataReader reader = cmd.ExecuteReader()){
-                            if (reader.Read()){
+                            while (reader.Read()){
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));
+                                DateTime dataFinal = Convert.ToDateTime(reader["DataFim"]);
                                 double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
-                                int licitacaoAtual = Convert.ToInt32(reader["LicitacaoAtual"]);
+                                double valorAtual = Convert.ToDouble(reader["ValorAtual"]);
                                 int estado = Convert.ToInt32(reader["Estado"]);
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
                                 string? comitenteEmail = Convert.ToString(reader["Comitente"]);
                                 int loteId = Convert.ToInt32(reader["Lote"]);
                                 int categoriaId = Convert.ToInt32(reader["Categoria"]);
 
-                                Licitacao licitacao = this.licitacaoDao.get(licitacaoAtual);
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
                                 Categoria categoria = getCategoria(categoriaId);
 
-                                Leilao leilao = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,licitacao,estado,avaliador,comitente,lote,categoria);
+                                Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
                                 leiloesPendentes.Add(leilao);
                             }
                         }
@@ -203,36 +202,35 @@ namespace Leilum.Data
             return leiloesPendentes;
         }
 
-        public ICollection<Leilao> getLeiloesEmCurso(){
-            ICollection<Leilao> leiloesAtivos = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM dbo.Leilao WHERE Estado = 1";
+        public IEnumerable<Leilao> getLeiloesEmCurso(){
+            IEnumerable<Leilao> leiloesAtivos = new HashSet<Leilao>();
+            string s_cmd = "SELECT * FROM Leilao WHERE Estado = 1";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
                         conn.Open();
                         using (SqlDataReader reader = cmd.ExecuteReader()){
-                            if (reader.Read()){
+                            while (reader.Read()){
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));
+                                DateTime dataFinal = Convert.ToDateTime(reader["DataFim"]);
                                 double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
-                                int licitacaoAtual = Convert.ToInt32(reader["LicitacaoAtual"]);
+                                double valorAtual = Convert.ToDouble(reader["ValorAtual"]);
                                 int estado = Convert.ToInt32(reader["Estado"]);
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
                                 string? comitenteEmail = Convert.ToString(reader["Comitente"]);
                                 int loteId = Convert.ToInt32(reader["Lote"]);
                                 int categoriaId = Convert.ToInt32(reader["Categoria"]);
-
-                                Licitacao licitacao = this.licitacaoDao.get(licitacaoAtual);
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
                                 Categoria categoria = getCategoria(categoriaId);
 
-                                Leilao leilao = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,licitacao,estado,avaliador,comitente,lote,categoria);
-                                leiloesAtivos.Add(leilao);
+                                Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
+
+                                leiloesAtivos = leiloesAtivos.Append(leilao);
                             }
                         }
                     }
@@ -245,33 +243,32 @@ namespace Leilum.Data
 
         public ICollection<Leilao> getLeiloesTerminados(){
             ICollection<Leilao> leiloesTerminados = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM dbo.Leilao WHERE Estado = 0";
+            string s_cmd = "SELECT * FROM Leilao WHERE Estado = 0";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
                         conn.Open();
                         using (SqlDataReader reader = cmd.ExecuteReader()){
-                            if (reader.Read()){
+                            while (reader.Read()){
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));
+                                DateTime dataFinal = Convert.ToDateTime(reader["DataFim"]);
                                 double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
-                                int licitacaoAtual = Convert.ToInt32(reader["LicitacaoAtual"]);
+                                double valorAtual = Convert.ToDouble(reader["ValorAtual"]);
                                 int estado = Convert.ToInt32(reader["Estado"]);
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
                                 string? comitenteEmail = Convert.ToString(reader["Comitente"]);
                                 int loteId = Convert.ToInt32(reader["Lote"]);
                                 int categoriaId = Convert.ToInt32(reader["Categoria"]);
 
-                                Licitacao licitacao = this.licitacaoDao.get(licitacaoAtual);
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
                                 Categoria categoria = getCategoria(categoriaId);
 
-                                Leilao leilao = new Leilao(nrLeilao,titulo,duracao,valorAbertura,valorBase,valorMinimo,licitacao,estado,avaliador,comitente,lote,categoria);
+                                Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
                                 leiloesTerminados.Add(leilao);
                             }
                         }
@@ -286,13 +283,13 @@ namespace Leilum.Data
         public ICollection<Leilao> getLeiloesParticipados(string utilizadorEmail){
             ICollection<Leilao> leiloesParticipados = new HashSet<Leilao>();
             List<int> idsLeiloes = new List<int>();
-            string sql_cmd = $"SELECT * FROM dbo.Licitacao WHERE Licitador = {utilizadorEmail}";
+            string sql_cmd = $"SELECT * FROM Licitacao WHERE Licitador = {utilizadorEmail}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(sql_cmd,conn)){
                         conn.Open();
                         using (SqlDataReader reader = cmd.ExecuteReader()){
-                            if (reader.Read()){
+                            while (reader.Read()){
                                 int idLeilao = Convert.ToInt32(reader["Leilao"]);
                                 if (!idsLeiloes.Contains(idLeilao)){
                                     idsLeiloes.Add(idLeilao);
@@ -421,7 +418,7 @@ namespace Leilum.Data
 
         public Categoria getCategoria(int CategoriaId){
             Categoria? result = null;
-            string s_cmd = $"SELECT * FROM dbo.Categoria WHERE idCategoria = {CategoriaId}";
+            string s_cmd = $"SELECT * FROM Categoria WHERE idCategoria = {CategoriaId}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -495,7 +492,7 @@ namespace Leilum.Data
         public ICollection<Leilao> getLeiloesComitentes(string uComitente)
         {
             ICollection<Leilao> leiloesComitente = new HashSet<Leilao>();
-            string s_cmd = $"SELECT * FROM dbo.Leilao WHERE Comitente = {uComitente}";
+            string s_cmd = "SELECT * FROM Leilao WHERE Comitente = {uComitente}";
             try
             {
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -505,29 +502,28 @@ namespace Leilum.Data
                         conn.Open();
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            if (reader.Read())
+                            while (reader.Read())
                             {
                                 int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
                                 string? titulo = Convert.ToString(reader["Titulo"]);
-                                TimeSpan duracao = reader.GetTimeSpan(reader.GetOrdinal("Duracao"));
+                                DateTime dataFinal = Convert.ToDateTime(reader["DataFim"]);
                                 double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
                                 double valorBase = Convert.ToDouble(reader["ValorBase"]);
                                 double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
-                                int licitacaoAtual = Convert.ToInt32(reader["LicitacaoAtual"]);
+                                double valorAtual = Convert.ToDouble(reader["ValorAtual"]);
                                 int estado = Convert.ToInt32(reader["Estado"]);
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
                                 string? comitenteEmail = Convert.ToString(reader["Comitente"]);
                                 int loteId = Convert.ToInt32(reader["Lote"]);
                                 int categoriaId = Convert.ToInt32(reader["Categoria"]);
 
-                                Licitacao licitacao = this.licitacaoDao.get(licitacaoAtual);
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = this.loteDao.get(loteId);
                                 Categoria categoria = getCategoria(categoriaId);
                                 
-                                Leilao leilao = new Leilao(nrLeilao, titulo, duracao, valorAbertura, valorBase,
-                                    valorMinimo, licitacao, estado, avaliador, comitente, lote, categoria);
+                                Leilao leilao = new Leilao(nrLeilao, titulo, dataFinal, valorAbertura, valorBase,
+                                    valorMinimo, valorAtual, estado, avaliador, comitente, lote, categoria);
                                 leiloesComitente.Add(leilao);
                             }
                         }
@@ -544,7 +540,7 @@ namespace Leilum.Data
         public Lote getLote(int loteId){
 
             Lote? lote = null;
-            string s_cmd = $"SELECT * FROM dbo.Lote WHERE idLote = {loteId}";
+            string s_cmd = $"SELECT * FROM Lote WHERE idLote = {loteId}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd, conn)){
