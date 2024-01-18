@@ -47,7 +47,7 @@ namespace leilum.LeilumLN
             return false;
         }
 
-        public ICollection<Leilao> getLeiloesEmCurso(){
+        public IEnumerable<Leilao> getLeiloesEmCurso(){
             return this.db.getLeiloesEmCurso();
         }
 
@@ -77,12 +77,12 @@ namespace leilum.LeilumLN
         }
         
         // Cria um Leilão
-        public void criaLeilao(string titulo, TimeSpan duracao, double valorAbertura, double valorBase,
-            double valorMinimo, Licitacao licitacaoAtual, int estado, Utilizador avaliador, Utilizador comitente,
+        public void criaLeilao(string titulo, DateTime dataFinal, double valorAbertura, double valorBase,
+            double valorMinimo, double valorAtual, int estado, Utilizador avaliador, Utilizador comitente,
             Lote lote, Categoria categoria)
         {
             int idLeilao = this.db.quantidadeLeiloes() + 1;
-            Leilao l = new Leilao(idLeilao, titulo, duracao, valorAbertura, valorBase, valorMinimo, licitacaoAtual,
+            Leilao l = new Leilao(idLeilao, titulo, dataFinal, valorAbertura, valorBase, valorMinimo, valorAtual,
                 estado, avaliador, comitente, lote, categoria);
             addLeilao(l);
         }

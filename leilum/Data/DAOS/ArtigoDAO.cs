@@ -209,15 +209,23 @@ namespace Leilum.Data.DAOS
 
         public List<Artigo> getArtigosLote(int LoteId){
             List<Artigo> artigos = new List<Artigo>();
-            string s_cmd = $"SELECT * FROM db.Artigo WHERE idLote = {LoteId}";
+            string s_cmd = $"SELECT * FROM Artigo WHERE idLote = {LoteId}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd, conn)){
                         conn.Open();
-                        IEnumerable<Artigo> aux = conn.Query<Artigo>(s_cmd);
-                        foreach (Artigo artigo in aux)
-                        {
-                            artigos.Add(artigo);
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            while (reader.Read()){
+                                int idArtigo = Convert.ToInt32(reader["idArtigo"]);
+                                string? designacao = Convert.ToString(reader["Designacao"]);
+                                string? caracteristicas = Convert.ToString(reader["Caracteristicas"]);
+                                string? descricao = Convert.ToString(reader["Descricao"]);
+                                int idLote = Convert.ToInt32(reader["idLote"]);
+
+                                Artigo artigo = new Artigo(idArtigo,designacao,caracteristicas,descricao,idLote);
+                                artigos.Add(artigo);
+
+                            }
                         }
                     }
                 }

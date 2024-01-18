@@ -106,5 +106,7 @@ CREATE TABLE Licitacao (
 	FOREIGN KEY (Leilao) REFERENCES Leilao (idLeilao),
 	PRIMARY KEY (idLicitacao));
 
+
+
 USE master;
 GO

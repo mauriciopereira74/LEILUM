@@ -4,12 +4,12 @@ namespace Leilum.LeilumLN.LeilaoLN{
     public class Licitacao{
 
         private int id_licitacao;
-        private int id_licitador;
+        private string id_licitador;
         private int id_leilao;
         private double valor;
     
 
-        public Licitacao(int idLicitacao, int idLicitador, int idLeilao, double valor){
+        public Licitacao(int idLicitacao, string idLicitador, int idLeilao, double valor){
             this.id_licitacao = idLicitacao;
             this.id_licitador = idLicitador;
             this.id_leilao = idLeilao;
@@ -24,11 +24,11 @@ namespace Leilum.LeilumLN.LeilaoLN{
             this.id_licitacao = idLicitacao;
         }
     
-        public int getIdLicitador(){
+        public string getIdLicitador(){
             return id_licitador;
         }
     
-        public void setIdLicitador(int idLicitador){
+        public void setIdLicitador(string idLicitador){
             this.id_licitador = idLicitador;
         }
     

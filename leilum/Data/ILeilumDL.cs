@@ -44,6 +44,6 @@ namespace Leilum.Data
         public int quantidadeArtigos();
         public int quantidadeLotes();
         public ICollection<Leilao> getLeiloesComitentes(string uComitente);
-        public ICollection<Leilao> getLeiloesEmCurso();
+        public IEnumerable<Leilao> getLeiloesEmCurso();
     }
 }

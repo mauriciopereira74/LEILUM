@@ -19,7 +19,7 @@ namespace leilum.LeilumLN
         public bool adicionaConta(Utilizador utilizador);
 
         // Leiloes
-        public ICollection<Leilao> getLeiloesEmCurso();
+        public IEnumerable<Leilao> getLeiloesEmCurso();
 
         //public Leilao getLeilao(int nrLeilao);
     
