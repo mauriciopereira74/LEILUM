@@ -21,7 +21,10 @@ namespace leilum.LeilumLN
         // Leiloes
         public ICollection<Leilao> getLeiloesEmCurso();
 
+        public bool addLicitacao(int idLeilao, string userEmail, double value);
+
+
         //public Leilao getLeilao(int nrLeilao);
-    
+
     }
 }

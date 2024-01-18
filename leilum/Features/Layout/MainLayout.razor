@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Data
+@inherits LayoutComponentBase
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
 
@@ -33,6 +34,7 @@
                         </Authorized>
                         <NotAuthorized>
                             <RadzenProfileMenuItem Text="Login" Icon="login"/>
+                            <RadzenProfileMenuItem Text="Sign Up" Icon="assignment"/>
                         </NotAuthorized>
                     </AuthorizeView>
                 </ChildContent>
@@ -47,10 +49,12 @@
                     <RadzenPanelMenuItem Text="Suggest" Icon="grade" Click="@(() => NavigateTo("/suggest"))"/>
                     <RadzenPanelMenuItem Text="History" Icon="history" Click="@(() => NavigateTo("/history"))"/>
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
+
                 </Authorized>
                 <NotAuthorized>
                     <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/"))"/>
                     <RadzenPanelMenuItem Text="Login" Icon="login" class="login" Click="@(() => NavigateTo("/login"))"/>
+                    <RadzenPanelMenuItem Text="Sign Up" Icon="assignment" Click="@(() => NavigateTo("/create"))"/>
                 </NotAuthorized>
             </AuthorizeView>
         </RadzenPanelMenu>
@@ -66,7 +70,7 @@
 @code {
     bool sidebarExpanded = true;
     Utilizador? currentUser = CurrentUser.getCurrentUser();
-
+    
     string getEmail()
     {
         return currentUser != null ? currentUser.getEmail() : string.Empty;
@@ -100,6 +104,10 @@
         }
         else if(item.Text.Equals("Login")){
             navManager.NavigateTo("/login", true);
+        } 
+        else if (item.Text.Equals("Sign Up"))
+        {
+            navManager.NavigateTo("/create");
         }
     }
 }
