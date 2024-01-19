@@ -51,6 +51,9 @@ namespace leilum.LeilumLN
             return this.db.getLeiloesEmCurso();
         }
 
+        public Leilao getLeilao(int idLeilao){
+            return this.db.getLeilao(idLeilao);
+        }
 
         // Cria um Artigo
         public Artigo criaArtigo(string designacao, string caracteristicas, string descricao, int idLote)
@@ -97,6 +100,10 @@ namespace leilum.LeilumLN
         public bool addLicitacao(int idLeilao, string userEmail, double value)
         {
             return this.db.addLicitacao(value,idLeilao,userEmail);
+        }
+
+        public List<Categoria> GetAllCategorias(){
+            return this.db.GetAllCategorias();
         }
         
         

@@ -364,7 +364,7 @@ namespace Leilum.Data
         }
 
         public bool addLicitacao(double value, int idLeilao, string emailUser)
-        {
+        {   
             bool result = false;
             using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
             {
@@ -496,6 +496,36 @@ namespace Leilum.Data
                 throw new DAOException("getIDCategoria: " + e.Message);
             }
             return result.Value;
+        }
+        
+        public List<Categoria> GetAllCategorias() {
+            List<Categoria> categorias = new List<Categoria>();
+
+            string s_cmd = "SELECT * FROM Categoria";
+
+            try {
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())) {
+                    using (SqlCommand cmd = new SqlCommand(s_cmd, conn)) {
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader()) {
+                            while (reader.Read()) {
+                                int idCategoria = Convert.ToInt32(reader["idCategoria"]);
+                                string designacao = Convert.ToString(reader["Designacao"]);
+                                int idRegra = Convert.ToInt32(reader["Regra"]);
+
+                                Regra regra = this.regraDAO.get(idRegra);
+
+                                Categoria categoria = new Categoria(idCategoria, designacao, regra);
+                                categorias.Add(categoria);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                throw new Exception(e.Message);
+            }
+
+            return categorias;
         }
         
         // Adiciona Categoria

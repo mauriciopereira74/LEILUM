@@ -37,6 +37,7 @@ namespace Leilum.Data
         public bool addLicitacao(double value, int idLeilao, string emailUser);
         public void removeLicitacao(int idLicitacao);
         public Categoria getCategoria(int idCategoria);
+        public List<Categoria> GetAllCategorias();
         public void addCategoria(Categoria categoria);
         public void removeCategoria(int idCategoria);
         public int getIdCategoria(string designacao);
