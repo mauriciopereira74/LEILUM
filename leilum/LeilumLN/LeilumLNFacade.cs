@@ -101,6 +101,10 @@ namespace leilum.LeilumLN
         {
             return this.db.addLicitacao(value,idLeilao,userEmail);
         }
+
+        public List<Categoria> GetAllCategorias(){
+            return this.db.GetAllCategorias();
+        }
         
         // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  
         

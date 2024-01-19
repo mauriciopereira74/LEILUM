@@ -5,7 +5,13 @@
 
 <PageTitle>Home</PageTitle>
 
-<RadzenDataList WrapItems="true" AllowPaging="false" Data="@leiloes" TItem="Leilao">
+<RadzenTextBox @bind-Value="searchTerm" Placeholder="Search Title" Style="width: 100%" Change="FilterLeiloes" />
+
+<RadzenDropDown Data="@categorias" TextField="getDesignacao()" ValueField="getIdCategoria()" Style="width: 100%"
+               Placeholder="Selecione a Categoria" @bind-Value="selectedCategory">
+</RadzenDropDown>
+
+<RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredLeiloes" TItem="Leilao">
     <Template Context="leilao">
         <RadzenCard Style="width:100px; border-radius: 10%" @onclick="() => goTo(leilao.getNrLeilao())">
             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
@@ -43,18 +49,40 @@
 </style>
 
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-    }
     bool allowVirtualization;
 
     static ILeilumLN ln = new LeilumLNFacade();
-    IEnumerable<Leilao> leiloes = ln.getLeiloesEmCurso();
+    IEnumerable<Leilao> leiloes;
+    IEnumerable<Leilao> filteredLeiloes;
+    List<Categoria> categorias;
+    Categoria selectedCategory;
+    string searchTerm = "";
 
-    string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
+     string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
     int pageSize = 2;
     int count;
+    protected override async Task OnInitializedAsync()
+    {
+        leiloes = ln.getLeiloesEmCurso();
+        filteredLeiloes = leiloes;
+        categorias = ln.GetAllCategorias();
+        await base.OnInitializedAsync();
+    }
+
+    void FilterLeiloes()
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm) || selectedCategory != null)
+        {
+            filteredLeiloes = leiloes.Where(l =>
+                (string.IsNullOrEmpty(searchTerm) || l.getTitulo().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || l.getCategoria().getDesignacao().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
+                (selectedCategory == null || l.getCategoria() == selectedCategory)
+            );
+        }
+        else
+        {
+            filteredLeiloes = leiloes;
+        }
+    }
 
     /*
     void PageChanged(PagerEventArgs args)
@@ -72,4 +100,5 @@
         // Navegar para a página de detalhes do leilão
         NavigationManager.NavigateTo($"/auction/{leilaoId}");
     }
+
 }

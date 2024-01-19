@@ -41,6 +41,7 @@ namespace Leilum.Data
 
         public void removeLicitacao(int idLicitacao);
         public Categoria getCategoria(int idCategoria);
+        public List<Categoria> GetAllCategorias();
         public void addCategoria(Categoria categoria);
         public void removeCategoria(int idCategoria);
         public Regra getRegra(int idRegra);

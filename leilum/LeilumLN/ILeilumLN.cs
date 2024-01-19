@@ -1,4 +1,5 @@
 
+using Leilum.LeilumLN.CategoriaLN;
 using Leilum.LeilumLN.LeilaoLN;
 using Leilum.LeilumLN.UtilizadorLN;
 
@@ -24,6 +25,8 @@ namespace leilum.LeilumLN
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 
         public Leilao getLeilao(int idLeilao);
+
+        public List<Categoria> GetAllCategorias();
 
     }
 }
