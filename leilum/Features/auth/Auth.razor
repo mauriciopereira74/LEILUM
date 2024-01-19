@@ -2,13 +2,14 @@
 @page "/login"
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authStateProvider
+@inject NotificationService NotificationService
 
 <PageTitle>Login</PageTitle>
 
 <RadzenRow Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 800px; overflow: hidden;">
     <RadzenColumn Size="12" SizeMD="6">
         <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-text-align-center rz-p-12 custom-login-column" >
-            <RadzenText TextStyle="TextStyle.DisplayH3" TagName="TagName.H2" Class="rz-color-white rz-mb-6">Bem vindo!</RadzenText>
+            <RadzenText TextStyle="TextStyle.DisplayH3" TagName="TagName.H2" Class="rz-color-white rz-mb-6"><b>Login</b></RadzenText>
             <RadzenStack AlignItems="AlignItems.Center" Class="rz-mx-auto rz-my-12">
 
                 <RadzenImage Path="/images/logo.png" Style="width: 15rem;" />
@@ -18,18 +19,15 @@
     </RadzenColumn>
     <RadzenColumn Size="12" SizeMD="6">
         <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12">
-            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-6">
-                Login
-            </RadzenText>
             <RadzenTemplateForm Data=@("SimpleLogin")>
                 <RadzenLogin AllowResetPassword="false" Username=@email Password=@password AllowRememberMe="false"
-                        LoginText="LogIn" UserText="Email" PasswordText="Password"
-                        UserRequired="Email necessario"
-                        PasswordRequired="Password necessaria"
-                        RegisterText="Criar Conta"
-                        RegisterMessageText="Ainda não tens conta?"
-                        Login="@(args => HandleLogin(args))"
-                        Register="@(args => HandleCreate())"/>
+                             LoginText="LogIn" UserText="Email" PasswordText="Password"
+                             UserRequired="Email Address required."
+                             PasswordRequired="Password required."
+                             RegisterText="Create an Account"
+                             RegisterMessageText="Don't have an Account yet?"
+                             Login="@(args => HandleLogin(args))"
+                             Register="@(args => HandleCreate())"/>
             </RadzenTemplateForm>
         </RadzenCard>
     </RadzenColumn>
@@ -50,12 +48,12 @@
     private async Task HandleLogin(LoginArgs args)
     {
         ILeilumLN ef = new LeilumLNFacade();
-        if (ef.existsEmail(args.Username)) // utilizador existe?
+        if (ef.existsEmail(args.Username))
         {
             Utilizador user = ef.getUtilizadorWithEmail(args.Username);
-            if (user.getPassword().Equals(args.Password)) // a palavra passe é correcta?
+            if (user.getPassword().Equals(args.Password))
             {
-                CurrentUser.setCurrentUser(user); // serve para as outras páginas saberem quem é que está na sessão
+                CurrentUser.setCurrentUser(user);
 
                 var customAuthStateProvider = (AuthStateProvider)authStateProvider;
                 await customAuthStateProvider.UpdateAuthenticationState(new UserSession
@@ -67,12 +65,12 @@
             }
             else
             {
-                //await ShowBusyDialog(true, "A palavra passe é incorreta.");
+                NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Wrong Password", Detail = "Try again with another Password!", Duration = 4000 });
             }
         }
         else
         {
-            //await ShowBusyDialog(true, "Utilizador não encontrado.");
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Couldn't find a register account with that Email Address", Detail = "Try again with another email or register a new account!", Duration = 6000 });
         }
     }
 
