@@ -104,7 +104,7 @@
                                 </Helper>
                             </RadzenFormField>
                             
-                            <RadzenFormField Text="NIF" Variant=@variant>
+                            <RadzenFormField Text="NIF (Tax Number)" Variant=@variant>
                                 <ChildContent>
                                     <RadzenNumeric Name="NIF" ShowUpDown="false" @bind-Value=@user.nif Placeholder="Enter or clear value" InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "Enter value" } })"/>
                                 </ChildContent>
@@ -127,7 +127,7 @@
                                 </Helper>
                             </RadzenFormField>
                             
-                            <RadzenFormField Text="Bank Account" Variant=@variant>
+                            <RadzenFormField Text="IBAN (Internacional Bank Account Number)" Variant=@variant>
                                 <ChildContent>
                                     <RadzenTextBox Name="Bank" @bind-Value="@user.iban"/>
                                 </ChildContent>
@@ -272,13 +272,13 @@
             switch (this.user.auxPay)
             {
                 case "Check":
-                    this.user.pay = 0;
+                    this.user.pay = configGerais.Check;
                     break;
                 case "Bank Transfer":
-                    this.user.pay = 1;
+                    this.user.pay = configGerais.BankTransfer;
                     break;
                 case "Cash":
-                    this.user.pay = 2;
+                    this.user.pay = configGerais.Cash;
                     break;
             }
             Console.WriteLine("Register Account - Email: " + this.user.email + "; Password: " + this.user.password + "; Picture: " + this.user.filename + " NIF: " + this.user.nif.Value + "; Name: " + this.user.name + "; Address: " + this.user.address + "; Nacionality: " + this.user.nationality + "; contact: " + this.user.contact + "; Birth: " + this.user.birth + "; pay: " + this.user.pay + "; iban: " + this.user.iban);

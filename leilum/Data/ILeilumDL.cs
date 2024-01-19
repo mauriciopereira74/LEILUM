@@ -33,16 +33,16 @@ namespace Leilum.Data
         public void addLeilao(Leilao leilao);
         public int quantidadeLeiloes();
         public bool addLicitacao(Licitacao licitacao);
-
         public double? getMaiorLicitacao(int idLeilao);
-
-        
         public bool addLicitacao(double value, int idLeilao, string emailUser);
-
         public void removeLicitacao(int idLicitacao);
         public Categoria getCategoria(int idCategoria);
         public void addCategoria(Categoria categoria);
         public void removeCategoria(int idCategoria);
+        public int getIdCategoria(string designacao);
+        public ICollection<string> getCategoriasList();
+
+
         public Regra getRegra(int idRegra);
         public void addRegra(Regra regra);
         public void removeRegra(int idRegra);

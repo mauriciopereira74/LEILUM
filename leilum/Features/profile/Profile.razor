@@ -16,123 +16,173 @@
                 <RadzenImage Path="@currentUser.getFotoPerfil()" Style="width: 100px; height: 100px; border-radius: 50%;" />
                 <RadzenStack Gap="0" Style="text-align: center; margin-top: -10px;">
                     <RadzenText TextStyle="TextStyle.Body1">
-                        @if (isEditMode)
-                        {
-                            <InputText @bind-Value="newName" style="background-color: transparent; border: none; font-weight: bold; text-align: center;" />
-                        }
-                        else
-                        {
-                            <b>@currentUser.getNome()</b>
-                        }
+                        <b>@currentUser.getNome()</b>
                     </RadzenText>
                 </RadzenStack>
             </RadzenStack>
             <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
-                <RadzenText TextStyle="TextStyle.H6" class="rz-color-on-primary-light"><strong>Account Information</strong></RadzenText>
+                <RadzenText TextStyle="TextStyle.H6" TextAlign="TextAlign.Center" class="rz-color-on-primary-light"><strong>Account Information</strong></RadzenText>
                 <RadzenRow RowGap="0">
                     <RadzenColumn SizeSM="12">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Email</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getEmail()</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Password</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
-                            @if (isEditMode)
+                        @if (!isEditMode)
+                        {
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Email</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getEmail()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Password</b></RadzenText>
+                            <RadzenStack Orientation="Orientation.Horizontal">
+                                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light" Text="@currentUser.getPassword()" Visible="@isPassVisible"/>
+                                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light" Text="********" Visible="@(!isPassVisible)"/>
+                                <RadzenButton Icon="@(isPassVisible ? "visibility" : "visibility_off")" Click="passVisible" Style="color: #ffffff; outline: #000000;" Variant="Variant.Text" Size="ButtonSize.Small"/>
+                            </RadzenStack>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Contact</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getContacto()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Address</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getMorada()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Birth Date</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getDataNascimentoSTR()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Nationality</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getNacionalidade()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>NIF (Tax Number)</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getContribuinte()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Payment Method</b></RadzenText>
+                            @if (currentUser.getMetodoPagamento() == configGerais.Check)
                             {
-                                <InputText type="text"  @bind-Value="newPass" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Check</b></RadzenText>
                             }
-                            else
+
+                            @if (currentUser.getMetodoPagamento() == configGerais.BankTransfer)
                             {
-                                <b>@currentUser.getPassword()</b>
+                                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Bank Transfer</b></RadzenText>
                             }
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Contact</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
-                            @if (isEditMode)
+
+                            @if (currentUser.getMetodoPagamento() == configGerais.Cash)
                             {
-                                <InputText type="text" @bind-Value="newContact" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
+                                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Cash</b></RadzenText>
                             }
-                            else
-                            {
-                                <b>@currentUser.getContacto()</b>
-                            }
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Address</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
-                            @if (isEditMode)
-                            {
-                                <InputText type="text" @bind-Value="newAddress" style="background-color: transparent; border: none; color: white; font-weight:bold;"/>
-                            }
-                            else
-                            {
-                                <b>@currentUser.getMorada()</b>
-                            }
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Birth Date</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
-                            @if (isEditMode)
-                            {
-                                <RadzenDatePicker @bind-Value="newDate" DateFormat="MM/dd/yyyy" Class="custom-datepicker" />
-                            }
-                            else
-                            {
-                                <b>@currentUser.getDataNascimentoSTR()</b>
-                            }
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Nationality</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
-                            @if (isEditMode)
-                            {
-                                <InputText type="text" @bind-Value="newNaci" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
-                            }
-                            else
-                            {
-                                <b>@currentUser.getNacionalidade()</b>
-                            }
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">TIN</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
-                            @if (isEditMode)
-                            {
-                                <InputNumber type="text" @bind-Value="newNif" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
-                            }
-                            else
-                            {
-                                <b>@currentUser.getContribuinte()</b>
-                            }
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Payment Method</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
-                            @if (isEditMode)
-                            {
-                                <InputNumber type="text" @bind-Value="newPag" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
-                            }
-                            else
-                            {
-                                <b>@currentUser.getMetodoPagamento()</b>
-                            }
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">IBAN</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
-                            @if (isEditMode)
-                            {
-                                <InputText type="text"  @bind-Value="newIban" style="background-color: transparent; border: none; color: white; font-weight: bold;"/>
-                            }
-                            else
-                            {
-                                <b>@currentUser.getIban()</b>
-                            }
-                        </RadzenText>
+
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>IBAN (International Bank Account Number)</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getIban()</b></RadzenText>
+                        }
+                        else
+                        {
+                            <RadzenTemplateForm TItem="Utilizador" Data="@currentUser" Submit="@SaveChanges">
+                                <RadzenStack Orientation="Orientation.Vertical">
+                                    
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Name</b></RadzenText>
+                                    <RadzenFormField Variant=@variant>
+                                        <ChildContent>
+                                            <RadzenTextBox Name="Name" @bind-Value="@newName"/>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="Name" Text="Required Field."/>
+                                        </Helper>
+                                    </RadzenFormField>
+                                    
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Password</b></RadzenText>
+                                    <RadzenFormField Variant="@variant">
+                                        <ChildContent>
+                                            <RadzenStack Orientation="Orientation.Horizontal">
+                                                <RadzenTextBox Name="Password" @bind-Value="@newPass" Visible="@(!isPassVisible)"/>
+                                                <RadzenPassword Name="Password" @bind-Value="@newPass" Visible="isPassVisible"/>
+                                                <RadzenButton Icon="@(isPassVisible ? "visibility" : "visibility_off")" Click="passVisible" Style="color: #ffffff; outline: #000000;" Variant="Variant.Text" Size="ButtonSize.Small"/>
+                                            </RadzenStack>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="Password" Text="Required Field."/>
+                                        </Helper>
+                                        <End>
+                                            <RadzenButton Icon="@(isPassVisible ? "visibility" : "visibility_off")" Click="passVisible" Variant="Variant.Text" Size="ButtonSize.Small"/>
+                                        </End>
+                                    </RadzenFormField>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Contact</b></RadzenText>
+                                    <RadzenFormField Variant="@variant">
+                                        <ChildContent>
+                                            <RadzenTextBox Name="Contac" @bind-Value="@newContact"/>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="Contac" Text="Required Field."/>
+                                            <RadzenRegexValidator Component="Contac" Pattern="^(\+\d{1,4}\s?)?(\d{9,15})$" Text="Insert a valid phone number."/>
+                                        </Helper>
+                                    </RadzenFormField>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Address</b></RadzenText>
+                                    <RadzenFormField Variant=@variant>
+                                        <ChildContent>
+                                            <RadzenTextBox Name="Morada" @bind-Value="@newAddress"/>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="Morada" Text="Required Field."/>
+                                        </Helper>
+                                    </RadzenFormField>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Birth Date</b></RadzenText>
+                                    <RadzenFormField Variant=@variant>
+                                        <ChildContent>
+                                            <RadzenDatePicker Name="DataNascimento" @bind-Value="@newDate" DateFormat="MM/dd/yyyy"/>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="DataNascimento" Text="Required Field."/>
+                                            <RadzenCustomValidator Component="DataNascimento" Validator="@(() => idadeValidata(newDate))" Text="You must be at least 18 years."/>
+                                        </Helper>
+                                    </RadzenFormField>
+
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Nacionality</b></RadzenText>
+                                    <RadzenFormField Variant=@variant>
+                                        <ChildContent>
+                                            <RadzenTextBox Name="Nacionalidade" @bind-Value="@newNaci"/>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="Nacionalidade" Text="Required Field."/>
+                                        </Helper>
+                                    </RadzenFormField>
+
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>NIF (Tax Number)</b></RadzenText>
+                                    <RadzenFormField Variant=@variant>
+                                        <ChildContent>
+                                            <RadzenNumeric Name="NIF" ShowUpDown="false" @bind-Value=@newNif Placeholder="Enter or clear value" InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "Enter value" } })"/>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="NIF" Text="Required Field."/>
+                                            <RadzenCustomValidator Component="NIF" Validator="@(() => validNif(newNif))" Text="Already exists an Account with this NIF."/>
+                                            <RadzenRegexValidator Component="NIF" Text="NIF must be 9 digits." Pattern="\d{9}" Style="position: absolute"/>
+                                        </Helper>
+                                    </RadzenFormField>
+
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Payment Method</b></RadzenText>
+                                    <RadzenFormField Variant="@variant">
+                                        <Start>
+                                            <RadzenIcon Icon="credit_card"/>
+                                        </Start>
+                                        <ChildContent>
+                                            <RadzenDropDown Name="Pay" Multiple="false" Placeholder="Select..." TValue="string" Data="payMethod" @bind-Value="@auxpay"/>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="Pay" Text="Required Field."/>
+                                        </Helper>
+                                    </RadzenFormField>
+
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>IBAN (Internacional Bank Account Number)</b></RadzenText>
+                                    <RadzenFormField Variant=@variant>
+                                        <ChildContent>
+                                            <RadzenTextBox Name="Bank" @bind-Value="@newIban"/>
+                                        </ChildContent>
+                                        <Helper>
+                                            <RadzenRequiredValidator Component="Bank" Text="Required Field."/>
+                                        </Helper>
+                                    </RadzenFormField>
+                                    <RadzenButton ButtonType="ButtonType.Submit" Text="Submit Changes"/>
+                                </RadzenStack>
+                            </RadzenTemplateForm>
+                        }
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenCard>
             <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.End" Gap="0">
                 @if (isEditMode)
                 {   
-                    <RadzenButton Variant="Variant.Text" Text="Guardar" Click="SaveChanges" />
-                    <RadzenButton Variant="Variant.Text" Text="Sair" Click="ToggleEditMode" />
+                    <RadzenButton Variant="Variant.Text" Text="Go Back (Without saving)" Click="ToggleEditMode" />
                 }
                 else
                 {
-                    <RadzenButton Variant="Variant.Text" Text="EDITAR" Click="ToggleEditMode" />
+                    <RadzenButton Variant="Variant.Text" Text="Edit Profile" Click="ToggleEditMode" />
                 }
             </RadzenStack>
         </RadzenCard>
@@ -152,14 +202,17 @@
 </style>
 
 @code {
+    Variant variant = Variant.Outlined;
+    ILeilumLN leilumF = new LeilumLNFacade();
     Utilizador currentUser;
+    Utilizador editUser;
     bool isEditMode = false;
-
+    
     string? newFoto;
     string? newName;
-    string? newPass;
+    string newPass = "";
     string? newContact;
-
+    string? auxpay = "";
     string? newAddress;
     DateTime newDate;
 
@@ -170,13 +223,54 @@
     int newPag;
 
     string? newIban;
+
+    bool isPassVisible = false;
+    ICollection<string> payMethod = new List<string>()
+    {
+        "Check", "Bank Transfer", "Cash"
+    };
+    
+    
+    public bool isNull(string str)
+    {
+        return str.Equals("");
+    }
+    
+    public void passVisible()
+    {
+        isPassVisible = !isPassVisible;
+    }
+    
+    bool validNif(int nif)
+    {
+        if (!nif.Equals(currentUser.getContribuinte()))
+        {
+            return !leilumF.existsNIF(nif);
+        } else return true;
+    }
+
+    bool idadeValidata(DateTime data)
+    {
+        if (data != null)
+        {
+            DateTime dataAtual = DateTime.Now;
+
+            int idade = dataAtual.Year - data.Year;
+            
+            if (data.Date > dataAtual.AddYears(-idade))
+            {
+                idade--;
+            }
+
+            return idade >= 18;
+        }
+        return true;
+    }
     
     protected override async Task OnInitializedAsync()
     {
-        // Fetch user details from your authentication system or wherever you store user information
-        // For example, you can use your CurrentUser class or authentication state
         currentUser = CurrentUser.getCurrentUser();
-
+        
         if (currentUser != null)
         {
             newName = currentUser.getNome();
@@ -190,13 +284,24 @@
             newIban = currentUser.getIban();
         }
 
-        @* Console.WriteLine(currentUser.getFotoPerfil()); *@
-        // Simulate fetching data (replace this with your actual logic)
         await Task.Delay(1000);
     }
 
     void SaveChanges()
     {
+        switch (auxpay)
+        {
+            case "Check":
+                newPag = configGerais.Check;
+                break;
+            case "Bank Transfer":
+                newPag = configGerais.BankTransfer;
+                break;
+            case "Cash":
+                newPag = configGerais.Cash;
+                break;
+        }
+        
         currentUser.setNome(newName);
         currentUser.setPassword(newPass);
         currentUser.setContacto(newContact);
@@ -209,14 +314,14 @@
 
         ILeilumLN ef = new LeilumLNFacade();
         ef.updateUtilizador(currentUser);
-        isEditMode = false; // Sair do modo de edição após salvar
+        isEditMode = false;
+        
     }
+    
     void ToggleEditMode()
     {
         isEditMode = !isEditMode;
     }
-
-    
 }
 
 <style>

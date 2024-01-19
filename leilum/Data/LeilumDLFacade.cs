@@ -441,6 +441,62 @@ namespace Leilum.Data
             }
             return result;
         }
+
+        public ICollection<string> getCategoriasList()
+        {
+            ICollection<string> list = new List<string>();
+            string sql_cmd = "SELECT Designacao FROM Categoria;";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                list.Add(Convert.ToString(reader["Designacao"]));
+                            }
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getCategoriasSTR: " + e.Message);
+            }
+        }
+
+        public int getIdCategoria(string designacao)
+        {
+            int? result = null;
+            string sql_cmd = $"Select idCategoria FROM Categoria WHERE Designacao = {designacao};";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result = Convert.ToInt32(reader["idCategoria"]);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getIDCategoria: " + e.Message);
+            }
+            return result.Value;
+        }
         
         // Adiciona Categoria
         public void addCategoria(Categoria categoria) {
@@ -492,7 +548,7 @@ namespace Leilum.Data
         public ICollection<Leilao> getLeiloesComitentes(string uComitente)
         {
             ICollection<Leilao> leiloesComitente = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM Leilao WHERE Comitente = {uComitente}";
+            string s_cmd = $"SELECT * FROM Leilao WHERE Comitente = {uComitente}";
             try
             {
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))

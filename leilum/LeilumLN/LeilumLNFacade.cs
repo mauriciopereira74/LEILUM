@@ -99,6 +99,8 @@ namespace leilum.LeilumLN
             return this.db.addLicitacao(value,idLeilao,userEmail);
         }
         
+        
+        
         // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  
         
         // Função para buscar leilões em que o Utilizador ganhou
