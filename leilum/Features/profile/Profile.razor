@@ -27,13 +27,13 @@
                     </RadzenText>
                 </RadzenStack>
             </RadzenStack>
-            <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+            <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8 custom-account-card" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
                 <RadzenText TextStyle="TextStyle.H6" class="rz-color-on-primary-light"><strong>Account Information</strong></RadzenText>
                 <RadzenRow RowGap="0">
                     <RadzenColumn SizeSM="12">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Email</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color:grey; font-size: 13px;">Email</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getEmail()</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Password</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: grey; font-size: 13px;">Password</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
                             @if (isEditMode)
                             {
@@ -44,7 +44,7 @@
                                 <b>@currentUser.getPassword()</b>
                             }
                         </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Contact</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: grey; font-size: 13px;">Contact</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
                             @if (isEditMode)
                             {
@@ -55,7 +55,7 @@
                                 <b>@currentUser.getContacto()</b>
                             }
                         </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Address</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: grey; font-size: 13px;">Address</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
                             @if (isEditMode)
                             {
@@ -66,7 +66,7 @@
                                 <b>@currentUser.getMorada()</b>
                             }
                         </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Birth Date</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: grey; font-size: 13px;">Birth Date</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
                             @if (isEditMode)
                             {
@@ -77,7 +77,7 @@
                                 <b>@currentUser.getDataNascimentoSTR()</b>
                             }
                         </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Nationality</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: grey; font-size: 13px;">Nationality</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
                             @if (isEditMode)
                             {
@@ -88,7 +88,7 @@
                                 <b>@currentUser.getNacionalidade()</b>
                             }
                         </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">TIN</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: grey; font-size: 13px;">TIN</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
                             @if (isEditMode)
                             {
@@ -99,7 +99,7 @@
                                 <b>@currentUser.getContribuinte()</b>
                             }
                         </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Payment Method</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: grey; font-size: 13px;">Payment Method</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
                             @if (isEditMode)
                             {
@@ -110,7 +110,7 @@
                                 <b>@currentUser.getMetodoPagamento()</b>
                             }
                         </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">IBAN</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: grey; font-size: 13px;">IBAN</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light">
                             @if (isEditMode)
                             {
@@ -148,6 +148,10 @@
         text-align: center;
         font-size: 24px; /* Ajuste o tamanho da fonte conforme necessário */
         font-weight: bold;
+    }
+    .custom-account-card {
+        background-color: #001F3F !important; /* Substitua pela cor desejada */
+        color: white;
     }
 </style>
 

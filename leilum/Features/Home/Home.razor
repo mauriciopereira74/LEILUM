@@ -7,7 +7,7 @@
 
 <RadzenDataList WrapItems="true" AllowPaging="false" Data="@leiloes" TItem="Leilao">
     <Template Context="leilao">
-        <RadzenCard Style="width:100px; border-radius: 10%">
+        <RadzenCard Style="width:100px; border-radius: 10%" @onclick="() => goTo(leilao.getNrLeilao())">
             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
                 <RadzenImage Path="@leilao.getLote().getImgPath()" Style="width: 150px; height: 150px; border-radius: 10%" />
                 <RadzenStack Gap="0" Style="text-align: center;">
@@ -43,6 +43,10 @@
 </style>
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
     bool allowVirtualization;
 
     static ILeilumLN ln = new LeilumLNFacade();
@@ -63,9 +67,9 @@
         return dbContext.Orders.Include("Customer").Include("Employee").Skip(skip).Take(take).ToList();
     }
     */
-
-    protected override async Task OnInitializedAsync()
+    void goTo(int leilaoId)
     {
-        await base.OnInitializedAsync();
+        // Navegar para a página de detalhes do leilão
+        NavigationManager.NavigateTo($"/auction/{leilaoId}");
     }
 }

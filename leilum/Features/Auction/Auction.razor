@@ -1,5 +1,189 @@
-@page "/auction"
+@page "/auction/{id}"
 @inject HttpClient Http
-@inject NavigationManager NavigationManager;
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
 
+<PageTitle>Detalhes do Leilão</PageTitle>
 
+@if (leilao != null)
+{
+    <RadzenCard Style="width: 100%; margin: 10px;">
+        <div class="card-header custom-header" style="display: flex; align-items: center; justify-content: space-between; padding: 10px; border-radius: 10px; height: 350px;">
+            <div style="flex: 1;">
+                <img src="@leilao.getLote().getImgPath()" alt="Imagem do Leilão" style="max-width: 100%; height: 300px; border-radius: 50%; overflow: hidden;"  />
+            </div>
+            <div style="flex: 1; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px; text-align: center;">
+                <h4>Current Bid</h4>
+                <p style="font-size: 18px; color: #4CAF50;">@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", leilao.getvalorAtual())</p>
+            </div>
+            <div style="flex: 1; text-align: right;">
+                <p><b>Time Remaining:</b> <span id="remainingTime"></span></p>
+            </div>
+        </div>
+        <RadzenRow Gap="1rem" Style="margin-top: 20px;">
+            <RadzenColumn Size="8" SizeSM="6">
+                <RadzenTemplateForm TItem="Leilao" Data="@leilao">
+                    <RadzenStack>
+                        <RadzenFormField Text="Title" Variant="@variant">
+                            <ChildContent>
+                                <RadzenTextBox Value=@leilao.getTitulo() ReadOnly="true" disabled/>
+                            </ChildContent>
+                        </RadzenFormField>
+                        @if(artigos.Count()>1){
+
+                        }
+                        else{
+                            <RadzenFormField Text="Article Description" Variant="@variant">
+                                <ChildContent>
+                                    <RadzenTextBox Value=@artigos.First().getDescricao() ReadOnly="true" disabled/>
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Article Characteristics" Variant="@variant">
+                                <ChildContent>
+                                    <RadzenTextBox Value=@artigos.First().getCaracteristicas() ReadOnly="true" disabled/>
+                                </ChildContent>
+                            </RadzenFormField>
+                        }
+                    </RadzenStack>
+                </RadzenTemplateForm>
+            </RadzenColumn>
+            <RadzenColumn Size="8" SizeSM="6">
+                <RadzenTemplateForm TItem="Leilao" Data="@leilao">
+                    <RadzenStack>
+                        <RadzenFormField Text="Category" Variant="@variant">
+                            <ChildContent>
+                                <RadzenTextBox Value=@leilao.getCategoria().getDesignacao() ReadOnly="true" disabled/>
+                            </ChildContent>
+                        </RadzenFormField>
+                        <RadzenFormField Text="Time Interval" Variant="@variant">
+                            <ChildContent>
+                                <RadzenTextBox Value=@leilao.getDataFinal().ToString() ReadOnly="true" disabled/>
+                            </ChildContent>
+                        </RadzenFormField>
+                        <RadzenFormField Text="Minimum Value" Variant="@variant">
+                            <ChildContent>
+                                <RadzenTextBox Value=@leilao.getValorMinimo().ToString() ReadOnly="true" disabled/>
+                            </ChildContent>
+                        </RadzenFormField>
+                        <RadzenFormField Text="Your Bid" Variant="@variant">
+                            <ChildContent>
+                                <RadzenNumeric @bind-Value="@ValorDoLance" Placeholder="Enter your bid" Style="width: 100%" Min="@Convert.ToDecimal(valorMinimoLance)"/>
+                                <RadzenButton ButtonType="ButtonType.Button" Text="Bid Now" Click="@(() => bid())" Style="width: 100%: height: 100%;" />
+                            </ChildContent>
+                        </RadzenFormField>
+                    </RadzenStack>
+                </RadzenTemplateForm>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenButton ButtonType="ButtonType.Button" Text="Go Back" Click="@turnBack" Style="margin-top: 15px" />
+    </RadzenCard>
+}
+else
+{
+    NavigationManager.NavigateTo("/");
+}
+
+<style>
+    .custom-header {
+        background-color: #001F3F !important; /* Substitua pela cor desejada */
+        color: white;
+    }
+</style>
+
+<script>
+    function updateRemainingTime() {
+        // Obtém o elemento que exibe o tempo restante
+        var timeElement = document.getElementById('remainingTime');
+
+        // Obtém a data final do leilão do código C#
+        var dataFinal = new Date('@leilao.getDataFinal().ToString("yyyy-MM-ddTHH:mm:ss")');
+
+        // Calcula a diferença entre a data final e o momento atual
+        var difference = dataFinal - new Date();
+
+        // Calcula os componentes de dias, horas, minutos e segundos
+        var days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        // Formata o tempo restante
+        var formattedTime = days + " days, " + hours + "h: " + minutes + "m: " + seconds + " seconds";
+
+        // Atualiza o elemento com o tempo restante formatado
+        timeElement.innerText = formattedTime;
+    }
+
+    // Atualiza o tempo restante a cada segundo
+    setInterval(updateRemainingTime, 100);
+
+    // Chama a função pela primeira vez para iniciar imediatamente
+    updateRemainingTime();
+</script>
+
+@code {
+
+    Utilizador user = CurrentUser.getCurrentUser();
+    ILeilumLN ln = new LeilumLNFacade();
+    Leilao leilao;
+
+    List<Artigo> artigos;
+    Variant variant = Variant.Filled;
+
+    double valorMinimoLance;
+    double ValorDoLance;
+
+    [Parameter]
+    public string id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (int.TryParse(id, out int leilaoId))
+        {
+            leilao = ln.getLeilao(leilaoId);
+            artigos= leilao.getLote().getArtigos();
+            ValorDoLance = leilao.getvalorAtual();
+            valorMinimoLance = leilao.getvalorAtual()+1;
+        }
+        else
+        {
+            error();
+        }
+    }
+
+    private void error()
+    {
+        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "No Auction found!", Duration = 4000 });
+        turnBack();
+    }
+
+    private void turnBack()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void bid()
+    {   
+        if (leilao != null && user != null)
+        {
+            if (ValorDoLance > leilao.getvalorAtual())
+            {
+                bool flag = ln.addLicitacao(leilao.getNrLeilao(), user.getEmail(), ValorDoLance);
+                if (flag)
+                {
+                    leilao.setLicitacaoAtual(ValorDoLance);
+                    NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Bid placed successfully!", Duration = 4000 });
+                }
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "Invalid Bid!", Duration = 4000 });
+            }
+        }
+        else
+        {
+            // Adicione uma notificação ou manipulação de erro apropriada se leilao ou user for null
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Auction or user is null!", Duration = 4000 });
+        }
+    }
+}

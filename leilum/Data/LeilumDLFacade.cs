@@ -364,7 +364,7 @@ namespace Leilum.Data
         }
 
         public bool addLicitacao(double value, int idLeilao, string emailUser)
-        {
+        {   
             bool result = false;
             using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
             {
