@@ -407,6 +407,7 @@ obj/
 # Common node modules locations
 /node_modules
 /wwwroot/node_modules
+/wwwroot/ProfilePictures/
 
 ### VisualStudioCode ###
 !.vscode/*.code-snippets
@@ -622,3 +623,4 @@ leilum/leilum.csproj
 
 *.xml
 /.idea
+leilum/wwwroot/ProfilePictures/*
