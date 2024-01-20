@@ -68,7 +68,12 @@
                         {
                             <RadzenTemplateForm TItem="Utilizador" Data="@currentUser" Submit="@SaveChanges" InvalidSubmit="@invalidSubmit">
                                 <RadzenStack Orientation="Orientation.Vertical">
-                                    
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Profile Picture</b></RadzenText>
+                                    <RadzenFormField Variant=@variant>
+                                        <RadzenCard>
+                                            <RadzenUpload Auto="false" Change="args => UploadChange(args)" @ref="upload" Accept="image/*" Url=@($"upload/{"ProfilePictures"}/{newNif + "-ProfilePic"}")></RadzenUpload>
+                                        </RadzenCard>
+                                    </RadzenFormField>
                                     <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Name</b></RadzenText>
                                     <RadzenFormField Variant=@variant>
                                         <ChildContent>
@@ -212,6 +217,8 @@
     Utilizador currentUser;
     Utilizador editUser;
     bool isEditMode = false;
+    RadzenUpload upload;
+    
     
     string? newFoto;
     string? newName;
@@ -224,8 +231,8 @@
     string? newNaci;
 
     int newNif;
-
     int newPag;
+    string extension;
 
     string? newIban;
 
@@ -235,11 +242,14 @@
         "Check", "Bank Transfer", "Cash"
     };
     
-    
-    public bool isNull(string str)
+    void UploadChange(UploadChangeEventArgs args)
     {
-        return str.Equals("");
+        foreach (var file in args.Files)
+        {
+            extension = file.Name.Split(".")[1];
+        }
     }
+    
     
     public void passVisible()
     {
@@ -292,7 +302,7 @@
         await Task.Delay(1000);
     }
 
-    void SaveChanges()
+    async void SaveChanges()
     {
         switch (auxpay)
         {
@@ -305,6 +315,13 @@
             case "Cash":
                 newPag = configGerais.Cash;
                 break;
+        }
+        
+        if (upload.HasValue)
+        {
+            await upload.Upload();
+            string file = "/ProfilePictures/" + newNif + "-ProfilePic." + extension;
+            currentUser.setFotoPerfil(file);
         }
         
         currentUser.setNome(newName);

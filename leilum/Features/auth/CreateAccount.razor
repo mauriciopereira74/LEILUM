@@ -1,10 +1,8 @@
 @layout LoginLayout
 @page "/create"
-@using System.Text
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authStateProvider
 @inject NotificationService NotificationService
-@inject HttpClient HttpClient
 
 <PageTitle>Create Account</PageTitle>
 
@@ -29,7 +27,7 @@
                         <RadzenStack>
                             <RadzenFormField Text="Profile Photo" Variant=@variant>
                                 <RadzenCard>
-                                    <RadzenFileInput @bind-Value=@user.file @bind-FileName=@user.filename @bind-FileSize=@user.fileSize TValue="string" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" Change=@HandleFileChange/>
+                                    <RadzenUpload Auto="false" Change="args => UploadChange(args)" @ref="upload" Accept="image/*" Url=@($"upload/{"ProfilePictures"}/{user.nif + "-ProfilePic"}")></RadzenUpload>
                                 </RadzenCard>
                             </RadzenFormField>
                             
@@ -110,7 +108,7 @@
                                 </ChildContent>
                                 <Helper>
                                     <RadzenRequiredValidator DefaultValue="999999999" Component="NIF" Text="Required Field."/>
-                                    <RadzenCustomValidator DefaultValue="999999999" Component="NIF" Validator="@(() => validNif(user.nif.Value))" Text="Already exists an Account with this NIF." Popup="@user.nifVal"/>
+                                    <RadzenCustomValidator DefaultValue="999999999" Component="NIF" Validator="@(() => validNif(user.nif))" Text="Already exists an Account with this NIF." Popup="@user.nifVal"/>
                                     <RadzenRegexValidator DefaultValue="999999999" Component="NIF" Text="NIF must be 9 digits." Pattern="\d{9}" Popup=@user.nifVal Style="position: absolute" />
                                 </Helper>
                             </RadzenFormField>
@@ -159,11 +157,11 @@
     ILeilumLN leilumF = new LeilumLNFacade();
     Variant variant = Variant.Outlined;
 
+    RadzenUpload upload;
+
     class userAux
     {
-        public string? file { get; set; }
         public string? filename { get; set; }
-        public long? fileSize  { get; set; }
         public string? email { get; set; }
         public string password { get; set; }
         public bool flag { get; set; }
@@ -172,7 +170,7 @@
         public string address { get; set; }
         public DateTime birth { get; set; }
         public string nationality { get; set; }
-        public int? nif { get; set; }
+        public int nif { get; set; }
         public int pay { get; set; }
         public string auxPay { get; set; }
         public string iban { get; set; }
@@ -192,39 +190,20 @@
             this.nationality = "";
             this.auxPay = "";
             this.iban = "";
-            this.nif = 999999999;
             this.pay = 0;
             
         }
         
     }
 
+    string extension;
     userAux user = new userAux();
     
-    private async Task HandleFileChange()
+    void UploadChange(UploadChangeEventArgs args)
     {
-        // Crie um objeto MultipartFormDataContent
-        using (var content = new MultipartFormDataContent())
+        foreach (var file in args.Files)
         {
-            // Converta a string para um StreamContent
-            var streamContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(user.file)));
-
-            // Adicione o conteúdo do arquivo ao MultipartFormDataContent
-            content.Add(streamContent, "file", user.filename);
-
-            // Faça a chamada HTTP para o endpoint do serviço
-            var response = await HttpClient.PostAsync("api/file/upload", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                // Upload bem-sucedido
-                Console.WriteLine("Upload bem-sucedido!");
-            }
-            else
-            {
-                // Lidar com falha no upload
-                Console.WriteLine($"Falha no upload: {response.ReasonPhrase}");
-            }
+            extension = file.Name.Split(".")[1];
         }
     }
     
@@ -279,8 +258,9 @@
     {
         await base.OnInitializedAsync();
     }
+    
     private async void register()
-    {
+    { 
             switch (this.user.auxPay)
             {
                 case "Check":
@@ -293,10 +273,20 @@
                     this.user.pay = configGerais.Cash;
                     break;
             }
-            Console.WriteLine("Register Account - Email: " + this.user.email + "; Password: " + this.user.password + "; Picture: " + this.user.filename + " NIF: " + this.user.nif.Value + "; Name: " + this.user.name + "; Address: " + this.user.address + "; Nacionality: " + this.user.nationality + "; contact: " + this.user.contact + "; Birth: " + this.user.birth + "; pay: " + this.user.pay + "; iban: " + this.user.iban);
+            Console.WriteLine("Register Account - Email: " + this.user.email + "; Password: " + this.user.password + "; Picture: " + this.user.filename + " NIF: " + this.user.nif + "; Name: " + this.user.name + "; Address: " + this.user.address + "; Nacionality: " + this.user.nationality + "; contact: " + this.user.contact + "; Birth: " + this.user.birth + "; pay: " + this.user.pay + "; iban: " + this.user.iban);
             
-            Utilizador userNew = new Utilizador(this.user.email,this.user.password,1,this.user.filename,this.user.nif.Value,this.user.name,this.user.address,this.user.nationality,this.user.contact,this.user.birth,this.user.pay,this.user.iban);
-
+            if (upload.HasValue)
+            {
+                await upload.Upload();
+                user.filename = "/ProfilePictures/" + user.nif + "-ProfilePic." + extension;
+            }
+            else
+            {
+                user.filename = "/images/user-profilePicture.jpg";
+            }
+            
+            Utilizador userNew = new Utilizador(this.user.email,this.user.password,1,this.user.filename,this.user.nif,this.user.name,this.user.address,this.user.nationality,this.user.contact,this.user.birth,this.user.pay,this.user.iban);
+    
             if(!leilumF.existsEmail(userNew.getEmail())){
                 leilumF.adicionaConta(userNew);
                 var customAuthStateProvider = (AuthStateProvider)authStateProvider;
@@ -314,4 +304,5 @@
     {
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "Invalid Information. Ensure you filled all the corresponding fields with valid information!", Detail = "Please try again!", Duration = 4000 });
     }
+    
 }
