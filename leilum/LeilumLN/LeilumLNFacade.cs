@@ -73,6 +73,10 @@ namespace leilum.LeilumLN
 
             return lote;
         }
+
+        public int quantidadeLotes(){
+           return this.db.quantidadeLotes(); 
+        }
         
         // Adiciona um Leilão
         public void addLeilao(Leilao leilao){
