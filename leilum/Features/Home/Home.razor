@@ -40,7 +40,7 @@
 
 <RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredLeiloes" TItem="Leilao">
     <Template Context="leilao">
-        <RadzenCard Style="width:100px; border-radius: 10%" @onclick="() => goTo(leilao.getNrLeilao())">
+        <RadzenCard class="custom-card-spacing rz-mx" Style="max-width: 290px; border-radius: 10%" @onclick="() => goTo(leilao.getNrLeilao())">
             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
                 <RadzenImage Path="@leilao.getLote().getImgPath()" Style="width: 150px; height: 150px; border-radius: 10%" />
                 <RadzenStack Gap="0" Style="text-align: center;">
@@ -59,9 +59,11 @@
                         <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Text=@($"{String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", leilao.getvalorAtual())}") />
                     </RadzenColumn>
                 </RadzenRow>
+            </RadzenStack>
             </RadzenCard>
     </Template>
 </RadzenDataList>
+
 <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageNumbersCount="5" PageChanged="@PageChanged" />
 
 
@@ -102,10 +104,10 @@
     int count;
     protected override async Task OnInitializedAsync()
     {
+        leiloes = ln.getLeiloesEmCurso();
         count = leiloes.Count();
         leiloes = getLeiloes(0, pageSize);
   
-        //leiloes = ln.getLeiloesEmCurso();
         filteredLeiloes = leiloes;
 
         categorias = ln.GetAllCategorias();
@@ -164,7 +166,7 @@
 
     void PageChanged(PagerEventArgs args)
     {
-        leiloes = getLeiloes(args.Skip, args.Top);
+        filteredLeiloes = getLeiloes(args.Skip, args.Top);
     }
 
      IEnumerable<Leilao> getLeiloes(int skip, int take)
