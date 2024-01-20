@@ -7,31 +7,30 @@
 
 <RadzenDataList WrapItems="true" AllowPaging="false" Data="@leiloes" TItem="Leilao">
     <Template Context="leilao">
-        <RadzenCard Style="width:100px; border-radius: 10%">
-            <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
-                <RadzenImage Path="@leilao.getLote().getImgPath()" Style="width: 150px; height: 150px; border-radius: 10%" />
-                <RadzenStack Gap="0" Style="text-align: center;">
-                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0 text-center">Titulo</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getTitulo()</b></RadzenText>
-                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 text-center">Categoria</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getCategoria().getDesignacao()</b></RadzenText>
+            <RadzenCard class="custom-card-spacing rz-mx" Style="max-width: 290px;  border-radius: 10%">
+                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
+                    <RadzenImage Path="@leilao.getLote().getImgPath()" Style="width: 150px; height: 150px; border-radius: 10%" />
+                    <RadzenStack Gap="0" Style="text-align: center;">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0 text-center">Titulo</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getTitulo()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 text-center">Categoria</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getCategoria().getDesignacao()</b></RadzenText>
+                    </RadzenStack>
                 </RadzenStack>
-            </RadzenStack>
-            <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;" />
-            <RadzenRow>
-                <RadzenColumn Size="8" Class="rz-text-truncate">
-                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Data Fim</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getDataFinal()</b></RadzenText>
-                    @* <b>@leilao.getNrLeilao()</b> *@
-                </RadzenColumn>
-                <RadzenColumn Size="4" Class="rz-text-align-end">
-                    <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Text=@($"{String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", leilao.getvalorAtual())}") />
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenCard>
+                <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;" />
+                <RadzenRow>
+                    <RadzenColumn Size="8" Class="rz-text-truncate">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Data Fim</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getDataFinal()</b></RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="4" Class="rz-text-align-end">
+                        <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Text=@($"{String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", leilao.getvalorAtual())}") />
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
     </Template>
 </RadzenDataList>
-<RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageNumbersCount="5" />
+<RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageNumbersCount="5" PageChanged="@PageChanged" />
 
 
 <style>
@@ -42,17 +41,26 @@
   }
 </style>
 
+<style>
+.custom-card-spacing {
+    margin-bottom: 4px; /* Ou qualquer valor desejado para o espaçamento vertical */
+    margin-right: 2px;
+}
+</style>
+
+
 @code {
     bool allowVirtualization;
 
     static ILeilumLN ln = new LeilumLNFacade();
     IEnumerable<Leilao> leiloes = ln.getLeiloesEmCurso();
 
+    List<Leilao> list = ln.getLeiloesEmCurso().ToList();
+
     string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
-    int pageSize = 2;
+    int pageSize = 8;
     int count;
 
-    /*
     void PageChanged(PagerEventArgs args)
     {
         leiloes = getLeiloes(args.Skip, args.Top);
@@ -60,12 +68,13 @@
 
      IEnumerable<Leilao> getLeiloes(int skip, int take)
     {
-        return dbContext.Orders.Include("Customer").Include("Employee").Skip(skip).Take(take).ToList();
+        return list.Skip(skip).Take(take);
     }
-    */
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+
+        count = leiloes.Count();
+        leiloes = getLeiloes(0, pageSize);
     }
 }

@@ -23,6 +23,8 @@ namespace leilum.LeilumLN
 
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 
+        public int quantidadeLotes();
+
 
         //public Leilao getLeilao(int nrLeilao);
 
