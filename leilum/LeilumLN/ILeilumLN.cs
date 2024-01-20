@@ -1,4 +1,5 @@
 
+using Leilum.LeilumLN.CategoriaLN;
 using Leilum.LeilumLN.LeilaoLN;
 using Leilum.LeilumLN.UtilizadorLN;
 
@@ -25,8 +26,9 @@ namespace leilum.LeilumLN
 
         public int quantidadeLotes();
 
+        public Leilao getLeilao(int idLeilao);
 
-        //public Leilao getLeilao(int nrLeilao);
+        public List<Categoria> GetAllCategorias();
 
     }
 }

@@ -10,5 +10,9 @@ namespace Leilum.Data{
         public static int Avaliador = 2;
 
         public static int Admin = 3;
+        
+        public static int Check = 0;
+        public static int Cash = 1;
+        public static int BankTransfer = 2;
     }
 }

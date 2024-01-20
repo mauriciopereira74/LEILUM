@@ -4,7 +4,7 @@
 @inject NavigationManager navManager
 
 <RadzenLayout>
-    <RadzenHeader>
+    <RadzenHeader class="custom-header">
        <div class="header-content">
             <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
             <RadzenLabel>
@@ -12,7 +12,7 @@
                     <img src="/images/logo.png" alt="logo" />
                 </div>
             </RadzenLabel>
-            <RadzenProfileMenu Click="@ProfileMenu">
+            <RadzenProfileMenu Click="@ProfileMenu" class="custom-profile-menu">
                 <Template>
                     <AuthorizeView>
                         <Authorized>
@@ -50,7 +50,6 @@
                     <RadzenPanelMenuItem Text="History" Icon="history" Click="@(() => NavigateTo("/history"))"/>
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
                     <RadzenPanelMenuItem Text="Create an Auction" Icon="gavel" Click="@(() => NavigateTo("/createAuction"))"/>
-
                 </Authorized>
                 <NotAuthorized>
                     <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/"))"/>
@@ -67,6 +66,26 @@
     </RadzenBody>
 </RadzenLayout>
 <RadzenNotification />
+
+
+<style>
+    .custom-header {
+        background-color: #001F3F !important; /* Cor do cabeçalho */
+        color: white;
+    }
+
+    .custom-profile-menu {
+        background-color: #001F3F !important; /* Mesma cor do cabeçalho */
+        color: white;
+    }
+
+    .custom-profile-menu .profile-container {
+        background-color: #001F3F !important; /* Mesma cor do cabeçalho */
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
 
 
 @code {
