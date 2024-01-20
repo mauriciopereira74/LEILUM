@@ -5,11 +5,38 @@
 
 <PageTitle>Home</PageTitle>
 
-<RadzenTextBox @bind-Value="searchTerm" Placeholder="Search Title" Style="width: 100%" Change="FilterLeiloes" />
+<RadzenRow Gap="1rem" Style="margin-top: 20px; justify-content: space-between;">
+    <RadzenColumn Size="2" SizeSM="2">
+        <RadzenStack Style="border-radius: 10px; overflow: hidden;">
+            <RadzenFormField Text="Search Title" Variant="@variant" Style="color:#999">
+                <ChildContent>
+                    <RadzenTextBox @bind-Value="searchTerm" Placeholder="Search Title" Style="width: 100%" Change="FilterLeiloes" />
+                </ChildContent>
+            </RadzenFormField>
+        </RadzenStack>
+    </RadzenColumn>
 
-<RadzenDropDown Data="@categorias" TextField="getDesignacao()" ValueField="getIdCategoria()" Style="width: 100%"
-               Placeholder="Selecione a Categoria" @bind-Value="selectedCategory">
-</RadzenDropDown>
+    <RadzenColumn Size="2" SizeSM="2">
+        <RadzenStack Style="border-radius: 10px; overflow: hidden;">
+            <RadzenDropDown Data="@categorias" TextProperty="Designacao" ValueProperty="IdCategoria" @bind-Value="selectedCategoryId" Change="FilterLeiloesByCategory" Style="@(selectedCategoryId == 0 ? "color: #999; border: none; background: transparent;" : "border: none; background: transparent;")">
+            </RadzenDropDown>
+        </RadzenStack>
+    </RadzenColumn>
+
+    <RadzenColumn Size="2" SizeSM="2">
+        <RadzenStack Style="border-radius: 10px; overflow: hidden;">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Price Range</RadzenText>
+            <RadzenStack Orientation="Orientation.Horizontal">
+                <RadzenNumeric @bind-Value="minPrice" Placeholder="Mínimo" Style="width: 100px;" Change="@((decimal value) => FilterLeiloesByPrice(value))" />
+                <span style="margin: 0 0.5rem;">-</span>
+                <RadzenNumeric @bind-Value="maxPrice" Placeholder="Máximo" Style="width: 100px;" Change="@((decimal value) => FilterLeiloesByPrice(value))" />
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenColumn>
+    <div style="color: black; font-size: 18px; margin-top: 10px; margin-left:auto;">
+        @leiloes.Count() Auctions
+    </div>
+</RadzenRow>
 
 <RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredLeiloes" TItem="Leilao">
     <Template Context="leilao">
@@ -51,22 +78,46 @@
 @code {
     bool allowVirtualization;
 
+    Variant variant = Variant.Text;
+
     static ILeilumLN ln = new LeilumLNFacade();
     IEnumerable<Leilao> leiloes;
     IEnumerable<Leilao> filteredLeiloes;
     List<Categoria> categorias;
     Categoria selectedCategory;
+    int selectedCategoryId;
     string searchTerm = "";
-
-     string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
+    decimal minPrice;
+    decimal maxPrice;
+    string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
     int pageSize = 2;
     int count;
     protected override async Task OnInitializedAsync()
     {
         leiloes = ln.getLeiloesEmCurso();
         filteredLeiloes = leiloes;
+
         categorias = ln.GetAllCategorias();
+        Regra r = new Regra(9999,0,0);
+        categorias.Insert(0, new Categoria(0, "Search Category", r));
+
         await base.OnInitializedAsync();
+    }
+
+    void FilterLeiloesByCategory()
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm) || selectedCategoryId != 0)
+        {
+            filteredLeiloes = leiloes.Where(l =>
+                (string.IsNullOrEmpty(searchTerm) || l.getTitulo().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
+                (selectedCategoryId == 0 || l.getCategoria().getIdCategoria() == selectedCategoryId)
+            );
+        }
+        else
+        {
+            // Nenhum filtro aplicado, mostrar todos os leilões
+            filteredLeiloes = leiloes;
+        }
     }
 
     void FilterLeiloes()
@@ -80,6 +131,22 @@
         }
         else
         {
+            filteredLeiloes = leiloes;
+        }
+    }
+
+    void FilterLeiloesByPrice(decimal value)
+    {
+        if (minPrice > 0 || maxPrice > 0)
+        {
+            filteredLeiloes = leiloes.Where(l =>
+                (minPrice == 0 || l.getvalorAtual() >= (double)minPrice) &&
+                (maxPrice == 0 || l.getvalorAtual() <= (double)maxPrice)
+            );
+        }
+        else
+        {
+            // Se não houver faixa de preços definida, mostrar todos os leilões
             filteredLeiloes = leiloes;
         }
     }

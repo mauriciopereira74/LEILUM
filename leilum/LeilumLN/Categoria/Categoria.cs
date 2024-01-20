@@ -4,6 +4,9 @@ namespace Leilum.LeilumLN.CategoriaLN{
     public class Categoria{
         private int id_categoria;
         private string designacao;
+
+        public int IdCategoria => getIdCategoria();
+        public string Designacao => getDesignacao();
         private Regra regra;
     
     
