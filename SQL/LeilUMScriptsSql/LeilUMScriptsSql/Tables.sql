@@ -45,7 +45,6 @@ CREATE TABLE Lote (
 	Comitente VARCHAR(45) NOT NULL,
 	Comprador VARCHAR(45) NULL,
 	Avaliador VARCHAR(45) NULL,
-	Imgpath VARCHAR(500) NOT NULL,
 	FOREIGN KEY (Comitente) REFERENCES Utilizador (Email),
 	FOREIGN KEY (Comprador) REFERENCES Utilizador (Email),
 	FOREIGN KEY (Avaliador) REFERENCES Utilizador (Email),

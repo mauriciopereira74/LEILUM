@@ -66,11 +66,11 @@
                             <RadzenColumn Size="12" SizeSM="10">
                                 <RadzenTemplateForm TItem="artigoAux" Data=@artigo Submit="@OnClick">
                                     <RadzenStack>
-                                        <RadzenFormField Text="Foto do Artigo" Variant=@variant Style="width: 300px;">
+                                        @* <RadzenFormField Text="Foto do Artigo" Variant=@variant Style="width: 300px;">
                                             <RadzenCard>
-                                                <RadzenFileInput @bind-Value=@artigo.file @bind-FileName=@artigo.filename @bind-FileSize=@artigo.fileSize TValue="string" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" Change=@HandleFileChange/>
+                                                <RadzenFileInput @bind-FileName=@artigo.filename TValue="string" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" Change=@HandleFileChange/>
                                             </RadzenCard>
-                                        </RadzenFormField>
+                                        </RadzenFormField> *@
                                         <RadzenFormField Text="Designação" Variant=@variant Style="width: 300px;">
                                             <ChildContent>
                                                 <RadzenTextBox Name="Designação" @bind-Value="@artigo.designacao" Style="width: 500px;"/>
@@ -160,6 +160,8 @@
 @code {
     Variant variant = Variant.Outlined;
 
+    ILeilumLN ln = new LeilumLNFacade();
+
     int currentStep = 0;
 
     class leilaoAux
@@ -179,9 +181,9 @@
 
     class artigoAux
     {
-        public string? file { get; set; }
+        @* public string? file { get; set; } *@
         public string? filename { get; set;}
-        public long? fileSize { get; set;}
+        @* public long? fileSize { get; set;} *@
         public int id { get; set;}
         public string? designacao { get; set; }
         public string? caracteristicas { get; set; }
@@ -203,6 +205,8 @@
 
     IEnumerable<artigoAux> listaArtigos = new List<artigoAux>();
 
+    Utilizador user = CurrentUser.getCurrentUser();
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -221,6 +225,7 @@
         }
         if (index == 3) {
             currentStep = 200;
+            criaLeilao();
         }
     }
 
@@ -243,7 +248,7 @@
         "Desporto", "Entretinemento", "Tecnologia"
     };
 
-    private async Task HandleFileChange()
+    @* private async Task HandleFileChange()
     {
         // Crie um objeto MultipartFormDataContent
         using (var content = new MultipartFormDataContent())
@@ -268,7 +273,7 @@
                 Console.WriteLine($"Falha no upload: {response.ReasonPhrase}");
             }
         }
-    }
+    } *@
 
     private void OnClick()
     {
@@ -293,10 +298,35 @@
         }
     }
 
-    private void OnBotaoClicado()
-    {
-        // Adicione aqui a lógica que você deseja executar ao clicar no botão.
-        // Por exemplo, chamar um método, navegar para outra página, etc.
-        Console.WriteLine("Botão Clicado!");
+    private void criaLeilao() {
+        int idLote = this.ln.quantidadeLotes() + 1;
+
+        List<Artigo> lArtigos = new List<Artigo>();
+
+        // cria a lista de artigos do lote
+        foreach(artigoAux a in this.listaArtigos) {
+            int id = this.ln.quantidadeArtigos() + 1;
+            string designacao = a.designacao;
+            string caracteristicas = a.caracteristicas;
+            string descricao = a.descricao;
+            Artigo aux = new Artigo(id,designacao,caracteristicas,descricao,idLote);
+            lArtigos.Add(aux);
+        }
+        
+        // cria o lote
+        Lote lote = new Lote(idLote,this.user,null,null,lArtigos);
+
+        // cria o leilao
+        int idLeilao = this.ln.quantidadeLeiloes() + 1;
+        string titulo = this.leilao.titulo;
+        DateTime dataFinal = this.leilao.dataFinal;
+        double valorAbertura = 0;
+        double valorBase = 0;
+        double valorMinimo = 0;
+        double valorAtual = 0;
+        Categoria categoria = ln.GetCategoriaByDesignacao(this.leilao.Categoria);
+        Leilao leilao = new Leilao(idLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,2,null,user,lote,categoria);
+
+        this.ln.adicionaLeilao(leilao);
     }
 }

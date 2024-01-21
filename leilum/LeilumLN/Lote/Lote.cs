@@ -10,15 +10,13 @@ namespace Leilum.LeilumLN.LoteLN{
         private Utilizador comitente;
         private Utilizador comprador;
         private Utilizador avaliador;
-        private string imgPath;
         private List<Artigo> artigos;
 
-        public Lote(int idLote, Utilizador comitente, Utilizador comprador, Utilizador avaliador, string imgPath, List<Artigo> artigos){
+        public Lote(int idLote, Utilizador comitente, Utilizador comprador, Utilizador avaliador, List<Artigo> artigos){
             this.id_lote = idLote;
             this.comitente = comitente;
             this.comprador = comprador;
             this.avaliador = avaliador;
-            this.imgPath = imgPath;
             this.artigos = artigos;
         }
 
@@ -55,16 +53,6 @@ namespace Leilum.LeilumLN.LoteLN{
 
         }
 
-        public string getImgPath()
-        {
-            return this.imgPath;
-        }
-
-        public void setImgPath(string path)
-        {
-            this.imgPath = path;
-        }
-
         public void addArtigo(Artigo a) {
             artigos.Add(a);
         }
@@ -79,7 +67,7 @@ namespace Leilum.LeilumLN.LoteLN{
 
 
         public Lote Clone(){
-            Lote result = new Lote(id_lote,comitente,comprador,avaliador,imgPath,artigos);
+            Lote result = new Lote(id_lote,comitente,comprador,avaliador,artigos);
             return result;
         }
     }

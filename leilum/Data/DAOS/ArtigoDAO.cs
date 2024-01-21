@@ -41,9 +41,8 @@ namespace Leilum.Data.DAOS
 
         public void put(int key, Artigo value)
         {
-            string sql_cmd = "INSERT INTO Artigo (idArtigo, Designacao, Caracteristicas, Descricao, idLote) VALUES '" +
-                             value.getId_Artigo() + "','" + value.getDesignacao() + "','" + value.getCaracteristicas() +
-                             "','" +
+            string sql_cmd = "INSERT INTO Artigo (idArtigo, Designacao, Caracteristicas, Descricao, idLote) VALUES ('" +
+                             key + "','" + value.getDesignacao() + "','" + value.getCaracteristicas() + "','" +
                              value.getDescricao() + "','" + value.getLoteId() + "');";
             try
             {

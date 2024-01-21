@@ -55,6 +55,10 @@ namespace leilum.LeilumLN
             return this.db.getLeilao(idLeilao);
         }
 
+        public int quantidadeLeiloes() {
+            return this.db.quantidadeLeiloes();
+        }
+
         // Cria um Artigo
         public Artigo criaArtigo(string designacao, string caracteristicas, string descricao, int idLote)
         {
@@ -63,13 +67,17 @@ namespace leilum.LeilumLN
             Artigo artigo = new Artigo(idArtigo, designacao, caracteristicas, descricao, idLote);
             return artigo;
         }
+
+        public int quantidadeArtigos(){
+            return this.db.quantidadeArtigos();
+        }
         
         // Cria um Lote
         public Lote criaLote(Utilizador comitente, Utilizador comprador, Utilizador avaliador, string imgPath,
             List<Artigo> artigos)
         {
             int idLote = this.db.quantidadeLotes() + 1;
-            Lote lote = new Lote(idLote, comitente, comprador, avaliador, imgPath, artigos);
+            Lote lote = new Lote(idLote, comitente, comprador, avaliador, artigos);
 
             return lote;
         }
@@ -109,8 +117,14 @@ namespace leilum.LeilumLN
         public List<Categoria> GetAllCategorias(){
             return this.db.GetAllCategorias();
         }
-        
-        
+
+        public Categoria GetCategoriaByDesignacao(string s) {
+            return this.db.getCategoriaByDesignacao(s);
+        }
+
+        public void adicionaLeilao(Leilao leilao){
+            this.db.adcionaLeilao(leilao);
+        }
         
         // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  
         
