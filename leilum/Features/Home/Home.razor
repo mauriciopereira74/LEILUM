@@ -42,7 +42,7 @@
     <Template Context="leilao">
         <RadzenCard class="custom-card-spacing rz-mx" Style="max-width: 290px; border-radius: 10%" @onclick="() => goTo(leilao.getNrLeilao())">
             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
-                <RadzenImage Path="@leilao.getLote().getImgPath()" Style="width: 150px; height: 150px; border-radius: 10%" />
+                @* <RadzenImage Path="@leilao.getLote().getImgPath()" Style="width: 150px; height: 150px; border-radius: 10%" /> *@
                 <RadzenStack Gap="0" Style="text-align: center;">
                     <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0 text-center">Titulo</RadzenText>
                     <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getTitulo()</b></RadzenText>
@@ -170,6 +170,8 @@
                 (minPrice == 0 || l.getvalorAtual() >= (double)minPrice) &&
                 (maxPrice == 0 || l.getvalorAtual() <= (double)maxPrice)
             );
+
+            count = filteredLeiloes.Count();
         }
         else
         {

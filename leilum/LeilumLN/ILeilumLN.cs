@@ -24,11 +24,19 @@ namespace leilum.LeilumLN
 
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 
+        public int quantidadeArtigos();
+
         public int quantidadeLotes();
+        
+        public int quantidadeLeiloes();
 
         public Leilao getLeilao(int idLeilao);
 
         public List<Categoria> GetAllCategorias();
 
+        public Categoria GetCategoriaByDesignacao(string s);
+        public void addLeilao(Leilao l);
+
+        public void adicionaLeilao(Leilao leilao);
     }
 }

@@ -57,6 +57,10 @@ namespace Leilum.LeilumLN.LeilaoLN{
             return dataFinal;
         }
 
+        public string getDataFinalSTR(){
+            return this.dataFinal.ToString("yyyy-MM-dd hh:mm:ss");
+        }
+
         public void setDuracao(DateTime dataFinal){
             this.dataFinal = dataFinal;
         }
