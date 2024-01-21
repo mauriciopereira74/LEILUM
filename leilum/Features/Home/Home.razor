@@ -34,7 +34,7 @@
         </RadzenStack>
     </RadzenColumn>
     <div style="color: black; font-size: 18px; margin-top: 10px; margin-left:auto;">
-        @leiloes.Count() Auctions
+        @filteredLeiloes.Count() Auctions
     </div>
 </RadzenRow>
 
@@ -105,10 +105,10 @@
     protected override async Task OnInitializedAsync()
     {
         leiloes = ln.getLeiloesEmCurso();
+
         count = leiloes.Count();
-        leiloes = getLeiloes(0, pageSize);
-  
-        filteredLeiloes = leiloes;
+        
+        filteredLeiloes = getLeiloes(0, pageSize);
 
         categorias = ln.GetAllCategorias();
         Regra r = new Regra(9999,0,0);
@@ -119,17 +119,25 @@
 
     void FilterLeiloesByCategory()
     {
+
         if (!string.IsNullOrWhiteSpace(searchTerm) || selectedCategoryId != 0)
         {
             filteredLeiloes = leiloes.Where(l =>
                 (string.IsNullOrEmpty(searchTerm) || l.getTitulo().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
                 (selectedCategoryId == 0 || l.getCategoria().getIdCategoria() == selectedCategoryId)
             );
+
+            count = filteredLeiloes.Count();
         }
         else
         {
             // Nenhum filtro aplicado, mostrar todos os leilões
-            filteredLeiloes = leiloes;
+            leiloes = ln.getLeiloesEmCurso();
+
+            count = leiloes.Count();
+
+            filteredLeiloes = getLeiloes(0, pageSize);
+
         }
     }
 
@@ -141,10 +149,16 @@
                 (string.IsNullOrEmpty(searchTerm) || l.getTitulo().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || l.getCategoria().getDesignacao().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
                 (selectedCategory == null || l.getCategoria() == selectedCategory)
             );
+
+            count = filteredLeiloes.Count();
         }
         else
         {
-            filteredLeiloes = leiloes;
+            leiloes = ln.getLeiloesEmCurso();
+
+            count = leiloes.Count();
+
+            filteredLeiloes = getLeiloes(0, pageSize);
         }
     }
 
@@ -160,7 +174,11 @@
         else
         {
             // Se não houver faixa de preços definida, mostrar todos os leilões
-            filteredLeiloes = leiloes;
+            leiloes = ln.getLeiloesEmCurso();
+
+            count = leiloes.Count();
+
+            filteredLeiloes = getLeiloes(0, pageSize);
         }
     }
 
