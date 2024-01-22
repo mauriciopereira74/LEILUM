@@ -56,6 +56,11 @@ namespace leilum.LeilumLN
             return this.db.getLeiloesPendentes(categoria);
         }
 
+        public void startAuction(int auctionId, int bvalue, int mvalue, int ovalue ,string evaluator)
+        {
+            this.db.atualizaValorBaseLeilaoEstado(auctionId, bvalue, mvalue, ovalue, evaluator);
+        }
+
         public Categoria getCategoriaAvaliador(string email)
         {
             return this.db.getCategoriaAvaliador(email);
