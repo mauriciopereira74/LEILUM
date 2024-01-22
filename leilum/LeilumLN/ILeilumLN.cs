@@ -43,5 +43,8 @@ namespace leilum.LeilumLN
         public void adicionaLeilao(Leilao leilao);
 
         public IEnumerable<Utilizador> getAllUtilizadores();
+
+        public void promoteUtilizador(Utilizador u, string categoria);
+        public IEnumerable<Utilizador> getAllClientes();
     }
 }

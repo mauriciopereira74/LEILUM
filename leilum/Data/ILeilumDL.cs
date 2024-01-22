@@ -21,6 +21,8 @@ namespace Leilum.Data
 
         public IEnumerable<Utilizador> getAllUtilizadores();
 
+        public IEnumerable<Utilizador> getAllClientes();
+
         public void updateUtilizador(Utilizador utilizador);
 
         public bool existsEmail(string email);
@@ -55,5 +57,6 @@ namespace Leilum.Data
         public IEnumerable<Leilao> getLeiloesEmCurso();
         public Categoria? getCategoriaAvaliador(string email);
         public void adcionaLeilao(Leilao l);
+        public void setCategoriaAvaliador(string email, int categoria);
     }
 }

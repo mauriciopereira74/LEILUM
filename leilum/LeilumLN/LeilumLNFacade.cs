@@ -139,6 +139,17 @@ namespace leilum.LeilumLN
         public IEnumerable<Utilizador> getAllUtilizadores() {
             return this.db.getAllUtilizadores();
         }
+
+        public IEnumerable<Utilizador> getAllClientes() {
+            return this.db.getAllClientes();
+        }
+
+        public void promoteUtilizador(Utilizador u, string categoria) {
+            string email = u.getEmail();
+            Categoria c = this.db.getCategoriaByDesignacao(categoria);
+
+            this.db.setCategoriaAvaliador(email, c.getIdCategoria());
+        }
         
         // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  
         
