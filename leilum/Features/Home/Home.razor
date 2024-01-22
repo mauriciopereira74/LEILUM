@@ -51,11 +51,11 @@
                 </RadzenStack>
                 <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;" />
                 <RadzenRow>
-                    <RadzenColumn Size="8" Class="rz-text-truncate">
+                    <RadzenColumn Size="9" Class="rz-text-truncate">
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Tempo Restante</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1"><b>@CalculateTimeRemaining(leilao.getDataFinal())</b></RadzenText>
                     </RadzenColumn>
-                    <RadzenColumn Size="4" Class="rz-text-align-end">
+                    <RadzenColumn Size="2" Class="rz-text-align-end">
                         <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Text=@($"{String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", leilao.getvalorAtual())}") />
                     </RadzenColumn>
                 </RadzenRow>
