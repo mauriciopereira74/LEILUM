@@ -1,4 +1,4 @@
-@page "/createAuction"
+@page "/create-auction"
 @using System.Text
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authStateProvider
@@ -328,5 +328,11 @@
         Leilao leilao = new Leilao(idLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,2,null,user,lote,categoria);
 
         this.ln.adicionaLeilao(leilao);
+        this.ln.adicionaNotificacao(new Notificacao(user.getEmail(),"You Create the Auction" + " #" +leilao.getNrLeilao(), DateTime.Now));
+
     }
 }
+
+    }
+}
+

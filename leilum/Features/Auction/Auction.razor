@@ -2,6 +2,9 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject NotificationService NotificationService
+@using System.Timers
+@inject IJSRuntime JSRuntime
+
 
 <PageTitle>Detalhes do Leilão</PageTitle>
 
@@ -91,34 +94,12 @@ else
 </style>
 
 <script>
-    function updateRemainingTime() {
-        // Obtém o elemento que exibe o tempo restante
-        var timeElement = document.getElementById('remainingTime');
-
-        // Obtém a data final do leilão do código C#
-        var dataFinal = new Date('@leilao.getDataFinal().ToString("yyyy-MM-ddTHH:mm:ss")');
-
-        // Calcula a diferença entre a data final e o momento atual
-        var difference = dataFinal - new Date();
-
-        // Calcula os componentes de dias, horas, minutos e segundos
-        var days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        // Formata o tempo restante
-        var formattedTime = days + " days, " + hours + "h: " + minutes + "m: " + seconds + " seconds";
-
-        // Atualiza o elemento com o tempo restante formatado
-        timeElement.innerText = formattedTime;
+    function updateRemainingTime(formattedTime) {
+        var remainingTimeElement = document.getElementById('remainingTime');
+        if (remainingTimeElement) {
+            remainingTimeElement.innerText = formattedTime;
+        }
     }
-
-    // Atualiza o tempo restante a cada segundo
-    setInterval(updateRemainingTime, 100);
-
-    // Chama a função pela primeira vez para iniciar imediatamente
-    updateRemainingTime();
 </script>
 
 @code {
@@ -143,11 +124,41 @@ else
             artigos= leilao.getLote().getArtigos();
             ValorDoLance = leilao.getvalorAtual();
             valorMinimoLance = leilao.getvalorAtual()+1;
+            var timer = new Timer(100);
+            timer.Elapsed += (sender, e) => { InvokeAsync(UpdateTimeRemaining); };
+            timer.AutoReset = true;
+            timer.Start();
+
+            await base.OnInitializedAsync();
         }
         else
         {
             error();
         }
+    }
+
+    void UpdateTimeRemaining()
+    {
+        // Atualizar o tempo restante a cada segundo
+        if (leilao != null)
+        {
+            TimeSpan timeRemaining = leilao.getDataFinal() - DateTime.Now;
+
+            // Se o leilão já terminou, exibir "Encerrado"
+            if (timeRemaining.TotalSeconds < 0)
+            {
+                SetRemainingTime("Encerrado");
+            }
+            else
+            {
+                SetRemainingTime($"{(int)timeRemaining.TotalDays}d {timeRemaining.Hours}h {timeRemaining.Minutes}m {timeRemaining.Seconds}s");
+            }
+        }
+    }
+    void SetRemainingTime(string formattedTime)
+    {
+        // Atualizar o elemento HTML com o tempo restante formatado
+        JSRuntime.InvokeVoidAsync("updateRemainingTime", formattedTime);
     }
 
     private void error()
@@ -172,6 +183,7 @@ else
                 {
                     leilao.setLicitacaoAtual(ValorDoLance);
                     NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Bid placed successfully!", Duration = 4000 });
+                    ln.adicionaNotificacao(new Notificacao(user.getEmail(),"You Bid the Auction" + " #" +leilao.getNrLeilao(), DateTime.Now));
                 }
             }
             else

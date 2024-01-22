@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject HttpClient Http
 @inject NavigationManager NavigationManager;
-
+@using System.Timers
 
 <PageTitle>Home</PageTitle>
 
@@ -52,8 +52,8 @@
                 <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;" />
                 <RadzenRow>
                     <RadzenColumn Size="8" Class="rz-text-truncate">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Data Fim</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getDataFinal()</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Tempo Restante</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@CalculateTimeRemaining(leilao.getDataFinal())</b></RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="4" Class="rz-text-align-end">
                         <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Text=@($"{String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", leilao.getvalorAtual())}") />
@@ -102,6 +102,9 @@
     string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
     int pageSize = 8;
     int count;
+
+    TimeSpan timeRemaining = TimeSpan.Zero;
+
     protected override async Task OnInitializedAsync()
     {
         leiloes = ln.getLeiloesEmCurso();
@@ -114,7 +117,25 @@
         Regra r = new Regra(9999,0,0);
         categorias.Insert(0, new Categoria(0, "Search Category", r));
 
+        // Iniciar o temporizador a cada segundo
+        var timer = new Timer(1000);
+        timer.Elapsed += (sender, e) => { InvokeAsync(UpdateTimeRemaining); };
+        timer.AutoReset = true;
+        timer.Start();
+
         await base.OnInitializedAsync();
+    }
+
+    void UpdateTimeRemaining()
+    {
+        // Atualizar o tempo restante a cada segundo
+        if (timeRemaining.TotalSeconds > 0)
+        {
+            timeRemaining = timeRemaining.Subtract(TimeSpan.FromSeconds(1));
+        }
+
+        // Forçar a atualização da renderização
+        StateHasChanged();
     }
 
     void FilterLeiloesByCategory()
@@ -198,6 +219,21 @@
     {
         // Navegar para a página de detalhes do leilão
         NavigationManager.NavigateTo($"/auction/{leilaoId}");
+    }
+
+    string CalculateTimeRemaining(DateTime dataFinal)
+    {
+        // Calcular a diferença entre a data final e a data atual
+        timeRemaining = dataFinal - DateTime.Now;
+
+        // Se o leilão já terminou, exibir "Encerrado"
+        if (timeRemaining.TotalSeconds < 0)
+        {
+            return "Encerrado";
+        }
+
+        // Formatar o tempo restante em dias, horas, minutos e segundos
+        return $"{(int)timeRemaining.TotalDays}d {timeRemaining.Hours}h {timeRemaining.Minutes}m {timeRemaining.Seconds}s";
     }
 
 }
