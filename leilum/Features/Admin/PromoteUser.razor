@@ -1,0 +1,94 @@
+@page "/promoteUser"
+@inject NotificationService NotificationService
+
+<PageTitle>Promote User</PageTitle>
+
+@if (u != null) {
+
+<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="1rem" Class="rz-p-4">
+    <RadzenImage Path="@u.getFotoPerfil()" Style="width: 100px; height: 100px; border-radius: 50%;" />
+    <RadzenStack Gap="0" Style="text-align: center; margin-top: -10px;">
+        <RadzenText TextStyle="TextStyle.Body1">
+            <b>@u.getNome()</b>
+        </RadzenText>
+    </RadzenStack>
+</RadzenStack>
+}
+
+<div class="rz-p-sm-12 rz-text-align-center">
+    <RadzenLabel Text="Select User" Component="DropDownVirtualization" Style="margin-right: 8px; vertical-align: middle;" />
+    <RadzenDropDown AllowClear="true" @bind-Value=user AllowVirtualization="true" Name="DropDownVirtualization"
+        AllowFiltering="true" Data=@emails Style="width: 100%; max-width: 400px;" />
+    <RadzenButton Click=@(args => verifica()) Text="Search" ButtonStyle="ButtonStyle.Primary" />
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center;">
+<RadzenFormField Text="Categorias" Variant="@variant" Style="width: 300px; text-align: center;">
+    <Start>
+        <RadzenIcon Icon="folder_open"/>
+    </Start>
+    <ChildContent>
+        <RadzenDropDown Name="Pay" Multiple="false" Placeholder="Select..." TValue="string" Data="getAllCategorias()" @bind-Value="@categoria"/>
+    </ChildContent>
+    <Helper>
+        <RadzenRequiredValidator Component="Pay" Text="Required Field."/>
+    </Helper>
+</RadzenFormField>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; margin-top: 50px;">
+@if (categoria != null && u != null){
+    <RadzenButton Click=@(args => promover(u, categoria)) Text="Promote" ButtonStyle="ButtonStyle.Primary" />
+}
+</div>
+
+@code {
+
+    Variant variant = Variant.Outlined;
+
+    ILeilumLN ln = new LeilumLNFacade();
+
+    string user;
+
+    string categoria;
+
+
+    IEnumerable<String> emails;
+
+    Utilizador u;
+
+    public IEnumerable<string> converterParaEmails(IEnumerable<Utilizador> utilizadores)
+    {
+        // Utilizando LINQ para projetar apenas os emails
+        return utilizadores.Select(u => u.getEmail());
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        emails = converterParaEmails(ln.getAllClientes());
+
+        await base.OnInitializedAsync();
+
+    }
+
+    public void verifica(){
+        u = ln.getUtilizadorWithEmail(user);
+        @* Console.WriteLine("Email: " + u.getEmail()); *@
+    }
+
+    public ICollection<string> getAllCategorias(){
+        ICollection<string> categorias = new List<string>();
+        List<Categoria> lista = this.ln.GetAllCategorias();
+
+        foreach (Categoria c in lista){
+            categorias.Add(c.getDesignacao());
+        }
+
+        return categorias;
+    }
+
+    public void promover(Utilizador u, string categoria) {
+            this.ln.promoteUtilizador(u,categoria);
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Utilizador promovido com sucesso!" });
+    }
+}

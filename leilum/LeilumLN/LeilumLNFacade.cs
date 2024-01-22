@@ -5,6 +5,7 @@ using Leilum.Data;
 using Leilum.LeilumLN.ArtigoLN;
 using Leilum.LeilumLN.CategoriaLN;
 using Leilum.LeilumLN.LoteLN;
+using Leilum.LeilumLN.NotificacaoLN;
 
 namespace leilum.LeilumLN
 {
@@ -144,10 +145,30 @@ namespace leilum.LeilumLN
         public IEnumerable<Utilizador> getAllUtilizadores() {
             return this.db.getAllUtilizadores();
         }
+
+        public IEnumerable<Utilizador> getAllClientes() {
+            return this.db.getAllClientes();
+        }
+
+        public void promoteUtilizador(Utilizador u, string categoria) {
+            string email = u.getEmail();
+            Categoria c = this.db.getCategoriaByDesignacao(categoria);
+
+            this.db.setCategoriaAvaliador(email, c.getIdCategoria());
+        }
         
         // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  
         
         // Função para buscar leilões em que o Utilizador ganhou
         
+
+        public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador){
+            return this.db.getNotificacoesPorUtilizador(idUtilizador);
+        }
+
+        public void adicionaNotificacao(Notificacao notificacao){
+            this.db.adicionaNotificacao(notificacao);
+        }
+
     }
 }

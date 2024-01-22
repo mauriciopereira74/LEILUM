@@ -1,0 +1,38 @@
+@page "/notifications"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>Notificações</h3>
+
+@if (notifications == null)
+{
+    <p>Loading notifications...</p>
+}
+else if (notifications.Any())
+{
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+        @foreach (var notification in notifications)
+        {
+            <div style="flex: 1; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px; text-align: center;">
+                <p style="font-size: 16px;">@notification.getMensagemNotificacao()</p>
+                <p style="font-size: 14px; color: #888;">@notification.getDataNotificacao().ToString("dd/MM/yyyy HH:mm:ss")</p>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No notifications found.</p>
+}
+
+@code {
+    ILeilumLN ln = new LeilumLNFacade();
+    Utilizador user = CurrentUser.getCurrentUser();
+    private List<Notificacao> notifications;
+
+    protected override async Task OnInitializedAsync()
+    {
+        notifications = ln.getNotificacoesPorUtilizador(user.getEmail());
+        await base.OnInitializedAsync();
+    }
+}

@@ -1,4 +1,4 @@
-@page "/createAuction"
+@page "/create-auction"
 @using System.Text
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authStateProvider
@@ -42,7 +42,7 @@
                                                 <RadzenIcon Icon="folder_open"/>
                                             </Start>
                                             <ChildContent>
-                                                <RadzenDropDown Name="Pay" Multiple="false" Placeholder="Select..." TValue="string" Data="payMethod" @bind-Value="@leilao.Categoria"/>
+                                                <RadzenDropDown Name="Pay" Multiple="false" Placeholder="Select..." TValue="string" Data="getAllCategorias()" @bind-Value="@leilao.Categoria"/>
                                             </ChildContent>
                                             <Helper>
                                                 <RadzenRequiredValidator Component="Pay" Text="Required Field."/>
@@ -243,37 +243,16 @@
         return false;
     }
 
-    ICollection<string> payMethod = new List<string>()
-    {
-        "Desporto", "Entretinemento", "Tecnologia"
-    };
+    public ICollection<string> getAllCategorias(){
+        ICollection<string> categorias = new List<string>();
+        List<Categoria> lista = this.ln.GetAllCategorias();
 
-    @* private async Task HandleFileChange()
-    {
-        // Crie um objeto MultipartFormDataContent
-        using (var content = new MultipartFormDataContent())
-        {
-            // Converta a string para um StreamContent
-            var streamContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(artigo.file)));
-
-            // Adicione o conteúdo do arquivo ao MultipartFormDataContent
-            content.Add(streamContent, "file", artigo.filename);
-
-            // Faça a chamada HTTP para o endpoint do serviço
-            var response = await HttpClient.PostAsync("api/file/upload", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                // Upload bem-sucedido
-                Console.WriteLine("Upload bem-sucedido!");
-            }
-            else
-            {
-                // Lidar com falha no upload
-                Console.WriteLine($"Falha no upload: {response.ReasonPhrase}");
-            }
+        foreach (Categoria c in lista){
+            categorias.Add(c.getDesignacao());
         }
-    } *@
+
+        return categorias;
+    }
 
     private void OnClick()
     {
@@ -328,5 +307,11 @@
         Leilao leilao = new Leilao(idLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,2,null,user,lote,categoria);
 
         this.ln.adicionaLeilao(leilao);
+        this.ln.adicionaNotificacao(new Notificacao(user.getEmail(),"You Create the Auction" + " #" +leilao.getNrLeilao(), DateTime.Now));
+
     }
 }
+
+    }
+}
+

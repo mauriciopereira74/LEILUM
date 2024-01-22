@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using Dapper;
 using Leilum.LeilumLN.LoteLN;
 using Leilum.LeilumLN.ArtigoLN;
+using Leilum.LeilumLN.NotificacaoLN;
 
 namespace Leilum.Data
 {
@@ -21,6 +22,8 @@ namespace Leilum.Data
         private LoteDAO loteDao;
         private LicitacaoDAO licitacaoDao;
 
+        private NotificacaoDAO notificacaoDao;
+
         public LeilumDLFacade()
         {
             this.artigoDAO = ArtigoDAO.getInstance();
@@ -30,6 +33,7 @@ namespace Leilum.Data
             this.leilaoDao = LeilaoDAO.getInstance();
             this.loteDao = LoteDAO.getInstance();
             this.licitacaoDao = LicitacaoDAO.getInstance();
+            this.notificacaoDao = NotificacaoDAO.getInstance();
         }        
         
         // Utilizadores
@@ -86,6 +90,31 @@ namespace Leilum.Data
         public IEnumerable<Utilizador> getAllUtilizadores()
         {
             return this.utilizadorDAO.values();
+        }
+
+        public IEnumerable<Utilizador> getAllClientes()
+        {
+            int tipo = 0;
+            string sql_cmd = "SELECT Tipo FROM TipoUtilizador WHERE Role = 'Cliente'";
+
+            try {
+                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString())) {
+                    con.Open();
+
+                    // Obter Tipo
+                    using(SqlCommand cmdSelect = new SqlCommand(sql_cmd, con)) {
+                        using (SqlDataReader reader = cmdSelect.ExecuteReader()) {
+                            if (reader.Read()) {
+                                tipo = Convert.ToInt32(reader["Tipo"]);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                throw new Exception(e.Message);
+            }
+
+            return this.utilizadorDAO.getAllClientes(tipo);
         }
 
         
@@ -273,6 +302,42 @@ namespace Leilum.Data
             catch (Exception e)
             {
                 throw new DAOException("getCategoriaAvaliador: " + e.Message);
+            }
+        }
+
+        public void setCategoriaAvaliador(string email, int categoria) {
+            string sql_cmdAvaliador = "INSERT INTO Avaliador (Avaliador, Categoria) VALUES ('" + email + "','" + categoria + "');";
+            int tipo = 0;
+            string sql_getTipo = "SELECT Tipo FROM TipoUtilizador WHERE Role = 'Avaliador'";
+            string sql_setTipo = $"UPDATE Utilizador SET TipoUtilizador = @Tipo WHERE Email = @Email";
+
+            try {
+                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString())) {
+                    con.Open();
+
+                    // Inserir Avaliador
+                    using(SqlCommand cmdInsert = new SqlCommand(sql_cmdAvaliador, con)) {
+                        cmdInsert.ExecuteNonQuery();
+                    }
+
+                    // Obter Tipo
+                    using(SqlCommand cmdSelect = new SqlCommand(sql_getTipo, con)) {
+                        using (SqlDataReader reader = cmdSelect.ExecuteReader()) {
+                            if (reader.Read()) {
+                                tipo = Convert.ToInt32(reader["Tipo"]);
+                            }
+                        }
+                    }
+
+                    // Atualizar TipoUtilizador
+                    using(SqlCommand cmdUpdate = new SqlCommand(sql_setTipo, con)) {
+                        cmdUpdate.Parameters.AddWithValue("@Tipo", tipo);
+                        cmdUpdate.Parameters.AddWithValue("@Email", email);
+                        cmdUpdate.ExecuteNonQuery();
+                    }
+                }
+            } catch (Exception e) {
+                throw new Exception(e.Message);
             }
         }
         
@@ -802,5 +867,14 @@ namespace Leilum.Data
             
             this.leilaoDao.put(leilao.getNrLeilao(), leilao);
         }
+
+        public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador){
+            return this.notificacaoDao.getNotificacoesPorUtilizador(idUtilizador);
+        }
+
+        public void adicionaNotificacao(Notificacao notificacao){
+            this.notificacaoDao.put(notificacao);
+        }
+
     }
 }

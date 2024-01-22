@@ -242,6 +242,38 @@ namespace Leilum.Data.DAOS
             return Utilizadors;
         }
 
+        public IEnumerable<Utilizador> getAllClientes(int tipo)
+        {
+            IEnumerable<Utilizador> Utilizadors = new HashSet<Utilizador>();
+            string sql_cmd = $"SELECT * FROM Utilizador WHERE TipoUtilizador = {tipo}";
+            
+            try 
+            {
+                using(SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
+                    {
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            while (reader.Read()){
+                                string? email = Convert.ToString(reader["Email"]);
+                                string? password = Convert.ToString(reader["Password"]);
+                                int TipoUtilizador = Convert.ToInt32(reader["TipoUtilizador"]);
+
+                                Utilizador utilizador = new Utilizador(email,password,TipoUtilizador);
+                                Utilizadors = Utilizadors.Append(utilizador);
+                            }
+                        }
+                    }
+                }
+            } 
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return Utilizadors;
+        }
+
         public int size()
         {
             int size = 0;

@@ -1,0 +1,48 @@
+@page "/statistics"
+
+@*
+<PageTitle>Statistics</PageTitle>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-lg-6 offset-lg-3 my-5">
+            <RadzenCard class="w-100 mb-4" >
+                <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                <RadzenLabel Text="Show Data Labels" Component="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
+            </RadzenCard>
+            <RadzenChart>
+                <RadzenDonutSeries Data="@revenue" CategoryProperty="Quarter" ValueProperty="Revenue" TotalAngle="180" StartAngle="180">
+                    <ChildContent>
+                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                    </ChildContent>
+                    <TitleTemplate>
+                        <div class="rz-donut-content">
+                            <div>Revenue</div>
+                            <div>for 2020</div>
+                        </div>
+                    </TitleTemplate>
+                </RadzenDonutSeries>
+            </RadzenChart>
+        </div>
+    </div>
+</div>
+
+@code {
+    bool showDataLabels = false;
+
+    int revenue;
+
+    ILeilumLN ln = new LeilumLNFacade();
+
+    class DataItem
+    {
+        public string Quarter { get; set; }
+        public int Revenue { get; set; }
+    }
+
+    public void getRevenue(){
+        revenue = ln.getLeiloesEmCurso().Count();
+    }
+}
+*@
