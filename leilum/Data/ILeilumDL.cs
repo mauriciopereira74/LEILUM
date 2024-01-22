@@ -36,7 +36,9 @@ namespace Leilum.Data
         public double? getMaiorLicitacao(int idLeilao);
         public bool addLicitacao(double value, int idLeilao, string emailUser);
         public void removeLicitacao(int idLicitacao);
-        public Categoria getCategoria(int idCategoria);
+        public Categoria getCategoriaById(int idCategoria);
+
+        public Categoria getCategoriaByDesignacao(string Designacao);
         public List<Categoria> GetAllCategorias();
         public void addCategoria(Categoria categoria);
         public void removeCategoria(int idCategoria);
@@ -52,6 +54,6 @@ namespace Leilum.Data
         public ICollection<Leilao> getLeiloesComitentes(string uComitente);
         public IEnumerable<Leilao> getLeiloesEmCurso();
         public Categoria? getCategoriaAvaliador(string email);
-
+        public void adcionaLeilao(Leilao l);
     }
 }

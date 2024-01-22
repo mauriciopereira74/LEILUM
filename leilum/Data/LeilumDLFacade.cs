@@ -142,7 +142,7 @@ namespace Leilum.Data
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
-                                Categoria categoria = getCategoria(categoriaId);
+                                Categoria categoria = getCategoriaById(categoriaId);
 
                                 leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
                             }
@@ -188,7 +188,7 @@ namespace Leilum.Data
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
-                                Categoria categoria = getCategoria(categoriaId);
+                                Categoria categoria = getCategoriaById(categoriaId);
 
                                 Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
                                 leiloesPendentes = leiloesPendentes.Append(leilao);
@@ -226,7 +226,7 @@ namespace Leilum.Data
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
-                                Categoria categoria = getCategoria(categoriaId);
+                                Categoria categoria = getCategoriaById(categoriaId);
 
                                 Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
 
@@ -301,7 +301,7 @@ namespace Leilum.Data
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
-                                Categoria categoria = getCategoria(categoriaId);
+                                Categoria categoria = getCategoriaById(categoriaId);
 
                                 Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
                                 leiloesTerminados.Add(leilao);
@@ -345,10 +345,6 @@ namespace Leilum.Data
         
         
         // Cria Leilao inclui adicionar artigos e lotes! (Verificar se a classe do Lote tem uma lista de artigos)
-        
-        public void adicionaLeilao(Leilao leilao){
-            this.leilaoDao.put(leilao.getNrLeilao(),leilao);
-        }
         
         // Calcula o número de Leilões existentes na base de dados
         public int quantidadeLeiloes()
@@ -449,11 +445,39 @@ namespace Leilum.Data
         }
         */
                 
-        // Get categoria
+        // Get categoria pelo Id
 
-        public Categoria getCategoria(int CategoriaId){
+        public Categoria getCategoriaById(int CategoriaId){
             Categoria? result = null;
             string s_cmd = $"SELECT * FROM Categoria WHERE idCategoria = {CategoriaId}";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            if (reader.Read()){
+                                int idCategoria = Convert.ToInt32(reader["idCategoria"]);
+                                string? designacao = Convert.ToString(reader["Designacao"]);
+                                int idRegra = Convert.ToInt32(reader["Regra"]);
+
+                                Regra regra = this.regraDAO.get(idRegra);
+
+                                result = new Categoria(idCategoria,designacao,regra);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e){
+                throw new Exception(e.Message);
+            }
+            return result;
+        }
+
+        // get categoria pela designacao
+
+        public Categoria getCategoriaByDesignacao(string Designacao){
+            Categoria? result = null;
+            string s_cmd = $"SELECT * FROM Categoria WHERE Designacao = '{Designacao}'";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -606,8 +630,7 @@ namespace Leilum.Data
         public int quantidadeLotes()
         {
             return this.loteDao.size();
-        }
-        
+        }        
         
         // Função para buscar os leilões em que o Utilizador foi Comitente
         public ICollection<Leilao> getLeiloesComitentes(string uComitente)
@@ -641,7 +664,7 @@ namespace Leilum.Data
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = this.loteDao.get(loteId);
-                                Categoria categoria = getCategoria(categoriaId);
+                                Categoria categoria = getCategoriaById(categoriaId);
                                 
                                 Leilao leilao = new Leilao(nrLeilao, titulo, dataFinal, valorAbertura, valorBase,
                                     valorMinimo, valorAtual, estado, avaliador, comitente, lote, categoria);
@@ -672,13 +695,13 @@ namespace Leilum.Data
                                 string? comitenteEmail = Convert.ToString(reader["Comitente"]);
                                 string? compradorEmail = Convert.ToString(reader["Comprador"]);
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
-                                string? pathImg = Convert.ToString(reader["Imgpath"]);
+                                // string? pathImg = Convert.ToString(reader["Imgpath"]);
 
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Utilizador comprador = this.utilizadorDAO.getUtilizadorWithEmail(compradorEmail);
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 
-                                lote = new Lote(idLote,comitente,comprador,avaliador,pathImg,this.artigoDAO.getArtigosLote(loteId));
+                                lote = new Lote(idLote,comitente,comprador,avaliador,this.artigoDAO.getArtigosLote(loteId));
                             }
                         }
                     }
@@ -689,10 +712,19 @@ namespace Leilum.Data
             return lote;
         }
 
-
-
         public void adicionaArtigo(Artigo artigo){
             this.artigoDAO.put(artigo.getId_Artigo(),artigo);
+        }
+
+        public void adcionaLeilao(Leilao leilao){
+
+            this.loteDao.put(leilao.getLote().getIdLote(), leilao.getLote());
+
+            foreach (Artigo a in leilao.getLote().getArtigos()){
+                this.artigoDAO.put(a.getId_Artigo(),a);
+            }
+            
+            this.leilaoDao.put(leilao.getNrLeilao(), leilao);
         }
 
     }
