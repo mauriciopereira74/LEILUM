@@ -50,5 +50,7 @@ namespace leilum.LeilumLN
 
         public IEnumerable<Utilizador> getAllUtilizadores();
 
+        public void promoteUtilizador(Utilizador u, string categoria);
+        public IEnumerable<Utilizador> getAllClientes();
     }
 }

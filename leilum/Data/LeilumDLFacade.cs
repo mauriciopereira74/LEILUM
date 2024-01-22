@@ -92,6 +92,31 @@ namespace Leilum.Data
             return this.utilizadorDAO.values();
         }
 
+        public IEnumerable<Utilizador> getAllClientes()
+        {
+            int tipo = 0;
+            string sql_cmd = "SELECT Tipo FROM TipoUtilizador WHERE Role = 'Cliente'";
+
+            try {
+                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString())) {
+                    con.Open();
+
+                    // Obter Tipo
+                    using(SqlCommand cmdSelect = new SqlCommand(sql_cmd, con)) {
+                        using (SqlDataReader reader = cmdSelect.ExecuteReader()) {
+                            if (reader.Read()) {
+                                tipo = Convert.ToInt32(reader["Tipo"]);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                throw new Exception(e.Message);
+            }
+
+            return this.utilizadorDAO.getAllClientes(tipo);
+        }
+
         
         //Verifica Utilizador 
         public bool verificaUtilizador(string email, string password) {
@@ -277,6 +302,42 @@ namespace Leilum.Data
             catch (Exception e)
             {
                 throw new DAOException("getCategoriaAvaliador: " + e.Message);
+            }
+        }
+
+        public void setCategoriaAvaliador(string email, int categoria) {
+            string sql_cmdAvaliador = "INSERT INTO Avaliador (Avaliador, Categoria) VALUES ('" + email + "','" + categoria + "');";
+            int tipo = 0;
+            string sql_getTipo = "SELECT Tipo FROM TipoUtilizador WHERE Role = 'Avaliador'";
+            string sql_setTipo = $"UPDATE Utilizador SET TipoUtilizador = @Tipo WHERE Email = @Email";
+
+            try {
+                using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString())) {
+                    con.Open();
+
+                    // Inserir Avaliador
+                    using(SqlCommand cmdInsert = new SqlCommand(sql_cmdAvaliador, con)) {
+                        cmdInsert.ExecuteNonQuery();
+                    }
+
+                    // Obter Tipo
+                    using(SqlCommand cmdSelect = new SqlCommand(sql_getTipo, con)) {
+                        using (SqlDataReader reader = cmdSelect.ExecuteReader()) {
+                            if (reader.Read()) {
+                                tipo = Convert.ToInt32(reader["Tipo"]);
+                            }
+                        }
+                    }
+
+                    // Atualizar TipoUtilizador
+                    using(SqlCommand cmdUpdate = new SqlCommand(sql_setTipo, con)) {
+                        cmdUpdate.Parameters.AddWithValue("@Tipo", tipo);
+                        cmdUpdate.Parameters.AddWithValue("@Email", email);
+                        cmdUpdate.ExecuteNonQuery();
+                    }
+                }
+            } catch (Exception e) {
+                throw new Exception(e.Message);
             }
         }
         
