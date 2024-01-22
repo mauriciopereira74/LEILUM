@@ -59,7 +59,7 @@ namespace Leilum.Data
             return this.utilizadorDAO.getByNif(nif);
         }
 
-         public Utilizador getUtilizadorWithEmail(string email)
+        public Utilizador getUtilizadorWithEmail(string email)
         {
             return this.utilizadorDAO.getUtilizadorWithEmail(email);
         }
@@ -274,6 +274,32 @@ namespace Leilum.Data
             {
                 throw new DAOException("getCategoriaAvaliador: " + e.Message);
             }
+        }
+        
+        public Categoria getCategoria(int CategoriaId){
+            Categoria? result = null;
+            string s_cmd = $"SELECT * FROM Categoria WHERE idCategoria = {CategoriaId}";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            if (reader.Read()){
+                                int idCategoria = Convert.ToInt32(reader["idCategoria"]);
+                                string? designacao = Convert.ToString(reader["Designacao"]);
+                                int idRegra = Convert.ToInt32(reader["Regra"]);
+
+                                Regra regra = this.regraDAO.get(idRegra);
+
+                                result = new Categoria(idCategoria,designacao,regra);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e){
+                throw new Exception(e.Message);
+            }
+            return result;
         }
 
         public ICollection<Leilao> getLeiloesTerminados(){
