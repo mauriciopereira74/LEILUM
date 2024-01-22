@@ -24,6 +24,8 @@ namespace leilum.LeilumLN
         public IEnumerable<Leilao> getLeiloesPendentesPorCategoria(int categoria);
 
         public Categoria getCategoriaAvaliador(string email);
+
+        public void startAuction(int auctionId, int bvalue, int mvalue, int ovalue, string evaluator);
         
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 

@@ -355,6 +355,56 @@ namespace Leilum.Data
         {
             return this.leilaoDao.size();
         }
+
+        public void atualizaValorBaseLeilaoEstado(int idLeilao, int valorBase, int valorMinimo, int valorAbertura,
+            string avaliador)
+        {
+            bool result = false;
+            using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+            {
+                con.Open();
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    try
+                    {
+                        int valorAtual = valorAbertura;
+                        var parametros = new
+                        {
+                            idLeilao,
+                            avaliador,
+                            valorAbertura,
+                            valorMinimo,
+                            valorBase,
+                            valorAtual
+                        };
+
+                        string sql_cmd = @"UPDATE Leilao SET Avaliador = @avaliador,
+                                                        Estado = '1',
+                                                        ValorAbertura = @valorAbertura,
+                                                        ValorMinimo = @valorMinimo,
+                                                        ValorBase = @valorBase,
+                                                        ValorAtual = @valorAtual
+                                                   WHERE idLeilao = @idLeilao";
+                        
+                        int linhas = con.Execute(sql_cmd, parametros, transaction);
+
+                        if (linhas > 0)
+                        {
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new DAOException("atualizaValorBaseLeilaoEstado: " + e.Message);
+                    }
+                }
+            }
+        }
         
         // Adiciona uma Licitação
         public bool addLicitacao(Licitacao licitacao) {

@@ -52,6 +52,10 @@ namespace Leilum.Data
         public ICollection<Leilao> getLeiloesComitentes(string uComitente);
         public IEnumerable<Leilao> getLeiloesEmCurso();
         public Categoria? getCategoriaAvaliador(string email);
+        public void adcionaLeilao(Leilao l);
+
+        public void atualizaValorBaseLeilaoEstado(int idLeilao, int valorBase, int valorMinimo, int valorAbertura,
+            string avaliador);
 
     }
 }
