@@ -83,7 +83,7 @@ namespace Leilum.Data
             this.utilizadorDAO.remove(this.utilizadorDAO.getUtilizadorWithEmail(email).getContribuinte());
         }
 
-        public ICollection<Utilizador> getAllUtilizadores()
+        public IEnumerable<Utilizador> getAllUtilizadores()
         {
             return this.utilizadorDAO.values();
         }
@@ -752,6 +752,5 @@ namespace Leilum.Data
             
             this.leilaoDao.put(leilao.getNrLeilao(), leilao);
         }
-
     }
 }

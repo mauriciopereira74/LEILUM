@@ -41,5 +41,7 @@ namespace leilum.LeilumLN
         public void addLeilao(Leilao l);
 
         public void adicionaLeilao(Leilao leilao);
+
+        public IEnumerable<Utilizador> getAllUtilizadores();
     }
 }

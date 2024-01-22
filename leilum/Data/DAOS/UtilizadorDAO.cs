@@ -19,6 +19,8 @@ namespace Leilum.Data.DAOS
 
         public Utilizador getUtilizadorWithEmail(string email)
         {
+            if (email == "") return null;
+
             Utilizador result = null;
             string s_cmd = $" SELECT U.Email, U.Password, U.TipoUtilizador, I.Contribuinte, I.Nome, I.Morada, I.Nacionalidade, I.DataNascimento, I.Contacto, I.MetodoPagamento, I.Iban, I.FotoPerfilPath, I.idUtilizador FROM dbo.Utilizador U LEFT JOIN dbo.InfoUtilizador I ON U.Email = I.idUtilizador WHERE U.Email = '{email}'";
             
@@ -54,6 +56,8 @@ namespace Leilum.Data.DAOS
             {
                 throw new DAOException(e.Message);
             }
+
+
             return result;
         }
 
@@ -207,9 +211,9 @@ namespace Leilum.Data.DAOS
             return keys;
         }
 
-        public ICollection<Utilizador> values()
+        public IEnumerable<Utilizador> values()
         {
-            ICollection<Utilizador> Utilizadors = new HashSet<Utilizador>();
+            IEnumerable<Utilizador> Utilizadors = new HashSet<Utilizador>();
             string sql_cmd = "SELECT * FROM Utilizador";
             try 
             {
@@ -218,10 +222,15 @@ namespace Leilum.Data.DAOS
                     using(SqlCommand cmd = new SqlCommand(sql_cmd,conn))
                     {
                         conn.Open();
-                        IEnumerable<Utilizador> aux = conn.Query<Utilizador>(sql_cmd);
-                        foreach(Utilizador Utilizador in aux)
-                        {
-                            Utilizadors.Add(Utilizador);
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            while (reader.Read()){
+                                string? email = Convert.ToString(reader["Email"]);
+                                string? password = Convert.ToString(reader["Password"]);
+                                int TipoUtilizador = Convert.ToInt32(reader["TipoUtilizador"]);
+
+                                Utilizador utilizador = new Utilizador(email,password,TipoUtilizador);
+                                Utilizadors = Utilizadors.Append(utilizador);
+                            }
                         }
                     }
                 }
