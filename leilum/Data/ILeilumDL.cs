@@ -20,7 +20,7 @@ namespace Leilum.Data
 
         public void removeUtilizador(int nif);
 
-        public ICollection<Utilizador> getAllUtilizadores();
+        public IEnumerable<Utilizador> getAllUtilizadores();
 
         public void updateUtilizador(Utilizador utilizador);
 
@@ -45,8 +45,7 @@ namespace Leilum.Data
         public void removeCategoria(int idCategoria);
         public int getIdCategoria(string designacao);
         public ICollection<string> getCategoriasList();
-
-
+        public IEnumerable<Leilao> getLeiloesPendentes(int _categoria);
         public Regra getRegra(int idRegra);
         public void addRegra(Regra regra);
         public void removeRegra(int idRegra);
@@ -55,6 +54,7 @@ namespace Leilum.Data
         public int quantidadeLotes();
         public ICollection<Leilao> getLeiloesComitentes(string uComitente);
         public IEnumerable<Leilao> getLeiloesEmCurso();
+        public Categoria? getCategoriaAvaliador(string email);
         public void adcionaLeilao(Leilao l);
 
         public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador);

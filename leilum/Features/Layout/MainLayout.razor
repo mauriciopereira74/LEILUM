@@ -50,6 +50,14 @@
                     <RadzenPanelMenuItem Text="History" Icon="history" Click="@(() => NavigateTo("/history"))"/>
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
                     <RadzenPanelMenuItem Text="Create an Auction" Icon="gavel" Click="@(() => NavigateTo("/create-auction"))"/>
+                    <RadzenPanelMenuItem Text="Promote User" Icon="badge" Click="@(() => NavigateTo("/promoteUser"))" />
+                    <RadzenPanelMenuItem Text="Evaluate Auctions" Icon="assignment_turned_in" Click="@(() => NavigateTo("/EvaluateAuction"))"/>
+
+                    @* @if (currentUser.getTipoUtilizador() != configGerais.Utilizador) *@
+                    @* { *@
+                    @*     <RadzenPanelMenuItem Text="Evaluate Auctions" Icon="assignment_turned_in" Click="@(() => NavigateTo("/EvaluateAuction"))"/> *@
+                    @* } *@
+
                 </Authorized>
                 <NotAuthorized>
                     <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/"))"/>
@@ -66,6 +74,7 @@
     </RadzenBody>
 </RadzenLayout>
 <RadzenNotification />
+<RadzenDialog />
 
 
 <style>

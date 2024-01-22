@@ -1,0 +1,196 @@
+@page "/EvaluateAuction"
+@using System.Runtime.CompilerServices
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@inject DialogService DialogService
+
+<PageTitle>Evaluate Auctions</PageTitle>
+
+<style>
+    h4 {
+            text-align: center;
+            font-size: 24px; /* Ajuste o tamanho da fonte conforme necessário */
+            font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 1000px">
+        @if (user != null)
+        {
+            <h4>Evaluate Auctions</h4>
+            <RadzenPanel Text="Pending Auctions to Evaluate" AllowCollapse="true" Class="rz-background-color-primary-light rz-shadow-0 rz-p-8 rz-mx-auto" Style="max-width: 850px; color: #ffffff; margin-bottom: 20px;">
+                <RadzenDataGrid AllowFiltering="false" AllowPaging="true" PageSize="4"
+                                AllowSorting="false" Data="@auctionList" TItem="Leilao" ColumnWidth="200px"
+                                SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedAuction Style="margin-top: 15px">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Leilao" Property="Titulo" Title="Auction Title">
+                            <Template Context="leilao">
+                                @leilao.getTitulo()
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Leilao" Property="Comitente" Title="Seller">
+                            <Template Context="leilao">
+                                @leilao.getComitente().getEmail()
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Leilao" Property="lote" Title="Number of Items">
+                            <Template Context="leilao">
+                                @leilao.getLote().getArtigos().Count
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Leilao" Property="dataFinal" Title="End Time">
+                            <Template Context="leilao">
+                                @leilao.getDataFinal()
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenPanel>
+            @if (selectedAuction != null)
+            {
+                <h4><b>Auction Details</b></h4>
+                @* <RadzenText TextStyle="TextStyle.H4" TextAlign="TextAlign.Center" class="rz-my-6"><b>Auction Details</b></RadzenText> *@
+                <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-p-8" style="max-width: 500px; margin: auto; border-radius: 30px; margin-bottom: 40px;">
+                    <RadzenRow RowGap="0" Gap="1rem">
+                        <RadzenColumn>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Title</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@selectedAuction.Single().getTitulo()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Category</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@selectedAuction.Single().getCategoria().Designacao</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Final Date</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@selectedAuction.Single().getDataFinal().ToString()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Seller</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@selectedAuction.Single().getComitente().getEmail()</b></RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Base Value</b></RadzenText>
+                            <RadzenTemplateForm TItem="double" Data="@bvalue">
+                                <RadzenFormField Variant=@Variant.Outlined Style="margin-bottom: 10px">
+                                    <ChildContent>
+                                        <RadzenNumeric Name="BaseValue" ShowUpDown="false" TItem="int" @bind-Value="@bvalue" Placeholder="Enter a base value"/>
+                                    </ChildContent>
+                                    <Helper>
+                                        <RadzenRequiredValidator Component="BaseValue" Text="Required Field."/>
+                                        <RadzenCustomValidator Component="BaseValue" Validator="@(() => Validator(bvalue))" Text="Invalid Input." />
+                                    </Helper>
+                                </RadzenFormField>
+                                <RadzenButton Text="Submit" ButtonType="ButtonType.Submit" />
+                            </RadzenTemplateForm>
+                        </RadzenColumn>
+                    </RadzenRow>
+                    
+                    
+                </RadzenCard>
+                <RadzenDataGrid AllowPaging="true" bind-PageSize="5" Data="@selectedAuction.Single().getLote().getArtigos()" TItem="Artigo">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Artigo" Property="Designcao" Title="Item">
+                            <Template Context="artigo">
+                                @artigo.getDesignacao()
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Artigo" Property="Caracteristicas" Title="Characteristics">
+                            <Template Context="artigo">
+                                @artigo.getCaracteristicas()
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Artigo" Property="Descricao" Title="Description">
+                            <Template Context="artigo">
+                                @artigo.getDescricao()
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Artigo" Context="artigo" Title="Photo" >
+                            <Template Context="artigo">
+                                <RadzenButton Icon="pageview" ButtonStyle="ButtonStyle.Light" Text="View Item Photo" Click="@(args => showItemPicture(artigo.getDescricao()))"/>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            }
+            else
+            {
+                <h6>Please select a auction above to see more details.</h6>
+            }
+        }
+        
+    </RadzenCard>
+</div>
+
+
+@code
+{
+    int position = 1;
+    ILeilumLN leilumLn = new LeilumLNFacade();
+    IEnumerable<Leilao> auctionList;
+    Utilizador user;
+    Categoria categoria;
+    IList<Leilao> selectedAuction;
+    int bvalue = 0;
+    int mvalue = 0;
+    int ovalue = 0;
+    
+    async Task showItemPicture(string picPath)
+    {
+        await DialogService.OpenAsync("Item Picture", ds => 
+                @<RadzenStack AlignItems="AlignItems.Center" Gap="2rm">
+                    <RadzenImage Path="/ProfilePictures/111222334-ProfilePic.jpg" AlternateText="ERROR 404: Image Not Found." Style="max-width: 500px"/>
+            </RadzenStack>, new DialogOptions() {CloseDialogOnOverlayClick = true, CloseDialogOnEsc = true, Style = "min-height:auto;min-width:auto;width:auto"}
+        );
+    }
+
+    private void UpdateValues()
+    {
+        mvalue = (int)0.85 * bvalue;
+        ovalue = (int)0.5 * bvalue;
+        StateHasChanged();
+    }
+    
+    private void Callback(int obj)
+    {
+        throw new NotImplementedException();
+    }
+    
+    private void turnBack()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        user = CurrentUser.getCurrentUser();
+        if (user != null)
+        {
+            if (user.getTipoUtilizador() == configGerais.Avaliador)
+            {
+                categoria = leilumLn.getCategoriaAvaliador(user.getEmail());
+                if (categoria != null)
+                {
+                    auctionList = leilumLn.getLeiloesPendentesPorCategoria(categoria.getIdCategoria());
+                }
+                else
+                {
+                    NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error: Couldn't find Category associated with your Account.", Duration = 4000 });
+                    Task.Delay(5000);
+                    turnBack();
+                }
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error: You need to be an Evaluator to evaluate Auctions.", Duration = 4000 });
+                Task.Delay(5000);
+                turnBack();
+            }
+        }
+    }
+    
+    private bool Validator(int value)
+    {
+        if (value < 0)
+        {
+            return false;
+        }
+        return true;
+    }
+}
+

@@ -2,18 +2,18 @@ namespace Leilum.LeilumLN.UtilizadorLN{
 
     public class Utilizador{
         
-        private string email { get; set; }
-        private string password { get; set; }
-        private int idTipoUtilizador { get; set; }
-        private string? fotoPerfil { get; set; }
-        private int contribuinte { get; set; }
-        private string? nome { get; set; }
-        private string? morada { get; set; }
-        private string? nacionalidade { get; set; }
-        private string? contacto { get; set; }
-        private DateOnly dataNascimento { get; set; }
-        private int metodoPagamento { get; set; }
-        private string? iban { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
+        public int idTipoUtilizador { get; set; }
+        public string? fotoPerfil { get; set; }
+        public int contribuinte { get; set; }
+        public string? nome { get; set; }
+        public string? morada { get; set; }
+        public string? nacionalidade { get; set; }
+        public string? contacto { get; set; }
+        public DateOnly dataNascimento { get; set; }
+        public int metodoPagamento { get; set; }
+        public string? iban { get; set; }
         
 
         public Utilizador(){

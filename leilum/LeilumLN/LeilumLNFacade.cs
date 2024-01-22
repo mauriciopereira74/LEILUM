@@ -52,6 +52,16 @@ namespace leilum.LeilumLN
             return this.db.getLeiloesEmCurso();
         }
 
+        public IEnumerable<Leilao> getLeiloesPendentesPorCategoria(int categoria)
+        {
+            return this.db.getLeiloesPendentes(categoria);
+        }
+
+        public Categoria getCategoriaAvaliador(string email)
+        {
+            return this.db.getCategoriaAvaliador(email);
+        }
+
         public Leilao getLeilao(int idLeilao){
             return this.db.getLeilao(idLeilao);
         }
@@ -125,6 +135,10 @@ namespace leilum.LeilumLN
 
         public void adicionaLeilao(Leilao leilao){
             this.db.adcionaLeilao(leilao);
+        }
+
+        public IEnumerable<Utilizador> getAllUtilizadores() {
+            return this.db.getAllUtilizadores();
         }
         
         // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  

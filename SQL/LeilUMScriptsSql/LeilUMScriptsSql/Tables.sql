@@ -116,5 +116,12 @@ CREATE TABLE Notificacao (
 );
 
 
+CREATE TABLE Avaliador (
+	Avaliador VARCHAR(45) NOT NULL,
+	Categoria INT NOT NULL,
+	FOREIGN KEY (Avaliador) REFERENCES Utilizador (Email),
+	FOREIGN KEY (Categoria) REFERENCES Categoria (idCategoria)
+);
+
 USE master;
 GO

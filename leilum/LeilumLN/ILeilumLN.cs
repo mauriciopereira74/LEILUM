@@ -22,7 +22,10 @@ namespace leilum.LeilumLN
 
         // Leiloes
         public IEnumerable<Leilao> getLeiloesEmCurso();
+        public IEnumerable<Leilao> getLeiloesPendentesPorCategoria(int categoria);
 
+        public Categoria getCategoriaAvaliador(string email);
+        
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 
         public int quantidadeArtigos();
@@ -40,8 +43,12 @@ namespace leilum.LeilumLN
 
         public void adicionaLeilao(Leilao leilao);
 
+
         public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador);
 
         public void adicionaNotificacao(Notificacao notificacao);
+
+        public IEnumerable<Utilizador> getAllUtilizadores();
+
     }
 }
