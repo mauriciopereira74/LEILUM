@@ -125,6 +125,10 @@ namespace leilum.LeilumLN
         public void adicionaLeilao(Leilao leilao){
             this.db.adcionaLeilao(leilao);
         }
+
+        public IEnumerable<Utilizador> getAllUtilizadores() {
+            return this.db.getAllUtilizadores();
+        }
         
         // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  
         

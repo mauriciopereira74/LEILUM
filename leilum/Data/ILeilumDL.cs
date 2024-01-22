@@ -19,7 +19,7 @@ namespace Leilum.Data
 
         public void removeUtilizador(int nif);
 
-        public ICollection<Utilizador> getAllUtilizadores();
+        public IEnumerable<Utilizador> getAllUtilizadores();
 
         public void updateUtilizador(Utilizador utilizador);
 
