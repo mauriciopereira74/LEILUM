@@ -106,6 +106,15 @@ CREATE TABLE Licitacao (
 	PRIMARY KEY (idLicitacao));
 
 
+-- DROP TABLE Notificacao;
+CREATE TABLE Notificacao (
+    idNotificacao INT IDENTITY(1,1) PRIMARY KEY,
+    idUtilizador VARCHAR(45) NOT NULL,
+    MensagemNotificacao VARCHAR(500) NOT NULL,
+    DataNotificacao DATETIME NOT NULL,
+    FOREIGN KEY (idUtilizador) REFERENCES Utilizador (Email)
+);
+
 
 USE master;
 GO
