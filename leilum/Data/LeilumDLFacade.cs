@@ -163,9 +163,9 @@ namespace Leilum.Data
 
         // Get lista de leilões em curso e outro para leilões terminados e outro para leiloes pendentes
 
-        public ICollection<Leilao> getLeiloesPendentes(){
-            ICollection<Leilao> leiloesPendentes = new HashSet<Leilao>();
-            string s_cmd = "SELECT * FROM Leilao WHERE Estado = 2";
+        public IEnumerable<Leilao> getLeiloesPendentes(int _categoria){
+            IEnumerable<Leilao> leiloesPendentes = new HashSet<Leilao>();
+            string s_cmd = $"SELECT * FROM Leilao WHERE Estado = 2 and Categoria = {_categoria}";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
@@ -191,7 +191,7 @@ namespace Leilum.Data
                                 Categoria categoria = getCategoria(categoriaId);
 
                                 Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
-                                leiloesPendentes.Add(leilao);
+                                leiloesPendentes = leiloesPendentes.Append(leilao);
                             }
                         }
                     }
@@ -239,6 +239,41 @@ namespace Leilum.Data
                 throw new Exception(e.Message);
             }
             return leiloesAtivos;
+        }
+
+        public Categoria? getCategoriaAvaliador(string email)
+        {
+            string sql_cmd = $"SELECT Categoria FROM Avaliador WHERE Avaliador = '{email}'";
+            int idCategoria = -1;
+            Categoria categoria = null;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd,con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                idCategoria = Convert.ToInt32(reader["Categoria"]);
+                            }
+                        }
+                    }
+                }
+
+                if (idCategoria != -1)
+                {
+                    categoria = getCategoria(idCategoria);
+                }
+
+                return categoria;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getCategoriaAvaliador: " + e.Message);
+            }
         }
 
         public ICollection<Leilao> getLeiloesTerminados(){

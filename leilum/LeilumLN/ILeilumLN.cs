@@ -21,7 +21,10 @@ namespace leilum.LeilumLN
 
         // Leiloes
         public IEnumerable<Leilao> getLeiloesEmCurso();
+        public IEnumerable<Leilao> getLeiloesPendentesPorCategoria(int categoria);
 
+        public Categoria getCategoriaAvaliador(string email);
+        
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 
         public int quantidadeLotes();

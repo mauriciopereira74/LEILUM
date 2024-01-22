@@ -51,6 +51,16 @@ namespace leilum.LeilumLN
             return this.db.getLeiloesEmCurso();
         }
 
+        public IEnumerable<Leilao> getLeiloesPendentesPorCategoria(int categoria)
+        {
+            return this.db.getLeiloesPendentes(categoria);
+        }
+
+        public Categoria getCategoriaAvaliador(string email)
+        {
+            return this.db.getCategoriaAvaliador(email);
+        }
+
         public Leilao getLeilao(int idLeilao){
             return this.db.getLeilao(idLeilao);
         }
