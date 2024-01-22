@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using Dapper;
 using Leilum.LeilumLN.LoteLN;
 using Leilum.LeilumLN.ArtigoLN;
+using Leilum.LeilumLN.NotificacaoLN;
 
 namespace Leilum.Data
 {
@@ -21,6 +22,8 @@ namespace Leilum.Data
         private LoteDAO loteDao;
         private LicitacaoDAO licitacaoDao;
 
+        private NotificacaoDAO notificacaoDao;
+
         public LeilumDLFacade()
         {
             this.artigoDAO = ArtigoDAO.getInstance();
@@ -30,6 +33,7 @@ namespace Leilum.Data
             this.leilaoDao = LeilaoDAO.getInstance();
             this.loteDao = LoteDAO.getInstance();
             this.licitacaoDao = LicitacaoDAO.getInstance();
+            this.notificacaoDao = NotificacaoDAO.getInstance();
         }        
         
         // Utilizadores
@@ -813,5 +817,14 @@ namespace Leilum.Data
             
             this.leilaoDao.put(leilao.getNrLeilao(), leilao);
         }
+
+        public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador){
+            return this.notificacaoDao.getNotificacoesPorUtilizador(idUtilizador);
+        }
+
+        public void adicionaNotificacao(Notificacao notificacao){
+            this.notificacaoDao.put(notificacao);
+        }
+
     }
 }

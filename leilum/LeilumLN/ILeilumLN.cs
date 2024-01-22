@@ -1,6 +1,7 @@
 
 using Leilum.LeilumLN.CategoriaLN;
 using Leilum.LeilumLN.LeilaoLN;
+using Leilum.LeilumLN.NotificacaoLN;
 using Leilum.LeilumLN.UtilizadorLN;
 
 namespace leilum.LeilumLN
@@ -41,6 +42,11 @@ namespace leilum.LeilumLN
         public void addLeilao(Leilao l);
 
         public void adicionaLeilao(Leilao leilao);
+
+
+        public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador);
+
+        public void adicionaNotificacao(Notificacao notificacao);
 
         public IEnumerable<Utilizador> getAllUtilizadores();
 

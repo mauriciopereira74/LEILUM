@@ -300,6 +300,7 @@
         }
 
         await Task.Delay(1000);
+        await base.OnInitializedAsync();
     }
 
     async void SaveChanges()

@@ -5,6 +5,7 @@ using Leilum.Data;
 using Leilum.LeilumLN.ArtigoLN;
 using Leilum.LeilumLN.CategoriaLN;
 using Leilum.LeilumLN.LoteLN;
+using Leilum.LeilumLN.NotificacaoLN;
 
 namespace leilum.LeilumLN
 {
@@ -155,5 +156,14 @@ namespace leilum.LeilumLN
         
         // Função para buscar leilões em que o Utilizador ganhou
         
+
+        public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador){
+            return this.db.getNotificacoesPorUtilizador(idUtilizador);
+        }
+
+        public void adicionaNotificacao(Notificacao notificacao){
+            this.db.adicionaNotificacao(notificacao);
+        }
+
     }
 }

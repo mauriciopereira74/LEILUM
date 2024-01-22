@@ -1,6 +1,7 @@
 using Leilum.LeilumLN.ArtigoLN;
 using Leilum.LeilumLN.CategoriaLN;
 using Leilum.LeilumLN.LeilaoLN;
+using Leilum.LeilumLN.NotificacaoLN;
 using Leilum.LeilumLN.UtilizadorLN;
 
 namespace Leilum.Data
@@ -58,5 +59,7 @@ namespace Leilum.Data
         public Categoria? getCategoriaAvaliador(string email);
         public void adcionaLeilao(Leilao l);
         public void setCategoriaAvaliador(string email, int categoria);
+        public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador);
+        public void adicionaNotificacao(Notificacao notificacao);
     }
 }
