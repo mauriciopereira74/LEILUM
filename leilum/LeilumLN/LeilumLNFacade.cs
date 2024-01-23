@@ -180,8 +180,7 @@ namespace leilum.LeilumLN
         public void adicionaNotificacao(Notificacao notificacao){
             this.db.adicionaNotificacao(notificacao);
         }
-
-
+        
         public Dictionary<string, int> CalcularGastosPorMes(int ano)
         {
             IEnumerable<Leilao> leiloes = this.db.getLeiloesTerminados();
@@ -190,7 +189,7 @@ namespace leilum.LeilumLN
             // Inicializa o dicionário com gastos zero para cada mês do ano
             for (int i = 1; i <= 12; i++)
             {
-                string nomeMes = new DateTime(ano, i, 1).ToString("MMMM");
+                string nomeMes = $"{ano}-{i.ToString("D2")}-01";
                 gastosPorMes.Add(nomeMes, 0);
             }
 
@@ -199,11 +198,10 @@ namespace leilum.LeilumLN
             {
                 if (leilao.getDataFinal().Year == ano)
                 {
-                    string nomeMes = leilao.getDataFinal().ToString("MMMM");
+                    string nomeMes = leilao.getDataFinal().ToString("yyyy-MM-01");
                     gastosPorMes[nomeMes] += (int)leilao.getvalorAtual();
                 }
             }
-
             return gastosPorMes;
         }
         

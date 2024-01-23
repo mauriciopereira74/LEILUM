@@ -30,14 +30,14 @@
     <RadzenChart>
         @foreach (var r in revenue2)
         {
-            <RadzenAreaSeries Smooth="@smooth" Data="@r" CategoryProperty="Date" Title="r[0].Quarter.ToString();" ValueProperty="Revenue" RenderingOrder="1">
+            <RadzenStackedAreaSeries Smooth="@smooth" Data="@r" CategoryProperty="Ano" Title="@GetYearFromDateString(r[0].Ano)" ValueProperty="Revenue">
                 <RadzenSeriesDataLabels Visible="@showDataLabels2"/>
-            </RadzenAreaSeries>
+            </RadzenStackedAreaSeries>
         }
         <RadzenCategoryAxis Padding="20" Formatter="@FormatAsMonth"/>
         <RadzenValueAxis Formatter="@FormatAsUSD">
             <RadzenGridLines Visible="true"/>
-            <RadzenAxisTitle Text="Revenue in USD"/>
+            <RadzenAxisTitle Text="Amount Spent"/>
         </RadzenValueAxis>
     </RadzenChart>
 </div>
@@ -45,20 +45,31 @@
 @code {
     class DataItem
     {
+        public string Ano { get; set; }
         public string Quarter { get; set; }
         public int Revenue { get; set; }
     }
     bool showDataLabels1 = false;
     bool showDataLabels2 = false;
-    bool smooth = true;
+    bool smooth = false;
     DataItem[] revenue1; // Leilões
     List<DataItem[]> revenue2;
 
     ILeilumLN ln = new LeilumLNFacade();
     
+    string GetYearFromDateString(string dateString)
+    {
+        if (!string.IsNullOrEmpty(dateString) && dateString.Length >= 4)
+        {
+            return dateString.Substring(0, 4);
+        }
+
+        return string.Empty;
+    }
+    
     string FormatAsUSD(object value)
     {
-        return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
+        return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("pt-PT"));
     }
 
     string FormatAsMonth(object value)
@@ -84,22 +95,23 @@
         revenue1 = new DataItem[] {
             new DataItem
             {
+                Ano = "",
                 Quarter = "Leilões Pendentes",
                 Revenue = l1
             },
             new DataItem
             {
+                Ano = "",
                 Quarter = "Leilões em Curso",
                 Revenue = l2
             },
             new DataItem
             {
+                Ano = "",
                 Quarter = "Leilões Terminados",
                 Revenue = l3
             },
         };
-
-        revenue2 = magia(datas);
 
         List<DataItem[]> magia(List<int> datas)
         {
@@ -110,18 +122,36 @@
                 DataItem[] l = new DataItem[12];
                 Dictionary<string, int> gastos = this.ln.CalcularGastosPorMes(data);
 
+                int i = 0;
                 foreach (var gasto in gastos)
                 {
-                    DataItem x = new DataItem { Quarter = gasto.Key, Revenue = gasto.Value};
-                    l.Append(x);
+                    DataItem x = new DataItem { Ano = gasto.Key, Quarter = "", Revenue = gasto.Value};
+                    l[i++] = x;
                 }
-                lista.Append(l);
-
-                string n = l[0].Quarter.ToString();
-                
+                lista.Add(l);
             }
             return lista;
         }
+        revenue2 = magia(datas);
+        
+        static void ImprimirListaDeArrays(List<DataItem[]> listaDeArrays)
+        {
+            foreach (var array in listaDeArrays)
+            {
+                ImprimirArray(array);
+                Console.WriteLine(); // Adiciona uma linha em branco entre os arrays
+            }
+        }
+
+        static void ImprimirArray(DataItem[] array)
+        {
+            foreach (var item in array)
+            {
+                Console.WriteLine($"Ano: {item.Ano}, Quarter: {item.Quarter}, Revenue: {item.Revenue}");
+            }
+        }
+
+        ImprimirListaDeArrays(revenue2);
         
         await base.OnInitializedAsync();
     }
