@@ -56,7 +56,7 @@
                         <RadzenText TextStyle="TextStyle.Body1"><b>@CalculateTimeRemaining(leilao.getDataFinal())</b></RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="2" Class="rz-text-align-end">
-                        <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Text=@($"{String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", leilao.getvalorAtual())}") />
+                        <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Text=@($"{String.Format(new System.Globalization.CultureInfo("pt-PT"), "{0:C}", leilao.getvalorAtual())}") />
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenStack>

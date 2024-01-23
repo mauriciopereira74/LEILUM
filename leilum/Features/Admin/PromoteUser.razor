@@ -3,6 +3,8 @@
 
 <PageTitle>Promote User</PageTitle>
 
+
+
 @if (u != null) {
 
 <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="1rem" Class="rz-p-4">
@@ -11,6 +13,13 @@
         <RadzenText TextStyle="TextStyle.Body1">
             <b>@u.getNome()</b>
         </RadzenText>
+    </RadzenStack>
+</RadzenStack>
+}
+else{
+    <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="1rem" Class="rz-p-4">
+    <img class="profile-image" src="/images/user-profilePicture.jpg" alt="avatar" Style="width: 100px; height: 100px; border-radius: 50%;" />
+    <RadzenStack Gap="0" Style="text-align: center; margin-top: -10px;">
     </RadzenStack>
 </RadzenStack>
 }

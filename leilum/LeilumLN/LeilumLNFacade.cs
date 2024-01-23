@@ -57,6 +57,21 @@ namespace leilum.LeilumLN
             return this.db.getLeiloesPendentes(categoria);
         }
 
+        public IEnumerable<Leilao> getLeiloesParticipados(string email){
+            return this.db.getLeiloesParticipados(email);
+        }
+
+        public IEnumerable<Leilao> getLeiloesCriados(string utilizadorEmail){
+            return this.db.getLeiloesCriados(utilizadorEmail);
+        }
+
+        public IEnumerable<Leilao> getLeiloesGanhos(string utilizadorEmail){
+            return this.db.getLeiloesGanhos(utilizadorEmail);
+        }
+        public double getGastosTotaisUtilizador(string utilizadorEmail){
+            return this.db.getGastosTotaisUtilizador(utilizadorEmail);
+        }
+
         public Categoria getCategoriaAvaliador(string email)
         {
             return this.db.getCategoriaAvaliador(email);
@@ -164,6 +179,8 @@ namespace leilum.LeilumLN
         public void adicionaNotificacao(Notificacao notificacao){
             this.db.adicionaNotificacao(notificacao);
         }
+
+
 
     }
 }
