@@ -942,13 +942,13 @@ namespace Leilum.Data
                                 string? comitenteEmail = Convert.ToString(reader["Comitente"]);
                                 string? compradorEmail = Convert.ToString(reader["Comprador"]);
                                 string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
-                                // string? pathImg = Convert.ToString(reader["Imgpath"]);
+                                string? pathImg = Convert.ToString(reader["ImagPath"]);
 
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Utilizador comprador = this.utilizadorDAO.getUtilizadorWithEmail(compradorEmail);
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 
-                                lote = new Lote(idLote,comitente,comprador,avaliador,this.artigoDAO.getArtigosLote(loteId));
+                                lote = new Lote(idLote,comitente,comprador,avaliador,this.artigoDAO.getArtigosLote(loteId), pathImg);
                             }
                         }
                     }

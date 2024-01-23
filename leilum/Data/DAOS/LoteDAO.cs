@@ -39,8 +39,8 @@ namespace Leilum.Data.DAOS
 
         public void put(int key, Lote value)
         {
-            string sql_cmd = "INSERT INTO Lote (idLote, Comitente) VALUES ('" +
-                                value.getIdLote() + "','" + value.getComitente().getEmail() + "');";
+            string sql_cmd = "INSERT INTO Lote (idLote, Comitente, ImagPath) VALUES ('" +
+                                value.getIdLote() + "','" + value.getComitente().getEmail() + "','" + value.getImagPath() + "');";
             try 
             {
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))

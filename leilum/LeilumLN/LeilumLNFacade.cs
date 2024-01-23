@@ -118,7 +118,7 @@ namespace leilum.LeilumLN
             List<Artigo> artigos)
         {
             int idLote = this.db.quantidadeLotes() + 1;
-            Lote lote = new Lote(idLote, comitente, comprador, avaliador, artigos);
+            Lote lote = new Lote(idLote, comitente, comprador, avaliador, artigos,imgPath);
 
             return lote;
         }

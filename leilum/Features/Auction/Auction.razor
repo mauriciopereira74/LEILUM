@@ -13,7 +13,7 @@
     <RadzenCard Style="width: 100%; margin: 10px;">
         <div class="card-header custom-header" style="display: flex; align-items: center; justify-content: space-between; padding: 10px; border-radius: 10px; height: 350px;">
             <div style="flex: 1;">
-                @* <img src="@leilao.getLote().getImgPath()" alt="Imagem do Leilão" style="max-width: 100%; height: 300px; border-radius: 50%; overflow: hidden;"  /> *@
+                <img src="@leilao.getLote().getImagPath()" alt="Auction Image" style="max-width: 100%; height: 300px; border-radius: 50%; overflow: hidden;"  />
             </div>
             <div style="flex: 1; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px; text-align: center;">
                 <h4>Current Bid</h4>
@@ -32,27 +32,6 @@
                                 <RadzenTextBox Value=@leilao.getTitulo() ReadOnly="true" disabled/>
                             </ChildContent>
                         </RadzenFormField>
-                        @if(artigos.Count()>1){
-
-                        }
-                        else{
-                            <RadzenFormField Text="Article Description" Variant="@variant">
-                                <ChildContent>
-                                    <RadzenTextBox Value=@artigos.First().getDescricao() ReadOnly="true" disabled/>
-                                </ChildContent>
-                            </RadzenFormField>
-                            <RadzenFormField Text="Article Characteristics" Variant="@variant">
-                                <ChildContent>
-                                    <RadzenTextBox Value=@artigos.First().getCaracteristicas() ReadOnly="true" disabled/>
-                                </ChildContent>
-                            </RadzenFormField>
-                        }
-                    </RadzenStack>
-                </RadzenTemplateForm>
-            </RadzenColumn>
-            <RadzenColumn Size="8" SizeSM="6">
-                <RadzenTemplateForm TItem="Leilao" Data="@leilao">
-                    <RadzenStack>
                         <RadzenFormField Text="Category" Variant="@variant">
                             <ChildContent>
                                 <RadzenTextBox Value=@leilao.getCategoria().getDesignacao() ReadOnly="true" disabled/>
@@ -63,9 +42,20 @@
                                 <RadzenTextBox Value=@leilao.getDataFinal().ToString() ReadOnly="true" disabled/>
                             </ChildContent>
                         </RadzenFormField>
+                    </RadzenStack>
+                </RadzenTemplateForm>
+            </RadzenColumn>
+            <RadzenColumn Size="8" SizeSM="6">
+                <RadzenTemplateForm TItem="Leilao" Data="@leilao">
+                    <RadzenStack>
                         <RadzenFormField Text="Minimum Value" Variant="@variant">
                             <ChildContent>
                                 <RadzenTextBox Value=@leilao.getValorMinimo().ToString() ReadOnly="true" disabled/>
+                            </ChildContent>
+                        </RadzenFormField>
+                        <RadzenFormField Text="Opening Value" Variant="@variant">
+                            <ChildContent>
+                                <RadzenTextBox Value=@leilao.getValorAbertura().ToString() ReadOnly="true" disabled/>
                             </ChildContent>
                         </RadzenFormField>
                         @if (canBid() && leilao.getEstado() == 1)
@@ -73,7 +63,7 @@
                             <RadzenFormField Text="Your Bid" Variant="@variant">
                                 <ChildContent>
                                     <RadzenNumeric Disabled="@(!canBid())" @bind-Value="@ValorDoLance" Placeholder="Enter your bid" Style="width: 100%" Min="@Convert.ToDecimal(valorMinimoLance)"/>
-                                    <RadzenButton Disabled="@(!canBid())" ButtonType="ButtonType.Button" Text="Bid Now" Click="@(() => bid())" Style="width: 100%: height: 100%;" />
+                                    <RadzenButton Disabled="@(!canBid())" ButtonType="ButtonType.Button" Text="Bid Now" Click="@(() => bid())" Style="width: 100%; height: 100%;" />
                                 </ChildContent>
                             </RadzenFormField>
                         }
@@ -81,8 +71,35 @@
                 </RadzenTemplateForm>
             </RadzenColumn>
         </RadzenRow>
-        <RadzenButton ButtonType="ButtonType.Button" Text="Go Back" Click="@turnBack" Style="margin-top: 15px" />
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenButton ButtonType="ButtonType.Button" Text="Go Back" Click="@turnBack" Style="margin-top: 15px" />
+            <RadzenText Style="margin-top: 20px"><b>See Items information bellow.</b></RadzenText>
+        </RadzenRow>
     </RadzenCard>
+    @foreach (Artigo artigo in this.leilao.getLote().getArtigos())
+    {
+        <RadzenCard Style="width: 100%; margin: 10px;">
+            <RadzenStack>
+                <RadzenRow RowGap="10px">
+                    <RadzenColumn>
+                        <RadzenImage Style="max-width: 300px; max-height: 200px" Path="@artigo.getImagPath()"/>
+                    </RadzenColumn>
+                    <RadzenColumn>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Item Name:</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Style="color: #000000">@artigo.getDesignacao()</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Item Characteristics:</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Style="color: #000000">@artigo.getCaracteristicas()</RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>Item Description:</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Style="color: #000000">@artigo.getDescricao()</RadzenText>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenStack>
+        </RadzenCard>
+    }
+
+
 }
 else
 {
@@ -142,11 +159,15 @@ else
 
     private bool canBid()
     {
-        if (user.getEmail().Equals(leilao.getAvaliador().getEmail()) || user.getEmail().Equals(leilao.getComitente().getEmail()))
+        if (user != null)
         {
-            return false;
+            if (user.getEmail().Equals(leilao.getAvaliador().getEmail()) || user.getEmail().Equals(leilao.getComitente().getEmail()))
+            {
+                return false;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     void UpdateTimeRemaining()
