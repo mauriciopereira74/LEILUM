@@ -367,8 +367,8 @@ namespace Leilum.Data
             return result;
         }
 
-        public ICollection<Leilao> getLeiloesTerminados(){
-            ICollection<Leilao> leiloesTerminados = new HashSet<Leilao>();
+        public IEnumerable<Leilao> getLeiloesTerminados(){
+            IEnumerable<Leilao> leiloesTerminados = new HashSet<Leilao>();
             string s_cmd = "SELECT * FROM Leilao WHERE Estado = 0";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
@@ -388,14 +388,14 @@ namespace Leilum.Data
                                 string? comitenteEmail = Convert.ToString(reader["Comitente"]);
                                 int loteId = Convert.ToInt32(reader["Lote"]);
                                 int categoriaId = Convert.ToInt32(reader["Categoria"]);
-
                                 Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
                                 Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
                                 Lote lote = getLote(loteId);
                                 Categoria categoria = getCategoriaById(categoriaId);
 
                                 Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
-                                leiloesTerminados.Add(leilao);
+
+                                leiloesTerminados = leiloesTerminados.Append(leilao);
                             }
                         }
                     }
@@ -404,6 +404,45 @@ namespace Leilum.Data
                 throw new Exception(e.Message);
             }
             return leiloesTerminados;
+        }
+        
+        public IEnumerable<Leilao> getLeiloesPendentes(){
+            IEnumerable<Leilao> leiloesPendentes = new HashSet<Leilao>();
+            string s_cmd = "SELECT * FROM Leilao WHERE Estado = 2";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            while (reader.Read()){
+                                int nrLeilao = Convert.ToInt32(reader["idLeilao"]);
+                                string? titulo = Convert.ToString(reader["Titulo"]);
+                                DateTime dataFinal = Convert.ToDateTime(reader["DataFim"]);
+                                double valorAbertura = Convert.ToDouble(reader["ValorAbertura"]);
+                                double valorBase = Convert.ToDouble(reader["ValorBase"]);
+                                double valorMinimo = Convert.ToDouble(reader["ValorMinimo"]);
+                                double valorAtual = Convert.ToDouble(reader["ValorAtual"]);
+                                int estado = Convert.ToInt32(reader["Estado"]);
+                                string? avaliadorEmail = Convert.ToString(reader["Avaliador"]);
+                                string? comitenteEmail = Convert.ToString(reader["Comitente"]);
+                                int loteId = Convert.ToInt32(reader["Lote"]);
+                                int categoriaId = Convert.ToInt32(reader["Categoria"]);
+                                Utilizador avaliador = this.utilizadorDAO.getUtilizadorWithEmail(avaliadorEmail);
+                                Utilizador comitente = this.utilizadorDAO.getUtilizadorWithEmail(comitenteEmail);
+                                Lote lote = getLote(loteId);
+                                Categoria categoria = getCategoriaById(categoriaId);
+
+                                Leilao leilao = new Leilao(nrLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,estado,avaliador,comitente,lote,categoria);
+
+                                leiloesPendentes = leiloesPendentes.Append(leilao);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e){
+                throw new Exception(e.Message);
+            }
+            return leiloesPendentes;
         }
 
         public ICollection<Leilao> getLeiloesParticipados(string utilizadorEmail){
