@@ -7,7 +7,6 @@ GO
 USE LEILUM;
 GO
 
-
 -- DROP TABLE TipoUtilizador
 CREATE TABLE TipoUtilizador (
 	Tipo INT NOT NULL,
@@ -24,6 +23,12 @@ CREATE TABLE Utilizador (
 	PRIMARY KEY (Email)
 );
 
+CREATE TABLE MetodoPagamento (
+	Metodo INT NOT NULL,
+	Designacao VARCHAR(50) NOT NULL,
+	PRIMARY KEY (Metodo)
+);
+
 -- DROP TABLE InfoUtilizador;
 CREATE TABLE InfoUtilizador (
 	Contribuinte INT NOT NULL,
@@ -36,8 +41,10 @@ CREATE TABLE InfoUtilizador (
 	Iban VARCHAR(45) NOT NULL,
 	FotoPerfilPath VARCHAR(500) NOT NULL,
 	idUtilizador VARCHAR(45) NOT NULL,
+	FOREIGN KEY (MetodoPagamento) REFERENCES MetodoPagamento (Metodo),
 	FOREIGN KEY (idUtilizador) REFERENCES Utilizador (Email),
 	PRIMARY KEY (Contribuinte));
+
 
 -- DROP TABLE Lote;
 CREATE TABLE Lote (
@@ -56,6 +63,7 @@ CREATE TABLE Artigo (
 	Designacao VARCHAR(45) NOT NULL,
 	Caracteristicas TEXT NOT NULL,
 	Descricao TEXT NOT NULL,
+	ImagPath VARCHAR(500) NOT NULL,
 	idLote INT NOT NULL,
 	FOREIGN KEY (idLote) REFERENCES Lote (idLote),
 	PRIMARY KEY (idArtigo));
@@ -63,8 +71,8 @@ CREATE TABLE Artigo (
 -- DROP TABLE Regra;
 CREATE TABLE Regra (
 	idRegra INT NOT NULL,
-	ValorMinimo DECIMAL(6,2),
-	ValorMaximo DECIMAL(6,2),
+	ValorMinimo DECIMAL,
+	ValorMaximo DECIMAL,
 	PRIMARY KEY (idRegra));
 
 -- DROP TABLE Categoria;

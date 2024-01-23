@@ -481,6 +481,56 @@ namespace Leilum.Data
         {
             return this.leilaoDao.size();
         }
+
+        public void atualizaValorBaseLeilaoEstado(int idLeilao, int valorBase, int valorMinimo, int valorAbertura,
+            string avaliador)
+        {
+            bool result = false;
+            using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+            {
+                con.Open();
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    try
+                    {
+                        int valorAtual = valorAbertura;
+                        var parametros = new
+                        {
+                            idLeilao,
+                            avaliador,
+                            valorAbertura,
+                            valorMinimo,
+                            valorBase,
+                            valorAtual
+                        };
+
+                        string sql_cmd = @"UPDATE Leilao SET Avaliador = @avaliador,
+                                                        Estado = '1',
+                                                        ValorAbertura = @valorAbertura,
+                                                        ValorMinimo = @valorMinimo,
+                                                        ValorBase = @valorBase,
+                                                        ValorAtual = @valorAtual
+                                                   WHERE idLeilao = @idLeilao";
+                        
+                        int linhas = con.Execute(sql_cmd, parametros, transaction);
+
+                        if (linhas > 0)
+                        {
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new DAOException("atualizaValorBaseLeilaoEstado: " + e.Message);
+                    }
+                }
+            }
+        }
         
         // Adiciona uma Licitação
         public bool addLicitacao(Licitacao licitacao) {
@@ -863,6 +913,90 @@ namespace Leilum.Data
 
         public void adicionaNotificacao(Notificacao notificacao){
             this.notificacaoDao.put(notificacao);
+        }
+
+        public ICollection<string> getListMetodoPagamento()
+        {
+            ICollection<string> list = new List<string>();
+            string sql_cmd = "SELECT Designacao FROM MetodoPagamento";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd,con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                list.Add(Convert.ToString(reader["Designacao"]));
+                            }
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getListMetodoPagamento: " + e.Message);
+            }
+        }
+
+        public string getDesignacaoMetodoPagamento(int metodo)
+        {
+            string result = "";
+            string sql_cmd = $"SELECT Designacao FROM MetodoPagamento WHERE Metodo = {metodo}";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd,con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result = Convert.ToString(reader["Designacao"]);
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getDesignacaoMetodoPagamento: " + e.Message);
+            }
+        }
+
+        public int getIdMetodoPagamentoByDesignacao(string designacao)
+        {
+            int result = -1;
+            string sql_cmd = $"SELECT Metodo FROM MetodoPagamento WHERE Designacao = '{designacao}'";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd,con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result = Convert.ToInt32(reader["Metodo"]);
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getDesignacaoMetodoPagamento: " + e.Message);
+            }
         }
 
     }

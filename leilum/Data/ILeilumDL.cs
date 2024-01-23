@@ -60,8 +60,15 @@ namespace Leilum.Data
         public IEnumerable<Leilao> getLeiloesPendentes();
         public Categoria? getCategoriaAvaliador(string email);
         public void adcionaLeilao(Leilao l);
+        public void atualizaValorBaseLeilaoEstado(int idLeilao, int valorBase, int valorMinimo, int valorAbertura,
+            string avaliador);
+
         public void setCategoriaAvaliador(string email, int categoria);
         public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador);
         public void adicionaNotificacao(Notificacao notificacao);
+
+        public int getIdMetodoPagamentoByDesignacao(string designacao);
+        public string getDesignacaoMetodoPagamento(int metodo);
+        public ICollection<string> getListMetodoPagamento();
     }
 }

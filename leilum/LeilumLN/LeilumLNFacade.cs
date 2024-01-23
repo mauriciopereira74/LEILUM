@@ -68,6 +68,11 @@ namespace leilum.LeilumLN
             return this.db.getLeiloesPendentes(categoria);
         }
 
+        public void startAuction(int auctionId, int bvalue, int mvalue, int ovalue ,string evaluator)
+        {
+            this.db.atualizaValorBaseLeilaoEstado(auctionId, bvalue, mvalue, ovalue, evaluator);
+        }
+
         public Categoria getCategoriaAvaliador(string email)
         {
             return this.db.getCategoriaAvaliador(email);
@@ -176,6 +181,7 @@ namespace leilum.LeilumLN
             this.db.adicionaNotificacao(notificacao);
         }
 
+
         public Dictionary<string, int> CalcularGastosPorMes(int ano)
         {
             IEnumerable<Leilao> leiloes = this.db.getLeiloesTerminados();
@@ -212,8 +218,20 @@ namespace leilum.LeilumLN
             return anosComLeiloes;
         }
 
+        public ICollection<string> getAllMetodoPagamentos()
+        {
+            return this.db.getListMetodoPagamento();
+        }
 
+        public string getDesignacaoMetodoPagamento(int metodo)
+        {
+            return db.getDesignacaoMetodoPagamento(metodo);
+        }
 
+        public int getIdMetodoPagamento(string designacao)
+        {
+            return db.getIdMetodoPagamentoByDesignacao(designacao);
+        }
 
 
     }
