@@ -445,10 +445,10 @@ namespace Leilum.Data
             return leiloesPendentes;
         }
 
-        public ICollection<Leilao> getLeiloesParticipados(string utilizadorEmail){
-            ICollection<Leilao> leiloesParticipados = new HashSet<Leilao>();
+        public IEnumerable<Leilao> getLeiloesParticipados(string utilizadorEmail){
+            IEnumerable<Leilao> leiloesParticipados = new HashSet<Leilao>();
             List<int> idsLeiloes = new List<int>();
-            string sql_cmd = $"SELECT * FROM Licitacao WHERE Licitador = {utilizadorEmail}";
+            string sql_cmd = $"SELECT * FROM Licitacao WHERE Licitador = '{utilizadorEmail}'";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(sql_cmd,conn)){
@@ -462,7 +462,8 @@ namespace Leilum.Data
                             }
 
                             foreach(int id in idsLeiloes){
-                                leiloesParticipados.Add(getLeilao(id));
+                                leiloesParticipados = leiloesParticipados.Append(getLeilao(id));
+                                // leiloesParticipados.Add(getLeilao(id));
                             }
                         }
                     }
@@ -471,6 +472,72 @@ namespace Leilum.Data
                 throw new Exception(e.Message);
             }
             return leiloesParticipados;
+        }
+
+        public IEnumerable<Leilao> getLeiloesCriados(string utilizadorEmail){
+            IEnumerable<Leilao> leiloesCriados = new HashSet<Leilao>();
+            string sql_cmd = $"SELECT * FROM Leilao WHERE Comitente = '{utilizadorEmail}'";
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, conn)){
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader()){
+                            while (reader.Read()){
+                                int idLeilao = Convert.ToInt32(reader["idLeilao"]);
+                                leiloesCriados = leiloesCriados.Append(getLeilao(idLeilao));
+                            }
+                            
+                        }
+                    }
+                }
+            } catch (Exception e){
+                throw new Exception(e.Message);
+            }
+            return leiloesCriados;
+        }
+
+        public IEnumerable<Leilao> getLeiloesGanhos(string utilizadorEmail){
+            IEnumerable<Leilao> leiloesGanhos = new HashSet<Leilao>();
+            IEnumerable<Leilao> leiloesTerminados = getLeiloesTerminados();
+
+            try{
+                using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
+                    conn.Open();
+                    foreach (Leilao leilao in leiloesTerminados){
+                        int idLeilao = leilao.getNrLeilao();
+                        double valorAtual = leilao.getvalorAtual();
+
+                        string sql_cmd = $"SELECT * FROM Licitacao WHERE Leilao = '{idLeilao}' AND Valor = '{valorAtual}'";
+
+                        using (SqlCommand cmd = new SqlCommand(sql_cmd,conn)){
+                            using (SqlDataReader reader = cmd.ExecuteReader()){
+                                if (reader.Read()){
+                                    string email = Convert.ToString(reader["Licitador"]);
+
+                                    if (email == utilizadorEmail){
+                                        leiloesGanhos = leiloesGanhos.Append(getLeilao(idLeilao));
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            } catch (Exception e){
+                throw new Exception(e.Message);
+            }
+            return leiloesGanhos;
+        }
+
+        public double getGastosTotaisUtilizador(string utilizadorEmail){
+            IEnumerable<Leilao> leiloesGanhos = getLeiloesGanhos(utilizadorEmail);
+            double gastos = 0;
+
+            foreach (Leilao leilao in leiloesGanhos){
+                gastos += leilao.getvalorAtual();
+            }
+
+            return gastos;
         }
         
         
