@@ -6,6 +6,7 @@ using Leilum.LeilumLN.ArtigoLN;
 using Leilum.LeilumLN.CategoriaLN;
 using Leilum.LeilumLN.LoteLN;
 using Leilum.LeilumLN.NotificacaoLN;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace leilum.LeilumLN
 {
@@ -50,6 +51,16 @@ namespace leilum.LeilumLN
 
         public IEnumerable<Leilao> getLeiloesEmCurso(){
             return this.db.getLeiloesEmCurso();
+        }
+
+        public IEnumerable<Leilao> getLeiloesTerminados()
+        {
+            return this.db.getLeiloesTerminados();
+        }
+        
+        public IEnumerable<Leilao> getLeiloesPendentes()
+        {
+            return this.db.getLeiloesPendentes();
         }
 
         public IEnumerable<Leilao> getLeiloesPendentesPorCategoria(int categoria)
@@ -170,6 +181,43 @@ namespace leilum.LeilumLN
             this.db.adicionaNotificacao(notificacao);
         }
 
+
+        public Dictionary<string, int> CalcularGastosPorMes(int ano)
+        {
+            IEnumerable<Leilao> leiloes = this.db.getLeiloesTerminados();
+            Dictionary<string, int> gastosPorMes = new Dictionary<string, int>();
+
+            // Inicializa o dicionário com gastos zero para cada mês do ano
+            for (int i = 1; i <= 12; i++)
+            {
+                string nomeMes = new DateTime(ano, i, 1).ToString("MMMM");
+                gastosPorMes.Add(nomeMes, 0);
+            }
+
+            // Percorre os leilões e atualiza os gastos no dicionário
+            foreach (var leilao in leiloes)
+            {
+                if (leilao.getDataFinal().Year == ano)
+                {
+                    string nomeMes = leilao.getDataFinal().ToString("MMMM");
+                    gastosPorMes[nomeMes] += (int)leilao.getvalorAtual();
+                }
+            }
+
+            return gastosPorMes;
+        }
+        
+        // Para obter uma lista de anos em que ocorream os leiloes que já foram terminados
+        public List<int> ObterAnosComLeiloes(IEnumerable<Leilao> leiloes)
+        {
+            List<int> anosComLeiloes = leiloes
+                .Select(leilao => leilao.getDataFinal().Year)
+                .Distinct()
+                .ToList();
+
+            return anosComLeiloes;
+        }
+
         public ICollection<string> getAllMetodoPagamentos()
         {
             return this.db.getListMetodoPagamento();
@@ -184,6 +232,7 @@ namespace leilum.LeilumLN
         {
             return db.getIdMetodoPagamentoByDesignacao(designacao);
         }
+
 
     }
 }
