@@ -79,8 +79,11 @@ namespace leilum.LeilumLN
         public IEnumerable<Leilao> getLeiloesGanhos(string utilizadorEmail){
             return this.db.getLeiloesGanhos(utilizadorEmail);
         }
-        public double getGastosTotaisUtilizador(string utilizadorEmail){
+
+        public double getGastosTotaisUtilizador(string utilizadorEmail)
+        {
             return this.db.getGastosTotaisUtilizador(utilizadorEmail);
+        }
 
         public void startAuction(int auctionId, int bvalue, int mvalue, int ovalue ,string evaluator)
         {
