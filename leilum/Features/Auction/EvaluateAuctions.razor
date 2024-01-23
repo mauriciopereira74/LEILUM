@@ -85,7 +85,8 @@
                                         <RadzenCustomValidator Component="BaseValue" Validator="@(() => valueValidByRules(bvalue))" Text="Invalid value, please follow category rules."/>
                                     </Helper>
                                 </RadzenFormField>                              
-                                <RadzenButton Text="Submit" ButtonType="ButtonType.Submit" />
+                                <RadzenButton Text="Submit Auction" ButtonType="ButtonType.Submit" Style="width: 210px"/>
+                                <RadzenButton Text="Reject Auction" ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Danger" Style="width: 210px; margin-top: 10px" Click="confirmRejection"/>
                             </RadzenTemplateForm>
                         </RadzenColumn>
                     </RadzenRow>
@@ -161,6 +162,38 @@
         ovalue = Convert.ToInt32(Math.Round(0.5 * bvalue));
     }
 
+    string rejectionMotive;
+    
+    private async void confirmRejection()
+    {
+        await DialogService.OpenAsync("Reject Auction", ds =>
+                @<RadzenStack>
+                    <RadzenTemplateForm TItem="string" Data="@rejectionMotive" Submit="reject">
+                                <RadzenText Text="Please write the Motive for the Rejection: "/>
+                                <RadzenFormField>
+                                    <ChildContent>
+                                        <RadzenTextArea Style="width: 350px; height: 100px" Name="Motive" Placeholder="Enter motive here..." @bind-Value="@rejectionMotive" MaxLength="500"/>
+                                    </ChildContent>
+                                    <Helper>
+                                        <RadzenRequiredValidator Component="Motive" Text="Motive Required." />
+                                    </Helper>
+                                </RadzenFormField>
+                                <RadzenStack AlignItems="AlignItems.Center">
+                                <RadzenRow Style="margin-top: 20px" AlignItems="AlignItems.Center">
+                                    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Warning" Text="Reject" Style="max-width: 200px"/>
+                                    <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Danger" Text="Cancel" Click="() => DialogService.Close()" Style="max-width: 200px"/>
+                                </RadzenRow>
+                                </RadzenStack>
+                    </RadzenTemplateForm>
+            </RadzenStack>, new DialogOptions() {CloseDialogOnOverlayClick = true, CloseDialogOnEsc = true, Style="max-width: 400px"}
+        );
+    }
+
+    private void reject()
+    {
+        throw new NotImplementedException("TODO PARA LOGO");
+    }
+
     private async void trySybmit()
     {
         updateValues();
@@ -175,8 +208,8 @@
                         </RadzenColumn>
                         <RadzenColumn>
                             <RadzenButton Text="Cancel" ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Danger" Click="() => DialogService.Close()"></RadzenButton>
-                        </RadzenColumn>
-                    </RadzenRow>
+            </RadzenColumn>
+            </RadzenRow>
 
             </RadzenStack>, new DialogOptions() {CloseDialogOnOverlayClick = true, CloseDialogOnEsc = true, Style = "min-height:auto;min-width:auto;width:auto"}
         );
