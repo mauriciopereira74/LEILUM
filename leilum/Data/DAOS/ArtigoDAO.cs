@@ -41,9 +41,9 @@ namespace Leilum.Data.DAOS
 
         public void put(int key, Artigo value)
         {
-            string sql_cmd = "INSERT INTO Artigo (idArtigo, Designacao, Caracteristicas, Descricao, idLote) VALUES ('" +
+            string sql_cmd = "INSERT INTO Artigo (idArtigo, Designacao, Caracteristicas, Descricao, idLote, ImagPath) VALUES ('" +
                              key + "','" + value.getDesignacao() + "','" + value.getCaracteristicas() + "','" +
-                             value.getDescricao() + "','" + value.getLoteId() + "');";
+                             value.getDescricao() + "','" + value.getLoteId() + "','" + value.getImagPath() + "');";
             try
             {
                 using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
@@ -220,8 +220,8 @@ namespace Leilum.Data.DAOS
                                 string? caracteristicas = Convert.ToString(reader["Caracteristicas"]);
                                 string? descricao = Convert.ToString(reader["Descricao"]);
                                 int idLote = Convert.ToInt32(reader["idLote"]);
-
-                                Artigo artigo = new Artigo(idArtigo,designacao,caracteristicas,descricao,idLote);
+                                string imagPath = Convert.ToString(reader["ImagPath"]);
+                                Artigo artigo = new Artigo(idArtigo,designacao,caracteristicas,descricao,idLote, imagPath);
                                 artigos.Add(artigo);
 
                             }

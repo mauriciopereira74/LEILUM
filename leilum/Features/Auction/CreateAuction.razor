@@ -4,6 +4,7 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject NotificationService NotificationService
 @inject HttpClient HttpClient
+@inject DialogService DialogService
 
 <PageTitle>Create an Auction</PageTitle>
 
@@ -66,11 +67,11 @@
                             <RadzenColumn Size="12" SizeSM="10">
                                 <RadzenTemplateForm TItem="artigoAux" Data=@artigo Submit="@OnClick">
                                     <RadzenStack>
-                                        @* <RadzenFormField Text="Foto do Artigo" Variant=@variant Style="width: 300px;">
+                                        <RadzenFormField Text="Item Picture" Variant=@variant>
                                             <RadzenCard>
-                                                <RadzenFileInput @bind-FileName=@artigo.filename TValue="string" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" Change=@HandleFileChange/>
+                                                <RadzenUpload Name="ItemPic" Auto="false" Change="args => UploadChange(args)" @ref="upload" Accept="image/*" Url=@($"upload/{"ItemPictures"}/{artigo.uniqueID + "-ItemPicture"}")></RadzenUpload>
                                             </RadzenCard>
-                                        </RadzenFormField> *@
+                                        </RadzenFormField>
                                         <RadzenFormField Text="Designação" Variant=@variant Style="width: 300px;">
                                             <ChildContent>
                                                 <RadzenTextBox Name="Designação" @bind-Value="@artigo.designacao" Style="width: 500px;"/>
@@ -98,7 +99,7 @@
                                             </Helper>
                                         </RadzenFormField>
 
-                                        <RadzenButton ButtonType="ButtonType.Submit" Text="Add New" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Secondary" Style="width: 200px;" />
+                                        <RadzenButton ButtonType="ButtonType.Submit" Text="Add New" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Secondary" Style="width: 200px;"/>
                                     </RadzenStack>
                                 </RadzenTemplateForm>
                             </RadzenColumn>
@@ -111,6 +112,11 @@
                     <RadzenDataGridColumn TItem="artigoAux" Property="designacao" Title="designacao" Width="140px" />
                     <RadzenDataGridColumn TItem="artigoAux" Property="caracteristicas" Title="caracteristicas" />
                     <RadzenDataGridColumn TItem="artigoAux" Property="descricao" Title="descricao" />
+                    <RadzenDataGridColumn TItem="artigoAux" Context="artigo" Title="Item Photo" >
+                        <Template Context="artigo">
+                            <RadzenButton Icon="pageview" ButtonStyle="ButtonStyle.Light" Text="View Item Photo" Click="@(args => showItemPicture(artigo.picturePath))"/>
+                        </Template>
+                    </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="artigoAux" Width="50px">
                         <Template Context="artigo">
                             <RadzenButton Click="@(() => RemoverArtigo(@artigo.id))" Icon="delete" ButtonStyle="ButtonStyle.Danger" />
@@ -181,26 +187,47 @@
 
     class artigoAux
     {
-        @* public string? file { get; set; } *@
-        public string? filename { get; set;}
-        @* public long? fileSize { get; set;} *@
         public int id { get; set;}
         public string? designacao { get; set; }
         public string? caracteristicas { get; set; }
         public string? descricao { get; set; }
+        public string? picturePath { get; set; }
+        public string? uniqueID { get; set; }
 
         public artigoAux()
         {
-            filename = "";
             this.id = 0;
             this.designacao = "";
             this.caracteristicas = "";
             this.descricao = "";
+            this.uniqueID = Guid.NewGuid().ToString();
+            Console.Write(uniqueID);
+            this.picturePath = "";
         }
         
     }
-    leilaoAux leilao = new leilaoAux();
 
+    string extension = "";
+    
+    void UploadChange(UploadChangeEventArgs args)
+    {
+        if (args.Files.Count() > 0)
+        {
+            FileInfo _file = args.Files.Single();
+            if (_file.Size > (1024 * 1024 * 3)) // 3MB
+            {
+                upload.Error.InvokeAsync();
+                NotificationService.Notify(new NotificationMessage {Severity = NotificationSeverity.Error, Summary = "Invalid File Size.", Detail = "File Size must be less than 3MB."});
+            }
+            foreach (var file in args.Files)
+            {
+                extension = file.Name.Split(".")[1];
+            }
+        }
+    }
+    
+    leilaoAux leilao = new leilaoAux();
+    RadzenUpload upload;
     artigoAux artigo = new artigoAux();
 
     IEnumerable<artigoAux> listaArtigos = new List<artigoAux>();
@@ -210,6 +237,15 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+    }
+    
+    async Task showItemPicture(string picPath)
+    {
+        await DialogService.OpenAsync("Item Picture", ds => 
+                @<RadzenStack AlignItems="AlignItems.Center" Gap="2rm">
+                    <RadzenImage Path=@picPath AlternateText=@picPath Style="max-width: 500px"/>
+            </RadzenStack>, new DialogOptions() {CloseDialogOnOverlayClick = true, CloseDialogOnEsc = true, Style = "min-height:auto;min-width:auto;width:auto"}
+        );
     }
 
     void OnChange(int index)
@@ -254,11 +290,20 @@
         return categorias;
     }
 
-    private void OnClick()
+    private async void OnClick()
     {
+        if (!upload.HasValue)
+        {
+            NotificationService.Notify(new NotificationMessage {Severity = NotificationSeverity.Error, Summary = "Image Picture Required.", Detail = "Please Upload a Item Picture to Proceed."});
+            return;
+        }
+        await upload.Upload();
+        artigo.picturePath = "/ItemPictures/" + artigo.uniqueID + "-ItemPicture." + extension;
+        extension = "";
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Artigo adicionado com sucesso!" });
         adicionaListaArtigos();
         artigo = new artigoAux();
+        StateHasChanged();
     }
 
     private async void adicionaListaArtigos(){
@@ -269,6 +314,16 @@
     void RemoverArtigo(int id)
     {
         int i = 1;
+        artigoAux aux;
+        foreach (var artigo in listaArtigos)
+        {
+            if (artigo.id == id)
+            {
+                aux = artigo;
+                break;
+            }
+        }
+        
         listaArtigos = listaArtigos.Where(artigo => artigo.id != id).ToList();
 
         foreach (artigoAux a in listaArtigos) {
@@ -288,7 +343,8 @@
             string designacao = a.designacao;
             string caracteristicas = a.caracteristicas;
             string descricao = a.descricao;
-            Artigo aux = new Artigo(id,designacao,caracteristicas,descricao,idLote);
+            string picturePath = a.picturePath;
+            Artigo aux = new Artigo(id,designacao,caracteristicas,descricao,idLote, picturePath);
             lArtigos.Add(aux);
         }
         

@@ -22,6 +22,8 @@ namespace leilum.LeilumLN
 
         // Leiloes
         public IEnumerable<Leilao> getLeiloesEmCurso();
+        public IEnumerable<Leilao> getLeiloesTerminados();
+        public IEnumerable<Leilao> getLeiloesPendentes();
         public IEnumerable<Leilao> getLeiloesPendentesPorCategoria(int categoria);
         public IEnumerable<Leilao> getLeiloesParticipados(string email);
         public IEnumerable<Leilao> getLeiloesCriados(string utilizadorEmail);
@@ -29,6 +31,8 @@ namespace leilum.LeilumLN
         public double getGastosTotaisUtilizador(string utilizadorEmail);
 
         public Categoria getCategoriaAvaliador(string email);
+
+        public void startAuction(int auctionId, int bvalue, int mvalue, int ovalue, string evaluator);
         
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 
@@ -56,5 +60,12 @@ namespace leilum.LeilumLN
 
         public void promoteUtilizador(Utilizador u, string categoria);
         public IEnumerable<Utilizador> getAllClientes();
+
+        public Dictionary<string, int> CalcularGastosPorMes(int ano);
+        public List<int> ObterAnosComLeiloes(IEnumerable<Leilao> leiloes);
+
+        public int getIdMetodoPagamento(string designacao);
+        public string getDesignacaoMetodoPagamento(int metodo);
+        public ICollection<string> getAllMetodoPagamentos();
     }
 }

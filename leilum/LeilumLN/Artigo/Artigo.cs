@@ -1,6 +1,8 @@
 namespace Leilum.LeilumLN.ArtigoLN{
 
-    public class Artigo{
+    public class Artigo
+    {
+        private string filepath = "";
         private int id_artigo;
         private string designacao;
         private string caracteristicas;
@@ -15,6 +17,15 @@ namespace Leilum.LeilumLN.ArtigoLN{
             this.descricao = descricao;
             this.lote_id = loteId;
         }
+        
+        public Artigo(int idArtigo, string designacao, string caracteristicas, string descricao, int loteId, string filePath){
+            this.id_artigo = idArtigo;
+            this.designacao = designacao;
+            this.caracteristicas = caracteristicas;
+            this.descricao = descricao;
+            this.lote_id = loteId;
+            this.filepath = filePath;
+        }
 
         public int getId_Artigo(){
             return id_artigo;
@@ -22,6 +33,16 @@ namespace Leilum.LeilumLN.ArtigoLN{
 
         public void setId_Artigo(int id){
             this.id_artigo = id;
+        }
+
+        public string getImagPath()
+        {
+            return this.filepath;
+        }
+
+        public void setImagPath(string imagPath)
+        {
+            this.filepath = imagPath;
         }
 
         public string getDesignacao(){

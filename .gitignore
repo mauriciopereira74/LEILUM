@@ -408,6 +408,7 @@ obj/
 /node_modules
 /wwwroot/node_modules
 /wwwroot/ProfilePictures/
+/wwwroot/ItemPictures/
 
 ### VisualStudioCode ###
 !.vscode/*.code-snippets

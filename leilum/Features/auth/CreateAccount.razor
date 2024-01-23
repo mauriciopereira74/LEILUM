@@ -44,8 +44,8 @@
                             
                             <RadzenFormField Text="Password" Variant="@variant">
                                 <ChildContent>
-                                    <RadzenTextBox Name="Password" @bind-Value="@user.password" Visible="@(!user.flag)"/>
-                                    <RadzenPassword Name="Password" @bind-Value="@user.password" Visible="@user.flag"/>
+                                    <RadzenTextBox Name="Password" @bind-Value="@user.password" Visible="@user.flag"/>
+                                    <RadzenPassword Name="Password" @bind-Value="@user.password" Visible="@(!user.flag)"/>
                                 </ChildContent>
                                 <Helper>
                                     <RadzenRequiredValidator Component="Password" Text="Required Field."/>
@@ -137,8 +137,8 @@
                             <RadzenButton ButtonType="ButtonType.Submit" Text="Register Account" />
                             <RadzenButton ButtonType="ButtonType.Button" Text="Login" Click="@(() => NavigateTo("/login"))"></RadzenButton>
                         </RadzenStack>
-                     </RadzenTemplateForm>
-                    </RadzenColumn>
+                    </RadzenTemplateForm>
+                </RadzenColumn>
             </RadzenRow>
         </div>
     </RadzenColumn>
@@ -206,11 +206,8 @@
             extension = file.Name.Split(".")[1];
         }
     }
-    
-    ICollection<string> payMethod = new List<string>()
-    {
-        "Check", "Bank Transfer", "Cash"
-    };
+
+    ICollection<string> payMethod;
 
     bool validNif(int nif)
     {
@@ -256,49 +253,39 @@
 
     protected override async Task OnInitializedAsync()
     {
+        payMethod = leilumF.getAllMetodoPagamentos();
         await base.OnInitializedAsync();
     }
     
     private async void register()
-    { 
-            switch (this.user.auxPay)
-            {
-                case "Check":
-                    this.user.pay = configGerais.Check;
-                    break;
-                case "Bank Transfer":
-                    this.user.pay = configGerais.BankTransfer;
-                    break;
-                case "Cash":
-                    this.user.pay = configGerais.Cash;
-                    break;
-            }
-            Console.WriteLine("Register Account - Email: " + this.user.email + "; Password: " + this.user.password + "; Picture: " + this.user.filename + " NIF: " + this.user.nif + "; Name: " + this.user.name + "; Address: " + this.user.address + "; Nacionality: " + this.user.nationality + "; contact: " + this.user.contact + "; Birth: " + this.user.birth + "; pay: " + this.user.pay + "; iban: " + this.user.iban);
+    {
+        user.pay = leilumF.getIdMetodoPagamento(user.auxPay);
+        Console.WriteLine("Register Account - Email: " + this.user.email + "; Password: " + this.user.password + "; Picture: " + this.user.filename + " NIF: " + this.user.nif + "; Name: " + this.user.name + "; Address: " + this.user.address + "; Nacionality: " + this.user.nationality + "; contact: " + this.user.contact + "; Birth: " + this.user.birth + "; pay: " + this.user.pay + "; iban: " + this.user.iban);
             
-            if (upload.HasValue)
-            {
-                await upload.Upload();
-                user.filename = "/ProfilePictures/" + user.nif + "-ProfilePic." + extension;
-            }
-            else
-            {
-                user.filename = "/images/user-profilePicture.jpg";
-            }
-            
-            Utilizador userNew = new Utilizador(this.user.email,this.user.password,1,this.user.filename,this.user.nif,this.user.name,this.user.address,this.user.nationality,this.user.contact,this.user.birth,this.user.pay,this.user.iban);
-    
-            if(!leilumF.existsEmail(userNew.getEmail())){
-                leilumF.adicionaConta(userNew);
-                var customAuthStateProvider = (AuthStateProvider)authStateProvider;
-                    await customAuthStateProvider.UpdateAuthenticationState(new UserSession
-                    {
-                        email = userNew.getEmail(),
-                        tipo = userNew.getTipoUtilizador().ToString()
-                    });
-                    CurrentUser.setCurrentUser(userNew);
-                    NavigationManager.NavigateTo("/welcome", true);
-            }
+        if (upload.HasValue)
+        {
+            await upload.Upload();
+            user.filename = "/ProfilePictures/" + user.nif + "-ProfilePic." + extension;
         }
+        else
+        {
+            user.filename = "/images/user-profilePicture.jpg";
+        }
+            
+        Utilizador userNew = new Utilizador(this.user.email,this.user.password,1,this.user.filename,this.user.nif,this.user.name,this.user.address,this.user.nationality,this.user.contact,this.user.birth,this.user.pay,this.user.iban);
+    
+        if(!leilumF.existsEmail(userNew.getEmail())){
+            leilumF.adicionaConta(userNew);
+            var customAuthStateProvider = (AuthStateProvider)authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+            {
+                email = userNew.getEmail(),
+                tipo = userNew.getTipoUtilizador().ToString()
+            });
+            CurrentUser.setCurrentUser(userNew);
+            NavigationManager.NavigateTo("/", true);
+        }
+    }
 
     private async void invalidSubmit()
     {
