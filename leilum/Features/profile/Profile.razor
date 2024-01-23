@@ -3,7 +3,6 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject NotificationService NotificationService
 
-@using leilum.Data;
 
 <PageTitle>Profile</PageTitle>
 
@@ -46,21 +45,7 @@
                             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>NIF (Tax Number)</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getContribuinte()</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Payment Method</b></RadzenText>
-                            @if (currentUser.getMetodoPagamento() == configGerais.Check)
-                            {
-                                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Check</b></RadzenText>
-                            }
-
-                            @if (currentUser.getMetodoPagamento() == configGerais.BankTransfer)
-                            {
-                                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Bank Transfer</b></RadzenText>
-                            }
-
-                            @if (currentUser.getMetodoPagamento() == configGerais.Cash)
-                            {
-                                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Cash</b></RadzenText>
-                            }
-
+                            <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@auxpay</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>IBAN (International Bank Account Number)</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getIban()</b></RadzenText>
                         }
@@ -237,10 +222,7 @@
     string? newIban;
 
     bool isPassVisible = false;
-    ICollection<string> payMethod = new List<string>()
-    {
-        "Check", "Bank Transfer", "Cash"
-    };
+    ICollection<string> payMethod;
     
     void UploadChange(UploadChangeEventArgs args)
     {
@@ -285,6 +267,7 @@
     protected override async Task OnInitializedAsync()
     {
         currentUser = CurrentUser.getCurrentUser();
+        payMethod = leilumF.getAllMetodoPagamentos();
         
         if (currentUser != null)
         {
@@ -297,6 +280,7 @@
             newNif = currentUser.getContribuinte();
             newPag = currentUser.getMetodoPagamento();
             newIban = currentUser.getIban();
+            auxpay = leilumF.getDesignacaoMetodoPagamento(currentUser.getMetodoPagamento());
         }
 
         await Task.Delay(1000);
@@ -305,19 +289,7 @@
 
     async void SaveChanges()
     {
-        switch (auxpay)
-        {
-            case "Check":
-                newPag = configGerais.Check;
-                break;
-            case "Bank Transfer":
-                newPag = configGerais.BankTransfer;
-                break;
-            case "Cash":
-                newPag = configGerais.Cash;
-                break;
-        }
-        
+        newPag = leilumF.getIdMetodoPagamento(auxpay);
         if (upload.HasValue)
         {
             await upload.Upload();

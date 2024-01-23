@@ -170,5 +170,20 @@ namespace leilum.LeilumLN
             this.db.adicionaNotificacao(notificacao);
         }
 
+        public ICollection<string> getAllMetodoPagamentos()
+        {
+            return this.db.getListMetodoPagamento();
+        }
+
+        public string getDesignacaoMetodoPagamento(int metodo)
+        {
+            return db.getDesignacaoMetodoPagamento(metodo);
+        }
+
+        public int getIdMetodoPagamento(string designacao)
+        {
+            return db.getIdMetodoPagamentoByDesignacao(designacao);
+        }
+
     }
 }

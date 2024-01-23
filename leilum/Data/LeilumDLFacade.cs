@@ -876,5 +876,89 @@ namespace Leilum.Data
             this.notificacaoDao.put(notificacao);
         }
 
+        public ICollection<string> getListMetodoPagamento()
+        {
+            ICollection<string> list = new List<string>();
+            string sql_cmd = "SELECT Designacao FROM MetodoPagamento";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd,con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                list.Add(Convert.ToString(reader["Designacao"]));
+                            }
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getListMetodoPagamento: " + e.Message);
+            }
+        }
+
+        public string getDesignacaoMetodoPagamento(int metodo)
+        {
+            string result = "";
+            string sql_cmd = $"SELECT Designacao FROM MetodoPagamento WHERE Metodo = {metodo}";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd,con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result = Convert.ToString(reader["Designacao"]);
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getDesignacaoMetodoPagamento: " + e.Message);
+            }
+        }
+
+        public int getIdMetodoPagamentoByDesignacao(string designacao)
+        {
+            int result = -1;
+            string sql_cmd = $"SELECT Metodo FROM MetodoPagamento WHERE Designacao = '{designacao}'";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd,con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result = Convert.ToInt32(reader["Metodo"]);
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getDesignacaoMetodoPagamento: " + e.Message);
+            }
+        }
+
     }
 }

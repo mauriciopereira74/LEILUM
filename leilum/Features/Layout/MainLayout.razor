@@ -5,7 +5,7 @@
 
 <RadzenLayout>
     <RadzenHeader class="custom-header">
-       <div class="header-content">
+        <div class="header-content">
             <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
             <RadzenLabel>
                 <div>
@@ -50,15 +50,17 @@
                     <RadzenPanelMenuItem Text="History" Icon="history" Click="@(() => NavigateTo("/history"))"/>
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
                     <RadzenPanelMenuItem Text="Create an Auction" Icon="gavel" Click="@(() => NavigateTo("/create-auction"))"/>
-                    <RadzenPanelMenuItem Text="Promote User" Icon="badge" Click="@(() => NavigateTo("/promoteUser"))" />
-                    <RadzenPanelMenuItem Text="Evaluate Auctions" Icon="assignment_turned_in" Click="@(() => NavigateTo("/EvaluateAuction"))"/>
-                    <RadzenPanelMenuItem Text="General Statistics" Icon="query_stats" Click="@(() => NavigateTo("/statistics"))"/>
-
-                    @* @if (currentUser.getTipoUtilizador() != configGerais.Utilizador) *@
-                    @* { *@
-                    @*     <RadzenPanelMenuItem Text="Evaluate Auctions" Icon="assignment_turned_in" Click="@(() => NavigateTo("/EvaluateAuction"))"/> *@
-                    @* } *@
-
+                    
+                    @if (currentUser.getTipoUtilizador() == configGerais.Avaliador || currentUser.getTipoUtilizador() == configGerais.Admin)
+                    {
+                        <RadzenPanelMenuItem Text="Evaluate Auctions" Icon="assignment_turned_in" Click="@(() => NavigateTo("/EvaluateAuction"))"/>
+                    }
+                    
+                    @if (currentUser.getTipoUtilizador() == configGerais.Admin)
+                    {
+                        <RadzenPanelMenuItem Text="Promote User" Icon="badge" Click="@(() => NavigateTo("/promoteUser"))" />
+                        <RadzenPanelMenuItem Text="General Statistics" Icon="query_stats" Click="@(() => NavigateTo("/statistics"))"/>
+                    }
                 </Authorized>
                 <NotAuthorized>
                     <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/"))"/>
@@ -121,7 +123,7 @@
     {
         navManager.NavigateTo(url);
     }
-
+    
     public async void ProfileMenu(RadzenProfileMenuItem item)
     {   
         if(item.Text.Equals("Logout")){

@@ -54,5 +54,10 @@ namespace leilum.LeilumLN
 
         public void promoteUtilizador(Utilizador u, string categoria);
         public IEnumerable<Utilizador> getAllClientes();
+
+        public int getIdMetodoPagamento(string designacao);
+        public string getDesignacaoMetodoPagamento(int metodo);
+        public ICollection<string> getAllMetodoPagamentos();
+
     }
 }

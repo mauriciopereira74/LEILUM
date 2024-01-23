@@ -10,7 +10,7 @@
 <style>
     h4 {
             text-align: center;
-            font-size: 24px; /* Ajuste o tamanho da fonte conforme necessário */
+            font-size: 24px;
             font-weight: bold;
     }
 </style>
@@ -111,7 +111,7 @@
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Artigo" Context="artigo" Title="Photo" >
                             <Template Context="artigo">
-                                <RadzenButton Icon="pageview" ButtonStyle="ButtonStyle.Light" Text="View Item Photo" Click="@(args => showItemPicture(artigo.getDescricao()))"/>
+                                <RadzenButton Icon="pageview" ButtonStyle="ButtonStyle.Light" Text="View Item Photo" Click="@(args => showItemPicture(artigo.getImagPath()))"/>
                             </Template>
                         </RadzenDataGridColumn>
                     </Columns>
@@ -138,7 +138,7 @@
 {
     int position = 1;
     ILeilumLN leilumLn = new LeilumLNFacade();
-    IEnumerable<Leilao> auctionList;
+    IEnumerable<Leilao> auctionList = new List<Leilao>();
     Utilizador user;
     Categoria categoria;
     IList<Leilao> selectedAuction = new List<Leilao>();
@@ -150,7 +150,7 @@
     {
         await DialogService.OpenAsync("Item Picture", ds => 
                 @<RadzenStack AlignItems="AlignItems.Center" Gap="2rm">
-                    <RadzenImage Path="/ProfilePictures/111222334-ProfilePic.jpg" AlternateText="ERROR 404: Image Not Found." Style="max-width: 500px"/>
+                    <RadzenImage Path=@picPath AlternateText=@picPath Style="max-width: 500px"/>
             </RadzenStack>, new DialogOptions() {CloseDialogOnOverlayClick = true, CloseDialogOnEsc = true, Style = "min-height:auto;min-width:auto;width:auto"}
         );
     }

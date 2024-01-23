@@ -64,5 +64,9 @@ namespace Leilum.Data
         public void setCategoriaAvaliador(string email, int categoria);
         public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador);
         public void adicionaNotificacao(Notificacao notificacao);
+
+        public int getIdMetodoPagamentoByDesignacao(string designacao);
+        public string getDesignacaoMetodoPagamento(int metodo);
+        public ICollection<string> getListMetodoPagamento();
     }
 }
