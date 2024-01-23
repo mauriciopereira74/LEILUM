@@ -1,2 +1,202 @@
 @page "/statisticsAdminUser"
+@using System.Globalization
+
+<PageTitle>Statistics User by Admin</PageTitle>
+
+@if (u != null) {
+
+<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="1rem" Class="rz-p-4">
+    <RadzenImage Path="@u.getFotoPerfil()" Style="width: 100px; height: 100px; border-radius: 50%;" />
+    <RadzenStack Gap="0" Style="text-align: center; margin-top: -10px;">
+        <RadzenText TextStyle="TextStyle.Body1">
+            <b>@u.getNome()</b>
+        </RadzenText>
+    </RadzenStack>
+</RadzenStack>
+}
+else{
+    <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="1rem" Class="rz-p-4">
+    <img class="profile-image" src="/images/user-profilePicture.jpg" alt="avatar" Style="width: 100px; height: 100px; border-radius: 50%;" />
+    <RadzenStack Gap="0" Style="text-align: center; margin-top: -10px;">
+    </RadzenStack>
+</RadzenStack>
+}
+
+<div class="rz-p-sm-12 rz-text-align-center">
+    <RadzenLabel Text="Select User" Component="DropDownVirtualization" Style="margin-right: 8px; vertical-align: middle;" />
+    <RadzenDropDown AllowClear="true" @bind-Value=user AllowVirtualization="true" Name="DropDownVirtualization"
+        AllowFiltering="true" Data=@emails Style="width: 100%; max-width: 400px;" />
+    <RadzenButton Click=@(args => verifica()) Text="Search" ButtonStyle="ButtonStyle.Primary" />
+</div>
+
+@if (u != null){
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" class="rz-align-items-center" style="margin-left: 20px;">
+    <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="@gap">
+        <RadzenColumn Size="3" class="rz-background-color-info-lighter rz-text-align-center rz-p-2" style="height: 100px; width: 200px; border-radius: 10px;">
+            Auctions Participated
+            <div style="margin-top: 5px; text-align: center;">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-font-weight-bold" style="color: #000; font-size: 35px;"><b>@leiloesParticipados(u.getEmail())</b></RadzenText>
+            </div>
+        </RadzenColumn>
+        <RadzenColumn Size="3" class="rz-background-color-success-lighter rz-text-align-center rz-p-2" style="height: 100px; width: 200px; border-radius: 10px;">
+            Auctions Created
+            <div style="margin-top: 5px; text-align: center;">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-font-weight-bold" style="color: #000; font-size: 35px;"><b>@leiloesCriados(u.getEmail())</b></RadzenText>
+            </div>
+        </RadzenColumn>
+        <RadzenColumn Size="3" class="rz-background-color-warning-lighter rz-text-align-center rz-p-2" style="height: 100px; width: 200px; border-radius: 10px;">
+            Auctions Won
+            <div style="margin-top: 5px; text-align: center;">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-font-weight-bold" style="color: #000; font-size: 35px;"><b>@leiloesGanhos(u.getEmail())</b></RadzenText>
+            </div>
+        </RadzenColumn>
+        <RadzenColumn Size="3" class="rz-background-color-danger-lighter rz-text-align-center rz-p-2" style="height: 100px; width: 200px; border-radius: 10px;">
+            Amount Spent
+            <div style="margin-top: 5px; text-align: center;">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-font-weight-bold" style="color: #000; font-size: 35px;"><b>@($"{String.Format(new System.Globalization.CultureInfo("pt-PT"), "{0:C}", gastosTotais(u.getEmail()))}")</b> </RadzenText>
+            @* <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000; font-size: 35px;"><b>@gastosTotais(u.getEmail())$</b></RadzenText> *@
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenStack>
+
+
+
+<div class="container" style="margin-top: 10px;">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4>Amount Spent By Month</h4>
+            <RadzenChart>
+                @foreach(var parChaveValor in getGastosAnos(u.getEmail())){
+                    <RadzenStackedColumnSeries Data="@parChaveValor.Value" CategoryProperty="Mes" Title="@parChaveValor.Key" LineType="LineType.Dashed" ValueProperty="gastos" />
+                }
+                <RadzenColumnOptions Radius="5" />
+                <RadzenValueAxis Formatter="@FormatAsEUR">
+                    <RadzenGridLines Visible="true" />
+                    <RadzenAxisTitle Text="Revenue" />
+                </RadzenValueAxis>
+            </RadzenChart>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+}
+
+<style>
+.rz-align-items-center {
+    margin: auto;
+}
+</style>
+
+@code{
+
+    class DataItem
+    {
+        public string Mes { get; set; }
+        public double gastos { get; set; }
+    }
+
+    Dictionary<string, DataItem[]> gastosAno;
+
+    AlignItems alignItems = AlignItems.Center;
+    JustifyContent justifyContent = JustifyContent.Center;
+    string gap = "1rem";
+
+    string user;
+
+    ILeilumLN ln = new LeilumLNFacade();
+
+    IEnumerable<String> emails;
+
+    Utilizador u;
+
+    public IEnumerable<string> converterParaEmails(IEnumerable<Utilizador> utilizadores)
+    {
+        // Utilizando LINQ para projetar apenas os emails
+        return utilizadores.Select(u => u.getEmail());
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        emails = converterParaEmails(ln.getAllUtilizadores());
+
+        await base.OnInitializedAsync();
+
+    }
+
+    public void verifica(){
+        u = ln.getUtilizadorWithEmail(user);
+        @* Console.WriteLine("Email: " + u.getEmail()); *@
+    }
+
+    public int leiloesParticipados(string email){
+        return this.ln.getLeiloesParticipados(email).Count();
+    }
+
+    public int leiloesCriados(string email){
+        return this.ln.getLeiloesCriados(email).Count();
+    }
+
+    public int leiloesGanhos(string email){
+        return this.ln.getLeiloesGanhos(email).Count();
+    }
+
+    public double gastosTotais(string email){
+        return this.ln.getGastosTotaisUtilizador(email);
+    }
+
+    string FormatAsEUR(object value)
+    {
+        return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("pt-PT"));
+    }
+
+    private Dictionary<string, DataItem[]> getGastosAnos(string email){
+
+        string novaCultura = "en-US";
+
+        // Mude a cultura atual
+        CultureInfo novaCultureInfo = new CultureInfo(novaCultura);
+        CultureInfo.CurrentCulture = novaCultureInfo;
+        CultureInfo.CurrentUICulture = novaCultureInfo;
+
+        IEnumerable<Leilao> leiloesGanhos = ln.getLeiloesGanhos(email);
+
+        gastosAno = new Dictionary<string, DataItem[]>();
+
+        foreach (Leilao leilao in leiloesGanhos){
+            int ano = leilao.getDataFinal().Year;
+
+            int mes = leilao.getDataFinal().Month;
+
+            double valor = leilao.getvalorAtual();
+
+
+            string variavel = "Ano" + ano;
+            
+
+            if (!gastosAno.ContainsKey(variavel)){
+                gastosAno[variavel] = new DataItem[11];
+
+                for (int i = 0; i < 11; i++)
+                {
+                    gastosAno[variavel][i] = new DataItem(); // Certifique-se de que DataItem tenha um construtor padrão
+                    gastosAno[variavel][i].Mes = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i+1);
+                    gastosAno[variavel][i].gastos = 0;
+                }
+            }
+
+            gastosAno[variavel][mes - 1].gastos += valor;
+
+        }
+
+        return gastosAno;
+    }
+
+}
 
