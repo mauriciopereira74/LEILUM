@@ -18,7 +18,7 @@
         <div class="header-content">
             <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
             <RadzenLabel>
-                <div>
+                <div style="margin-left: 150px;">
                     <img src="/images/logo.png" alt="logo" />
                 </div>
             </RadzenLabel>
@@ -51,12 +51,12 @@
             </RadzenProfileMenu>
         </div>
     </RadzenHeader>
-    <RadzenSidebar Responsive="false" Style="width: max-content">
-        <RadzenPanelMenu DisplayStyle="@(sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
+    <RadzenSidebar Responsive="false" Style="width: 150px;">
+        <RadzenPanelMenu DisplayStyle="@(sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false" IconSize="small">
             <AuthorizeView>
                 <Authorized>
                     <RadzenPanelMenuItem Text="Active Aucions" Icon="home" Click="@(() => NavigateTo("/"))"/>
-                    <RadzenPanelMenuItem Text="Recomended Auctions" Icon="grade" Click="@(() => NavigateTo("/recommended"))"/>
+                    <RadzenPanelMenuItem Text="Recomended  Auctions" Icon="grade" Click="@(() => NavigateTo("/recommended"))"/>
                     <RadzenPanelMenuItem Text="History" Icon="history" Click="@(() => NavigateTo("/history"))"/>
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
                     <RadzenPanelMenuItem Text="Create an Auction" Icon="gavel" Click="@(() => NavigateTo("/create-auction"))"/>

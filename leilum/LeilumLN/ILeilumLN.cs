@@ -28,6 +28,7 @@ namespace leilum.LeilumLN
         public IEnumerable<Leilao> getLeiloesParticipados(string email);
         public IEnumerable<Leilao> getLeiloesCriados(string utilizadorEmail);
         public IEnumerable<Leilao> getLeiloesGanhos(string utilizadorEmail);
+        public IEnumerable<Leilao> getLeiloesRecomendados(string utilizadorEmail);
         public double getGastosTotaisUtilizador(string utilizadorEmail);
 
         public Categoria getCategoriaAvaliador(string email);

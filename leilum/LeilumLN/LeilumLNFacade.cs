@@ -79,6 +79,10 @@ namespace leilum.LeilumLN
             return this.db.getLeiloesGanhos(utilizadorEmail);
         }
 
+        public IEnumerable<Leilao> getLeiloesRecomendados(string utilizadorEmail){
+            return this.db.getLeiloesRecomendados(utilizadorEmail);
+        }
+
         public double getGastosTotaisUtilizador(string utilizadorEmail)
         {
             return this.db.getGastosTotaisUtilizador(utilizadorEmail);

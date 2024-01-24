@@ -529,6 +529,29 @@ namespace Leilum.Data
             return leiloesGanhos;
         }
 
+        public IEnumerable<Leilao> getLeiloesRecomendados(string utilizadorEmail){
+            IEnumerable<Leilao> leiloesRecomendados = new HashSet<Leilao>();
+            IEnumerable<Leilao> leiloesParticipados = getLeiloesParticipados(utilizadorEmail);
+            IEnumerable<Leilao> leiloesEmCurso = getLeiloesEmCurso();
+            List<string> categorias = new List<string>();
+
+            foreach(Leilao leilao in leiloesParticipados){
+                Categoria categoria = leilao.getCategoria();
+                if(!categorias.Contains(categoria.getDesignacao())){
+                    categorias.Add(categoria.getDesignacao());
+                }
+            }
+
+            foreach(Leilao leilao1 in leiloesEmCurso){
+                Categoria categoria1 = leilao1.getCategoria();
+                if(categorias.Contains(categoria1.getDesignacao())){
+                    leiloesRecomendados = leiloesRecomendados.Append(leilao1);
+                }
+            }
+
+            return leiloesRecomendados;
+        }
+
         public double getGastosTotaisUtilizador(string utilizadorEmail){
             IEnumerable<Leilao> leiloesGanhos = getLeiloesGanhos(utilizadorEmail);
             double gastos = 0;

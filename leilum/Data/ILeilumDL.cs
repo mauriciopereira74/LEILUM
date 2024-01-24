@@ -59,6 +59,7 @@ namespace Leilum.Data
         public IEnumerable<Leilao> getLeiloesParticipados(string utilizadorEmail);
         public IEnumerable<Leilao> getLeiloesCriados(string utilizadorEmail);
         public IEnumerable<Leilao> getLeiloesGanhos(string utilizadorEmail);
+        public IEnumerable<Leilao> getLeiloesRecomendados(string utilizadorEmail);
         public double getGastosTotaisUtilizador(string utilizadorEmail);
         public IEnumerable<Leilao> getLeiloesTerminados();
         public IEnumerable<Leilao> getLeiloesPendentes();
