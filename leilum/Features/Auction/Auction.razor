@@ -63,7 +63,7 @@
                             <RadzenFormField Text="Your Bid" Variant="@variant">
                                 <ChildContent>
                                     <RadzenNumeric Disabled="@(!canBid())" @bind-Value="@ValorDoLance" Placeholder="Enter your bid" Style="width: 100%" Min="@Convert.ToDecimal(valorMinimoLance)"/>
-                                    <RadzenButton Disabled="@(!canBid())" ButtonType="ButtonType.Button" Text="Bid Now" Click="@(() => bid())" Style="width: 100%; height: 100%;" />
+                                    <RadzenButton class="btn-submit" Disabled="@(!canBid())" ButtonType="ButtonType.Button" Text="Bid Now" Click="@(() => bid())" Style="width: 100%; height: 100%;" />
                                 </ChildContent>
                             </RadzenFormField>
                         }
@@ -72,7 +72,7 @@
             </RadzenColumn>
         </RadzenRow>
         <RadzenRow AlignItems="AlignItems.Center">
-            <RadzenButton ButtonType="ButtonType.Button" Text="Go Back" Click="@turnBack" Style="margin-top: 15px" />
+            <RadzenButton class="btn-submit" ButtonType="ButtonType.Button" Text="Go Back" Click="@turnBack" Style="margin-top: 15px" />
             <RadzenText Style="margin-top: 20px"><b>See Items information bellow.</b></RadzenText>
         </RadzenRow>
     </RadzenCard>
@@ -111,6 +111,12 @@ else
         background-color: #001F3F !important; /* Substitua pela cor desejada */
         color: white;
     }
+    
+        .btn-submit {
+                color: #fff; !important;
+                background-color: #00b477 !important;
+                border-color: #1861ac;
+        }
 </style>
 
 <script>

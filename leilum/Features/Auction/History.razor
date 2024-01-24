@@ -9,7 +9,7 @@
 <div class="container">
     <RadzenText TextStyle="TextStyle.H4" TextAlign="TextAlign.Center"><b>History</b></RadzenText>
 
-    @if (leiloes.Any())
+    @if (leiloes != null)
     {  
         <RadzenRow Gap="1rem" Style="margin-top: 20px; justify-content: space-between;">
             <RadzenColumn Size="2" SizeSM="2">
@@ -120,7 +120,7 @@
     Utilizador user;
     static ILeilumLN ln = new LeilumLNFacade();
     List<Leilao> list;
-    IEnumerable<Leilao> leiloes = new List<Leilao>();
+    IEnumerable<Leilao> leiloes;
     IEnumerable<Leilao> filteredLeiloes;
     IEnumerable<Leilao> leiloesParticipados;
     List<Categoria> categorias;
@@ -137,6 +137,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        user = CurrentUser.getCurrentUser();
         if (user != null)
         {
             list = ln.getLeiloesParticipados(user.getEmail()).ToList();
