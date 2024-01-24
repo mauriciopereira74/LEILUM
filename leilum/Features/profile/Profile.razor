@@ -3,6 +3,15 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject NotificationService NotificationService
 
+<style>
+    .custom-card {
+        background-color: #1e416c !important; /* Cor do cabeçalho */
+        color: white;
+    }
+    .custom-text {
+        color: #b4c2e8;
+    }
+</style>
 
 <PageTitle>Profile</PageTitle>
 
@@ -20,46 +29,46 @@
                     </RadzenText>
                 </RadzenStack>
             </RadzenStack>
-            <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+            <RadzenCard class="rz-shadow-0 rz-border-radius-0 rz-p-8 custom-card" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
                 <RadzenText TextStyle="TextStyle.H6" TextAlign="TextAlign.Center" class="rz-color-on-primary-light"><strong>Account Information</strong></RadzenText>
                 <RadzenRow RowGap="0">
                     <RadzenColumn SizeSM="12">
                         @if (!isEditMode)
                         {
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Email</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>Email</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getEmail()</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Password</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>Password</b></RadzenText>
                             <RadzenStack Orientation="Orientation.Horizontal">
                                 <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light" Text="@currentUser.getPassword()" Visible="@isPassVisible"/>
                                 <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light" Text="********" Visible="@(!isPassVisible)"/>
                                 <RadzenButton Icon="@(isPassVisible ? "visibility" : "visibility_off")" Click="passVisible" Style="color: #ffffff; outline: #000000;" Variant="Variant.Text" Size="ButtonSize.Small"/>
                             </RadzenStack>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Contact</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>Contact</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getContacto()</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Address</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>Address</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getMorada()</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Birth Date</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>Birth Date</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getDataNascimentoSTR()</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Nationality</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>Nationality</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getNacionalidade()</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>NIF (Tax Number)</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>NIF (Tax Number)</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getContribuinte()</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Payment Method</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>Payment Method</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@auxpay</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>IBAN (International Bank Account Number)</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="custom-text rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold"><b>IBAN (International Bank Account Number)</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@currentUser.getIban()</b></RadzenText>
                         }
                         else
                         {
                             <RadzenTemplateForm TItem="Utilizador" Data="@currentUser" Submit="@SaveChanges" InvalidSubmit="@invalidSubmit">
                                 <RadzenStack Orientation="Orientation.Vertical">
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Profile Picture</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>Profile Picture</b></RadzenText>
                                     <RadzenFormField Variant=@variant>
                                         <RadzenCard>
                                             <RadzenUpload Auto="false" Change="args => UploadChange(args)" @ref="upload" Accept="image/*" Url=@($"upload/{"ProfilePictures"}/{newNif + "-ProfilePic"}")></RadzenUpload>
                                         </RadzenCard>
                                     </RadzenFormField>
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Name</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>Name</b></RadzenText>
                                     <RadzenFormField Variant=@variant>
                                         <ChildContent>
                                             <RadzenTextBox Name="Name" @bind-Value="@newName"/>
@@ -69,7 +78,7 @@
                                         </Helper>
                                     </RadzenFormField>
                                     
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Password</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>Password</b></RadzenText>
                                     <RadzenFormField Variant="@variant">
                                         <ChildContent>
                                             <RadzenStack Orientation="Orientation.Horizontal">
@@ -85,7 +94,7 @@
                                             <RadzenButton Icon="@(isPassVisible ? "visibility" : "visibility_off")" Click="passVisible" Variant="Variant.Text" Size="ButtonSize.Small"/>
                                         </End>
                                     </RadzenFormField>
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Contact</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>Contact</b></RadzenText>
                                     <RadzenFormField Variant="@variant">
                                         <ChildContent>
                                             <RadzenTextBox Name="Contac" @bind-Value="@newContact"/>
@@ -95,7 +104,7 @@
                                             <RadzenRegexValidator Component="Contac" Pattern="^(\+\d{1,4}\s?)?(\d{9,15})$" Text="Insert a valid phone number."/>
                                         </Helper>
                                     </RadzenFormField>
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Address</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>Address</b></RadzenText>
                                     <RadzenFormField Variant=@variant>
                                         <ChildContent>
                                             <RadzenTextBox Name="Morada" @bind-Value="@newAddress"/>
@@ -104,7 +113,7 @@
                                             <RadzenRequiredValidator Component="Morada" Text="Required Field."/>
                                         </Helper>
                                     </RadzenFormField>
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Birth Date</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>Birth Date</b></RadzenText>
                                     <RadzenFormField Variant=@variant>
                                         <ChildContent>
                                             <RadzenDatePicker Name="DataNascimento" @bind-Value="@newDate" DateFormat="MM/dd/yyyy"/>
@@ -115,7 +124,7 @@
                                         </Helper>
                                     </RadzenFormField>
 
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Nacionality</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>Nacionality</b></RadzenText>
                                     <RadzenFormField Variant=@variant>
                                         <ChildContent>
                                             <RadzenTextBox Name="Nacionalidade" @bind-Value="@newNaci"/>
@@ -125,7 +134,7 @@
                                         </Helper>
                                     </RadzenFormField>
 
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>NIF (Tax Number)</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>NIF (Tax Number)</b></RadzenText>
                                     <RadzenFormField Variant=@variant>
                                         <ChildContent>
                                             <RadzenNumeric Name="NIF" ShowUpDown="false" @bind-Value=@newNif Placeholder="Enter or clear value" InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "Enter value" } })"/>
@@ -137,7 +146,7 @@
                                         </Helper>
                                     </RadzenFormField>
 
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Payment Method</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>Payment Method</b></RadzenText>
                                     <RadzenFormField Variant="@variant">
                                         <Start>
                                             <RadzenIcon Icon="credit_card"/>
@@ -150,7 +159,7 @@
                                         </Helper>
                                     </RadzenFormField>
 
-                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>IBAN (Internacional Bank Account Number)</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold custom-text"><b>IBAN (Internacional Bank Account Number)</b></RadzenText>
                                     <RadzenFormField Variant=@variant>
                                         <ChildContent>
                                             <RadzenTextBox Name="Bank" @bind-Value="@newIban"/>
@@ -159,7 +168,7 @@
                                             <RadzenRequiredValidator Component="Bank" Text="Required Field."/>
                                         </Helper>
                                     </RadzenFormField>
-                                    <RadzenButton ButtonType="ButtonType.Submit" Text="Submit Changes"/>
+                                    <RadzenButton Style="backgroud-color: #00b578 !important;" ButtonType="ButtonType.Submit" Text="Submit Changes"/>
                                 </RadzenStack>
                             </RadzenTemplateForm>
                         }

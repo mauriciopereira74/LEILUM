@@ -10,23 +10,23 @@
 
 <RadzenSteps Change=@OnChange>
     <Steps>
-        <RadzenStepsItem Text="Informações Leilão" Disabled = "@(currentStep > 199)">
-            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H3" class="rz-my-6">1. Preencha as Informações para continuar</RadzenText>
+        <RadzenStepsItem Text="Auction Information" Disabled = "@(currentStep > 199)">
+            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H3" class="rz-my-6">1. Auction Informations</RadzenText>
             <RadzenRow Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 400px; overflow: hidden; background: var(--rz-primary-light);">
-                <RadzenColumn Size="12" SizeMD="6">
+                <RadzenColumn>
                     <div Class="rz-p-0 rz-p-md-12">
-                        <RadzenRow Gap="1rem">
-                            <RadzenColumn Size="12" SizeSM="10">
+                        <RadzenRow Gap="5px">
+                            <RadzenColumn>
                                 <RadzenTemplateForm TItem="leilaoAux" Data=@leilao>
                                     <RadzenStack>
-                                        
-                                        <RadzenFormField Text="Auction Picture" Variant=@variant>
-                                            <RadzenCard>
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000"><b>Auction Display Picture</b></RadzenText>
+                                        <RadzenFormField Variant=@variant>
+                                            <RadzenCard Style="max-width: 300px">
                                                 <RadzenUpload Auto="false" Change="args => UploadChangeLote(args)" @ref="uploadLote" Accept="image/*" Url=@($"upload/{"LotPictures"}/{loteUniqueID + "-LotPicture"}")></RadzenUpload>
                                             </RadzenCard>
                                         </RadzenFormField>
-
-                                        <RadzenFormField Text="Titulo" Variant=@variant Style="width: 300px;">
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000"><b>Auction Title</b></RadzenText>
+                                        <RadzenFormField Variant=@variant Style="width: 300px;">
                                             <ChildContent>
                                                 <RadzenTextBox Name="Titulo" @bind-Value="@leilao.titulo" Style="width: 500px;"/>
                                             </ChildContent>
@@ -34,18 +34,18 @@
                                                 <RadzenRequiredValidator Component="Titulo" Text="Required Field."/>
                                             </Helper>
                                         </RadzenFormField>
-
-                                        <RadzenFormField Text="Data Final" Variant=@variant Style="width: 300px;">
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000"><b>Closing Date</b></RadzenText>
+                                        <RadzenFormField Variant=@variant Style="width: 300px;">
                                             <ChildContent>
                                                 <RadzenDatePicker Name="Data Final" @bind-Value="@leilao.dataFinal" ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="MM/dd/yyyy HH:mm:ss"/>
                                             </ChildContent>
                                             <Helper>
                                                 <RadzenRequiredValidator Component="Data Final" Text="Required Field."/>
-                                                <RadzenCustomValidator Component="Data Final" Validator="@(() => validaDataFinal(leilao.dataFinal))" Text="Minimo 2 horas depois da hora atual" Popup=@leilao.dataVal/>
+                                                <RadzenCustomValidator Component="Data Final" Validator="@(() => validaDataFinal(leilao.dataFinal))" Text="At least 4 hours from now." Popup=@leilao.dataVal/>
                                             </Helper>
                                         </RadzenFormField>
-
-                                        <RadzenFormField Text="Categorias" Variant="@variant" Style="width: 300px;">
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000"><b>Category</b></RadzenText>
+                                        <RadzenFormField Variant="@variant" Style="width: 300px;">
                                             <Start>
                                                 <RadzenIcon Icon="folder_open"/>
                                             </Start>
@@ -64,22 +64,30 @@
                     </div>
                 </RadzenColumn>
             </RadzenRow>
+            <RadzenStack AlignItems="AlignItems.End">
+                <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.Caption" Text="Keep in mint that your auction can be up to 2 hours to be Evaluated."/>
+            </RadzenStack>
+            
         </RadzenStepsItem>
-        <RadzenStepsItem Text="Artigos" Disabled="@(leilao.titulo == "" || leilao.dataFinal <= DateTime.Now.AddHours(2) || leilao.Categoria == "" || currentStep > 199 || !verifyLotPicSent())">
-            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H3" class="rz-my-6">2. Adicione os artigos para continuar</RadzenText>
+        <RadzenStepsItem Text="Auction Items" Disabled="@(leilao.titulo == "" || leilao.dataFinal <= DateTime.Now.AddHours(2) || leilao.Categoria == "" || currentStep > 199 || !verifyLotPicSent())">
+            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H3" class="rz-my-6">2. Auction Items</RadzenText>
             <RadzenRow Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 400px; overflow: hidden; background: var(--rz-primary-light);">
                 <RadzenColumn Size="12" SizeMD="6">
                     <div Class="rz-p-0 rz-p-md-12">
-                        <RadzenRow Gap="1rem">
-                            <RadzenColumn Size="12" SizeSM="10">
+                        <RadzenRow Gap="5px">
+                            <RadzenColumn>
                                 <RadzenTemplateForm TItem="artigoAux" Data=@artigo Submit="@OnClick">
                                     <RadzenStack>
-                                        <RadzenFormField Text="Item Picture" Variant=@variant>
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000"><b>Item Picture</b></RadzenText>
+
+                                        <RadzenFormField Variant=@variant Style="width: 300px;">
                                             <RadzenCard>
                                                 <RadzenUpload Name="ItemPic" Auto="false" Change="args => UploadChange(args)" @ref="upload" Accept="image/*" Url=@($"upload/{"ItemPictures"}/{artigo.uniqueID + "-ItemPicture"}")></RadzenUpload>
                                             </RadzenCard>
                                         </RadzenFormField>
-                                        <RadzenFormField Text="Designação" Variant=@variant Style="width: 300px;">
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000"><b>Item Name</b></RadzenText>
+
+                                        <RadzenFormField Variant=@variant Style="width: 300px;">
                                             <ChildContent>
                                                 <RadzenTextBox Name="Designação" @bind-Value="@artigo.designacao" Style="width: 500px;"/>
                                             </ChildContent>
@@ -87,8 +95,9 @@
                                                 <RadzenRequiredValidator Component="Designação" Text="Required Field."/>
                                             </Helper>
                                         </RadzenFormField>
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000"><b>Item Characteristics</b></RadzenText>
 
-                                        <RadzenFormField Text="Caracteristicas" Variant=@variant Style="width: 300px;">
+                                        <RadzenFormField Variant=@variant Style="width: 300px;">
                                             <ChildContent>
                                                 <RadzenTextBox Name="Caracteristicas" @bind-Value="@artigo.caracteristicas" Style="width: 500px;"/>
                                             </ChildContent>
@@ -96,8 +105,9 @@
                                                 <RadzenRequiredValidator Component="Caracteristicas" Text="Required Field."/>
                                             </Helper>
                                         </RadzenFormField>
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000"><b>Item Description</b></RadzenText>
 
-                                        <RadzenFormField Text="Descrição" Variant=@variant Style="width: 300px;">
+                                        <RadzenFormField Variant=@variant Style="width: 300px;">
                                             <ChildContent>
                                                 <RadzenTextBox Name="Descrição" @bind-Value="@artigo.descricao" Style="width: 500px;"/>
                                             </ChildContent>
@@ -116,15 +126,15 @@
             </RadzenRow>
             <RadzenDataGrid ColumnWidth="200px" Data="@listaArtigos" TItem="artigoAux">
                 <Columns>
-                    <RadzenDataGridColumn TItem="artigoAux" Property="designacao" Title="designacao" Width="140px" />
-                    <RadzenDataGridColumn TItem="artigoAux" Property="caracteristicas" Title="caracteristicas" />
-                    <RadzenDataGridColumn TItem="artigoAux" Property="descricao" Title="descricao" />
+                    <RadzenDataGridColumn TItem="artigoAux" Property="designacao" Title="Item Name" Width="140px" />
+                    <RadzenDataGridColumn TItem="artigoAux" Property="caracteristicas" Title="Item Characterists" />
+                    <RadzenDataGridColumn TItem="artigoAux" Property="descricao" Title="Item Description" />
                     <RadzenDataGridColumn TItem="artigoAux" Context="artigo" Title="Item Photo" >
                         <Template Context="artigo">
                             <RadzenButton Icon="pageview" ButtonStyle="ButtonStyle.Light" Text="View Item Photo" Click="@(args => showItemPicture(artigo.picturePath))"/>
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="artigoAux" Width="50px">
+                    <RadzenDataGridColumn Title="Remove" TItem="artigoAux" Width="65px">
                         <Template Context="artigo">
                             <RadzenButton Click="@(() => RemoverArtigo(@artigo.id))" Icon="delete" ButtonStyle="ButtonStyle.Danger" />
                         </Template>
@@ -132,8 +142,8 @@
                 </Columns>
             </RadzenDataGrid>
         </RadzenStepsItem>
-        <RadzenStepsItem Text="Detalhes do Leilão" Disabled="@(listaArtigos.Count() == 0 || currentStep > 199)" NextText="Create" >
-            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H3" class="rz-my-6">Detalhes Finais do Leilão</RadzenText>
+        <RadzenStepsItem Text="Auction Summary" Disabled="@(listaArtigos.Count() == 0 || currentStep > 199)" NextText="Create" >
+            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H3" class="rz-my-6">Auction Summary</RadzenText>
             <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-p-8" style="width: 500px; margin: auto; border-radius: 30px; margin-bottom: 40px;">
                 <RadzenText TextStyle="TextStyle.H6" TextAlign="TextAlign.Center" class="rz-color-on-primary-light"><strong>Auction Information</strong></RadzenText>
                 <RadzenRow RowGap="0">
@@ -142,28 +152,22 @@
                         <RadzenStack AlignItems="AlignItems.Center" Style="margin-top: 10px">
                             <RadzenImage Path="@imagPathLote" Style="max-width: 400px; max-height: 400px"/>
                         </RadzenStack>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Título</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Title</b></RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@leilao.titulo</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Categoria</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Category</b></RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@leilao.Categoria</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Data Final</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Closing Date</b></RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@leilao.dataFinal.ToString()</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Comitente</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Auctioneer</b></RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@CurrentUser.getCurrentUser().getEmail()</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Valor Abertura</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"> <b>Espera avaliação de um avaliador.</b> </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Valor Base</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"> <b>Espera avaliação de um avaliador.</b> </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;">Valor Minimo</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"> <b>Espera avaliação de um avaliador. </b> </RadzenText>
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenCard>
             <RadzenDataGrid ColumnWidth="200px" Data="@listaArtigos" TItem="artigoAux">
                 <Columns>
-                    <RadzenDataGridColumn TItem="artigoAux" Property="designacao" Title="Designacão" Width="140px" />
-                    <RadzenDataGridColumn TItem="artigoAux" Property="caracteristicas" Title="Características" />
-                    <RadzenDataGridColumn TItem="artigoAux" Property="descricao" Title="Descrição" />
+                    <RadzenDataGridColumn TItem="artigoAux" Property="designacao" Title="Item Name" Width="140px" />
+                    <RadzenDataGridColumn TItem="artigoAux" Property="caracteristicas" Title="Item Characteristics" />
+                    <RadzenDataGridColumn TItem="artigoAux" Property="descricao" Title="Item Description" />
                     <RadzenDataGridColumn TItem="artigoAux" Context="artigo" Title="Item Photo" >
                         <Template Context="artigo">
                             <RadzenButton Icon="pageview" ButtonStyle="ButtonStyle.Light" Text="View Item Photo" Click="@(args => showItemPicture(artigo.picturePath))"/>
@@ -338,9 +342,13 @@
         {
             DateTime dataAtual = DateTime.Now;
             
-            if (data >= dataAtual.AddHours(2))
+            if (data >= dataAtual.AddHours(4))
             {
                 return true;
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage {Severity = NotificationSeverity.Warning, Summary = "Your auction can take up to 2 hours to be evaluated", Detail = "Select a Date at least 4 hours from now."});
             }
         }
         return false;
@@ -431,8 +439,7 @@
         Leilao leilao = new Leilao(idLeilao,titulo,dataFinal,valorAbertura,valorBase,valorMinimo,valorAtual,2,null,user,lote,categoria);
 
         this.ln.adicionaLeilao(leilao);
-        this.ln.adicionaNotificacao(new Notificacao(user.getEmail(),"You Create the Auction" + " #" +leilao.getNrLeilao(), DateTime.Now));
+        this.ln.adicionaNotificacao(new Notificacao(user.getEmail(),"You Created the Auction with Title:" +leilao.getTitulo() + "(Auction #" + leilao.getNrLeilao() + ")", DateTime.Now));
 
     }
 }
-

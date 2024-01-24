@@ -13,6 +13,13 @@
             font-size: 24px;
             font-weight: bold;
     }
+    .custom-card {
+        background-color: #1e416c !important; /* Cor do cabeçalho */
+        color: white;
+    }
+    custom-text {
+            color: #b4c2e8;
+    }
 </style>
 
 <div class="container">
@@ -22,7 +29,7 @@
             <h4>Evaluate Auctions</h4>
             @if (auctionList.Count() > 0)
             {
-                <RadzenPanel Text="Pending Auctions to Evaluate" AllowCollapse="true" Class="rz-background-color-primary-light rz-shadow-0 rz-p-8 rz-mx-auto" Style="max-width: 850px; color: #ffffff; margin-bottom: 20px;">
+                <RadzenPanel AllowCollapse="true" Class="custom-card rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="max-width: 850px; color: #b4c2e8; margin-bottom: 20px;"><b>Pending Auctions to Evaluate</b>
                     <RadzenDataGrid AllowFiltering="false" AllowPaging="true" PageSize="4"
                                     AllowSorting="false" Data="@auctionList" TItem="Leilao" ColumnWidth="200px"
                                     SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedAuction Style="margin-top: 15px">
@@ -60,20 +67,25 @@
             {
                 <h4><b>Auction Details</b></h4>
                 @* <RadzenText TextStyle="TextStyle.H4" TextAlign="TextAlign.Center" class="rz-my-6"><b>Auction Details</b></RadzenText> *@
-                <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-p-8" style="max-width: 500px; margin: auto; border-radius: 30px; margin-bottom: 40px;">
+                <RadzenCard class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10 custom-card" style="background-color: #1e416c; color: #ffffff; max-width: 500px; margin: auto; border-radius: 30px; margin-bottom: 40px;">
+                    <RadzenStack AlignItems="AlignItems.Center" Style="margin-top: 10px">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #b4c2e8;"><b>Auction Picture</b></RadzenText>
+                        
+                        <RadzenImage Path="@selectedAuction.Single().getLote().getImagPath()" Style="max-width: 400px; max-height: 400px"/>
+                    </RadzenStack>
                     <RadzenRow RowGap="0" Gap="1rem">
                         <RadzenColumn>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Title</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #b4c2e8;"><b>Title</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@selectedAuction.Single().getTitulo()</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Category</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #b4c2e8;"><b>Category</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@selectedAuction.Single().getCategoria().Designacao</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Final Date</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #b4c2e8;"><b>Final Date</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@selectedAuction.Single().getDataFinal().ToString()</b></RadzenText>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Seller</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #b4c2e8;"><b>Seller</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@selectedAuction.Single().getComitente().getEmail()</b></RadzenText>
                         </RadzenColumn>
                         <RadzenColumn>
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #000;"><b>Base Value</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 rz-font-weight-bold" style="color: #b4c2e8;"><b>Base Value</b></RadzenText>
                             <RadzenTemplateForm TItem="double" Data="@bvalue" Submit="@trySybmit">
                                 <RadzenFormField Variant=@Variant.Outlined Style="margin-bottom: 10px">
                                     <ChildContent>
@@ -134,7 +146,6 @@
     </RadzenCard>
 </div>
 
-
 @code
 {
     int position = 1;
@@ -169,22 +180,22 @@
         await DialogService.OpenAsync("Reject Auction", ds =>
                 @<RadzenStack>
                     <RadzenTemplateForm TItem="string" Data="@rejectionMotive" Submit="reject">
-                                <RadzenText Text="Please write the Motive for the Rejection: "/>
-                                <RadzenFormField>
-                                    <ChildContent>
-                                        <RadzenTextArea Style="width: 350px; height: 100px" Name="Motive" Placeholder="Enter motive here..." @bind-Value="@rejectionMotive" MaxLength="500"/>
-                                    </ChildContent>
-                                    <Helper>
-                                        <RadzenRequiredValidator Component="Motive" Text="Motive Required." />
-                                    </Helper>
-                                </RadzenFormField>
-                                <RadzenStack AlignItems="AlignItems.Center">
-                                <RadzenRow Style="margin-top: 20px" AlignItems="AlignItems.Center">
-                                    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Warning" Text="Reject" Style="max-width: 200px"/>
-                                    <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Danger" Text="Cancel" Click="() => DialogService.Close()" Style="max-width: 200px"/>
-                                </RadzenRow>
-                                </RadzenStack>
-                    </RadzenTemplateForm>
+                        <RadzenText Text="Please write the Motive for the Rejection: "/>
+                        <RadzenFormField>
+                            <ChildContent>
+                                <RadzenTextArea Style="width: 350px; height: 100px" Name="Motive" Placeholder="Enter motive here..." @bind-Value="@rejectionMotive" MaxLength="500"/>
+                            </ChildContent>
+                            <Helper>
+                                <RadzenRequiredValidator Component="Motive" Text="Motive Required." />
+                            </Helper>
+                        </RadzenFormField>
+                        <RadzenStack AlignItems="AlignItems.Center">
+                            <RadzenRow Style="margin-top: 20px" AlignItems="AlignItems.Center">
+                                <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Warning" Text="Reject" Style="max-width: 200px"/>
+                                <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Danger" Text="Cancel" Click="() => DialogService.Close()" Style="max-width: 200px"/>
+            </RadzenRow>
+            </RadzenStack>
+            </RadzenTemplateForm>
             </RadzenStack>, new DialogOptions() {CloseDialogOnOverlayClick = true, CloseDialogOnEsc = true, Style="max-width: 400px"}
         );
     }
@@ -222,13 +233,15 @@
 
     private void submitEvaluation()
     {
-        this.leilumLn.startAuction(this.auctionList.Single().getNrLeilao(),bvalue, mvalue, ovalue, this.user.getEmail());
+        Leilao leilao = this.auctionList.Single();
+        this.leilumLn.startAuction(leilao.getNrLeilao(),bvalue, mvalue, ovalue, this.user.getEmail());
         bvalue = 0;
         mvalue = 0;
         ovalue = 0;
         this.auctionList = leilumLn.getLeiloesPendentesPorCategoria(categoria.getIdCategoria());
         this.selectedAuction.Clear();
         DialogService.Close();
+        leilumLn.adicionaNotificacao(new Notificacao(leilao.getComitente().getEmail(),"Your Auction Titled: " + leilao.getTitulo() + "(Auction #" + leilao.getNrLeilao() + ") was APPROVED.", DateTime.Now));
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Auction Evaluated Sucessfully!", Detail = "Auction initiated!" });
         StateHasChanged();
     }

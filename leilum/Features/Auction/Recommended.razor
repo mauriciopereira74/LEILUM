@@ -1,0 +1,268 @@
+@page "/recommended"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager;
+@using System.Timers
+
+<PageTitle>Recommended Auctions</PageTitle>
+
+
+<div class="container">
+    <RadzenText TextStyle="TextStyle.H4" TextAlign="TextAlign.Center"><b>Recommended Auctions NOT IMPLEMENTED!!!!!</b></RadzenText>
+
+    @if (leiloes.Any())
+    {  
+        <RadzenRow Gap="1rem" Style="margin-top: 20px; justify-content: space-between;">
+            <RadzenColumn Size="2" SizeSM="2">
+                <RadzenStack Style="border-radius: 10px; overflow: hidden;">
+                    <RadzenFormField Text="Search Title" Variant="@variant" Style="color:#999">
+                        <ChildContent>
+                            <RadzenTextBox @bind-Value="searchTerm" Placeholder="Search Title" Style="width: 100%" Change="FilterLeiloes" />
+                        </ChildContent>
+                    </RadzenFormField>
+                </RadzenStack>
+            </RadzenColumn>
+
+            <RadzenColumn Size="2" SizeSM="2">
+                <RadzenStack Style="border-radius: 10px; overflow: hidden;">
+                    <RadzenDropDown Data="@categorias" TextProperty="Designacao" ValueProperty="IdCategoria" @bind-Value="selectedCategoryId" Change="FilterLeiloesByCategory" Style="@(selectedCategoryId == 0 ? "color: #999; border: none; background: transparent;" : "border: none; background: transparent;")">
+                    </RadzenDropDown>
+                </RadzenStack>
+            </RadzenColumn>
+
+            <RadzenColumn Size="2" SizeSM="2">
+                <RadzenStack Style="border-radius: 10px; overflow: hidden;">
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Price Range</RadzenText>
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenNumeric @bind-Value="minPrice" Placeholder="Mínimo" Style="width: 100px;" Change="@((decimal value) => FilterLeiloesByPrice(value))" />
+                        <span style="margin: 0 0.5rem;">-</span>
+                        <RadzenNumeric @bind-Value="maxPrice" Placeholder="Máximo" Style="width: 100px;" Change="@((decimal value) => FilterLeiloesByPrice(value))" />
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenColumn>
+            <div style="color: black; font-size: 18px; margin-top: 10px; margin-left:auto;">
+                @filteredLeiloes.Count() Auctions
+            </div>
+        </RadzenRow>
+        <RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredLeiloes" TItem="Leilao">
+            <Template Context="leilao">
+                <RadzenCard class="custom-card-spacing rz-mx" Style="max-width: 290px; border-radius: 10%" @onclick="() => goTo(leilao.getNrLeilao())">
+                    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
+                        <RadzenImage Path="@leilao.getLote().getImagPath()" Style="width: 150px; height: 150px; border-radius: 10%" />
+                        <RadzenStack Gap="0" Style="text-align: center;">
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0 text-center">Title</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getTitulo()</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0 text-center">Category</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1"><b>@leilao.getCategoria().getDesignacao()</b></RadzenText>
+                        </RadzenStack>
+                        <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;" />
+                        <RadzenRow>
+                            @if (leilao.getEstado() == 1)
+                            {
+                                <RadzenColumn Size="9" Class="rz-text-truncate">
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Remaining Time</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body1"><b>@CalculateTimeRemaining(leilao.getDataFinal())</b></RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn Size="2" Class="rz-text-align-end">
+                                    <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Text=@($"{String.Format(new System.Globalization.CultureInfo("pt-PT"), "{0:C}", leilao.getvalorAtual())}")/>
+                                </RadzenColumn>
+                            }
+                            @if (leilao.getEstado() == 0)
+                            {
+                                @if (leilao.getLote().getComprador().getEmail().Equals(user.getEmail()))
+                                {
+                                    <RadzenBadge BadgeStyle="BadgeStyle.Success">You won this Auction!</RadzenBadge>
+                                }
+                                else
+                                {
+                                    <RadzenBadge BadgeStyle="BadgeStyle.Danger">Auction Sold</RadzenBadge>
+                                }
+                            }
+                        </RadzenRow>
+                    </RadzenStack>
+                </RadzenCard>
+            </Template>
+        </RadzenDataList>
+    
+        <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageNumbersCount="5" PageChanged="@PageChanged" />
+    }
+    else
+    {
+        <RadzenCard>
+            <RadzenText TextAlign="TextAlign.Center" Text="You didn't participated in any Auction." />
+        </RadzenCard>
+    }
+</div>
+
+
+
+
+<style>
+  .text-center {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+</style>
+
+<style>
+.custom-card-spacing {
+    margin-bottom: 4px; /* Ou qualquer valor desejado para o espaçamento vertical */
+    margin-right: 2px;
+}
+</style>
+
+
+@code {
+    bool allowVirtualization;
+
+    Variant variant = Variant.Text;
+
+    Utilizador user = CurrentUser.getCurrentUser();
+    static ILeilumLN ln = new LeilumLNFacade();
+    List<Leilao> list;
+    IEnumerable<Leilao> leiloes = new List<Leilao>();
+    IEnumerable<Leilao> filteredLeiloes;
+    IEnumerable<Leilao> leiloesParticipados;
+    List<Categoria> categorias;
+    Categoria selectedCategory;
+    int selectedCategoryId;
+    string searchTerm = "";
+    decimal minPrice;
+    decimal maxPrice;
+    string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
+    int pageSize = 8;
+    int count;
+
+    TimeSpan timeRemaining = TimeSpan.Zero;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (user != null)
+        {
+            list = ln.getLeiloesParticipados(user.getEmail()).ToList();
+            leiloes = ln.getLeiloesParticipados(user.getEmail());
+            count = leiloes.Count();
+            
+            filteredLeiloes = getLeiloes(0, pageSize);
+
+            categorias = ln.GetAllCategorias();
+            Regra r = new Regra(9999,0,0);
+            categorias.Insert(0, new Categoria(0, "Search Category", r));
+        }
+        
+        // Iniciar o temporizador a cada segundo
+        var timer = new Timer(1000);
+        timer.Elapsed += (sender, e) => { InvokeAsync(UpdateTimeRemaining); };
+        timer.AutoReset = true;
+        timer.Start();
+
+        await base.OnInitializedAsync();
+    }
+
+    void UpdateTimeRemaining()
+    {
+        // Atualizar o tempo restante a cada segundo
+        if (timeRemaining.TotalSeconds > 0)
+        {
+            timeRemaining = timeRemaining.Subtract(TimeSpan.FromSeconds(1));
+        }
+        StateHasChanged();
+    }
+
+    void FilterLeiloesByCategory()
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm) || selectedCategoryId != 0)
+        {
+            filteredLeiloes = leiloes.Where(l =>
+                (string.IsNullOrEmpty(searchTerm) || l.getTitulo().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
+                (selectedCategoryId == 0 || l.getCategoria().getIdCategoria() == selectedCategoryId)
+            );
+
+            count = filteredLeiloes.Count();
+        }
+        else
+        {
+            // Nenhum filtro aplicado, mostrar todos os leilões
+            leiloes = ln.getLeiloesParticipados(user.getEmail());
+
+            count = leiloes.Count();
+
+            filteredLeiloes = getLeiloes(0, pageSize);
+        }
+    }
+
+    void FilterLeiloes()
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm) || selectedCategory != null)
+        {
+            filteredLeiloes = leiloes.Where(l =>
+                (string.IsNullOrEmpty(searchTerm) || l.getTitulo().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || l.getCategoria().getDesignacao().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
+                (selectedCategory == null || l.getCategoria() == selectedCategory)
+            );
+
+            count = filteredLeiloes.Count();
+        }
+        else
+        {
+            leiloes = ln.getLeiloesParticipados(user.getEmail());
+
+            count = leiloes.Count();
+
+            filteredLeiloes = getLeiloes(0, pageSize);
+        }
+    }
+
+    void FilterLeiloesByPrice(decimal value)
+    {
+        if (minPrice > 0 || maxPrice > 0)
+        {
+            filteredLeiloes = leiloes.Where(l =>
+                (minPrice == 0 || l.getvalorAtual() >= (double)minPrice) &&
+                (maxPrice == 0 || l.getvalorAtual() <= (double)maxPrice)
+            );
+
+            count = filteredLeiloes.Count();
+        }
+        else
+        {
+            // Se não houver faixa de preços definida, mostrar todos os leilões
+            leiloes = ln.getLeiloesParticipados(user.getEmail());
+
+            count = leiloes.Count();
+
+            filteredLeiloes = getLeiloes(0, pageSize);
+        }
+    }
+
+    void PageChanged(PagerEventArgs args)
+    {
+        filteredLeiloes = getLeiloes(args.Skip, args.Top);
+    }
+
+    IEnumerable<Leilao> getLeiloes(int skip, int take)
+    {
+        return list.Skip(skip).Take(take);
+    }
+
+    void goTo(int leilaoId)
+    {
+        // Navegar para a página de detalhes do leilão
+        NavigationManager.NavigateTo($"/auction/{leilaoId}");
+    }
+
+    string CalculateTimeRemaining(DateTime dataFinal)
+    {
+        // Calcular a diferença entre a data final e a data atual
+        timeRemaining = dataFinal - DateTime.Now;
+
+        // Se o leilão já terminou, exibir "Encerrado"
+        if (timeRemaining.TotalSeconds < 0)
+        {
+            return "Encerrado";
+        }
+
+        // Formatar o tempo restante em dias, horas, minutos e segundos
+        return $"{(int)timeRemaining.TotalDays}d {timeRemaining.Hours}h {timeRemaining.Minutes}m {timeRemaining.Seconds}s";
+    }
+
+}

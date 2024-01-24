@@ -45,8 +45,8 @@
         <RadzenPanelMenu DisplayStyle="@(sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
             <AuthorizeView>
                 <Authorized>
-                    <RadzenPanelMenuItem Text="Overview" Icon="home" Click="@(() => NavigateTo("/"))"/>
-                    <RadzenPanelMenuItem Text="Suggest" Icon="grade" Click="@(() => NavigateTo("/suggest"))"/>
+                    <RadzenPanelMenuItem Text="Active Aucions" Icon="home" Click="@(() => NavigateTo("/"))"/>
+                    <RadzenPanelMenuItem Text="Recomended Auctions" Icon="grade" Click="@(() => NavigateTo("/recommended"))"/>
                     <RadzenPanelMenuItem Text="History" Icon="history" Click="@(() => NavigateTo("/history"))"/>
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
                     <RadzenPanelMenuItem Text="Create an Auction" Icon="gavel" Click="@(() => NavigateTo("/create-auction"))"/>

@@ -6,7 +6,6 @@ using Leilum.LeilumLN.ArtigoLN;
 using Leilum.LeilumLN.CategoriaLN;
 using Leilum.LeilumLN.LoteLN;
 using Leilum.LeilumLN.NotificacaoLN;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace leilum.LeilumLN
 {

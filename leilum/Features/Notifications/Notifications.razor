@@ -2,28 +2,31 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<h3>Notificações</h3>
+<RadzenText TextStyle="TextStyle.H4" TextAlign="TextAlign.Center"><b>Notifications</b></RadzenText>
 
-@if (notifications == null)
-{
-    <p>Loading notifications...</p>
-}
-else if (notifications.Any())
-{
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-        @foreach (var notification in notifications)
-        {
-            <div style="flex: 1; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px; text-align: center;">
-                <p style="font-size: 16px;">@notification.getMensagemNotificacao()</p>
-                <p style="font-size: 14px; color: #888;">@notification.getDataNotificacao().ToString("dd/MM/yyyy HH:mm:ss")</p>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <p>No notifications found.</p>
-}
+<RadzenCard>
+    @if (notifications == null)
+    {
+        <p>Loading notifications...</p>
+    }
+    else if (notifications.Any())
+    {
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            @foreach (var notification in notifications)
+            {
+                <div style="flex: 1; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px; text-align: center;">
+                    <p style="font-size: 16px;">@notification.getMensagemNotificacao()</p>
+                    <p style="font-size: 14px; color: #888;">@notification.getDataNotificacao().ToString("dd/MM/yyyy HH:mm:ss")</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <RadzenText TextAlign="TextAlign.Center" Text="You didn't participated in any Auction." />
+    }
+</RadzenCard>
+
 
 @code {
     ILeilumLN ln = new LeilumLNFacade();
