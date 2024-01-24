@@ -168,7 +168,7 @@
                                             <RadzenRequiredValidator Component="Bank" Text="Required Field."/>
                                         </Helper>
                                     </RadzenFormField>
-                                    <RadzenButton Style="backgroud-color: #00b578 !important;" ButtonType="ButtonType.Submit" Text="Submit Changes"/>
+                                    <RadzenButton class="btn-submit" Style="color: #ffffff" ButtonType="ButtonType.Submit"><b>Submit Changes</b></RadzenButton>
                                 </RadzenStack>
                             </RadzenTemplateForm>
                         }
@@ -178,11 +178,11 @@
             <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.End" Gap="0">
                 @if (isEditMode)
                 {   
-                    <RadzenButton Variant="Variant.Text" Text="Go Back (Without saving)" Click="ToggleEditMode" />
+                    <RadzenButton Variant="Variant.Text" Style="color: #00b477" Text="Go Back (Without saving)" Click="ToggleEditMode" />
                 }
                 else
                 {
-                    <RadzenButton Variant="Variant.Text" Text="Edit Profile" Click="ToggleEditMode" />
+                    <RadzenButton class="btn-submit" Style="color: #ffffff" Variant="Variant.Text" Text="Edit Profile" Click="ToggleEditMode"><b>Edit Profile</b></RadzenButton>
                 }
             </RadzenStack>
         </RadzenCard>
@@ -203,6 +203,15 @@
         background-color: #001F3F !important; /* Substitua pela cor desejada */
         color: white;
     }
+    
+
+    .btn-submit {
+            color: #fff; !important;
+            background-color: #00b477 !important;
+            border-color: #1861ac;
+    }
+
+    
 </style>
 
 @code {

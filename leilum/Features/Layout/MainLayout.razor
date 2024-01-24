@@ -3,6 +3,16 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
 
+<style>
+    *.btn-primary {
+        color: #fff;
+        background-color: #00b477;
+        border-color: #1861ac;
+    }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
 <RadzenLayout>
     <RadzenHeader class="custom-header">
         <div class="header-content">
@@ -60,6 +70,7 @@
                     {
                         <RadzenPanelMenuItem Text="Promote User" Icon="badge" Click="@(() => NavigateTo("/promoteUser"))" />
                         <RadzenPanelMenuItem Text="General Statistics" Icon="query_stats" Click="@(() => NavigateTo("/statistics"))"/>
+                        <RadzenPanelMenuItem Text="User Statistics" Icon="assignment_ind" Click="@(() => NavigateTo("/statisticsAdminUser"))"/>
                     }
                 </Authorized>
                 <NotAuthorized>

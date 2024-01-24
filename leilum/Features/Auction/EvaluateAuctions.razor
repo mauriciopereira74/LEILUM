@@ -233,7 +233,7 @@
 
     private void submitEvaluation()
     {
-        Leilao leilao = this.auctionList.Single();
+        Leilao leilao = this.auctionList.First();
         this.leilumLn.startAuction(leilao.getNrLeilao(),bvalue, mvalue, ovalue, this.user.getEmail());
         bvalue = 0;
         mvalue = 0;
