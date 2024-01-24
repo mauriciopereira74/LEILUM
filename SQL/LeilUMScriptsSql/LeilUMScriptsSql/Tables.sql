@@ -89,10 +89,10 @@ CREATE TABLE Leilao (
 	idLeilao INT NOT NULL,
 	Titulo VARCHAR(45) NOT NULL,
 	DataFim DATETIME NOT NULL,
-	ValorAbertura DECIMAL(6,2) NULL, -- 50% do valor base do leilão
-	ValorBase DECIMAL(6,2) NULL, -- Valor da Avaliação do leilão
-	ValorMinimo DECIMAL(6,2) NOT NULL, -- Valor mais baixo pelo qual poderá licitar, corresponde a 85% do valor base. Se o valor de uma licitação estiver entre o valor de abertura e o valor minimo, então é considerado licitação condicional
-	ValorAtual DECIMAL(6,2) NOT NULL, -- Valor da licitação mais alta
+	ValorAbertura DECIMAL NULL, -- 50% do valor base do leilão
+	ValorBase DECIMAL NULL, -- Valor da Avaliação do leilão
+	ValorMinimo DECIMAL NOT NULL, -- Valor mais baixo pelo qual poderá licitar, corresponde a 85% do valor base. Se o valor de uma licitação estiver entre o valor de abertura e o valor minimo, então é considerado licitação condicional
+	ValorAtual DECIMAL NOT NULL, -- Valor da licitação mais alta
 	Estado INT NOT NULL,
 	Avaliador VARCHAR(45) NULL,
 	Comitente VARCHAR(45) NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE Leilao (
 -- DROP TABLE Licitacao;
 CREATE TABLE Licitacao (
 	idLicitacao INT NOT NULL,
-	Valor DECIMAL(6,2) NOT NULL,
+	Valor INT NOT NULL,
 	Licitador VARCHAR(45) NOT NULL,
 	Leilao INT NOT NULL,
 	FOREIGN KEY (Licitador) REFERENCES Utilizador (Email),
