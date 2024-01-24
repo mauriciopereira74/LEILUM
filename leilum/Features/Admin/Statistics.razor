@@ -4,15 +4,16 @@
 <PageTitle>Statistics</PageTitle>
 
 <div class="container">
+    <RadzenText TextStyle="TextStyle.H4" TextAlign="TextAlign.Center"><b>Auction Statistics</b></RadzenText>
     <div class="row">
         <div class="col-sm-12 col-lg-6 offset-lg-3 my-5">
-            <RadzenCard class="w-100 mb-4" >
+            <RadzenCard class="w-100 mb-4">
                 <RadzenCheckBox @bind-Value="@showDataLabels1" Name="dataLabels"></RadzenCheckBox>
-                <RadzenLabel Text="Show Data Labels" Component="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
+                <RadzenLabel Text="Show Data Labels" Component="dataLabels" Style="margin-left: 8px; vertical-align: middle;"/>
             </RadzenCard>
             <RadzenChart>
                 <RadzenPieSeries Data="@revenue1" Title="Revenue" CategoryProperty="Quarter" ValueProperty="Revenue">
-                    <RadzenSeriesDataLabels Visible="@showDataLabels1" />
+                    <RadzenSeriesDataLabels Visible="@showDataLabels1"/>
                 </RadzenPieSeries>
             </RadzenChart>
         </div>
@@ -20,11 +21,13 @@
 </div>
 
 <div Class="rz-p-0 rz-p-md-12">
+    <RadzenText TextStyle="TextStyle.H4" TextAlign="TextAlign.Center"><b>Total Received from Auctions</b></RadzenText>
+
     <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" Class="rz-p-4 rz-mb-6 rz-border-radius-1" Style="border: var(--rz-grid-cell-border);">
         <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
         <RadzenLabel Text="Smooth" Component="smooth" Class="rz-mr-6"/>
         <RadzenCheckBox @bind-Value="@showDataLabels2" Name="dataLabels"></RadzenCheckBox>
-        <RadzenLabel Text="Show Data Labels" Component="dataLabels" />
+        <RadzenLabel Text="Show Data Labels" Component="dataLabels"/>
     </RadzenStack>
 
     <RadzenChart>
@@ -96,19 +99,19 @@
             new DataItem
             {
                 Ano = "",
-                Quarter = "Leilões Pendentes",
+                Quarter = "Auctions Pending Evaluation",
                 Revenue = l1
             },
             new DataItem
             {
                 Ano = "",
-                Quarter = "Leilões em Curso",
+                Quarter = "Active Auctions",
                 Revenue = l2
             },
             new DataItem
             {
                 Ano = "",
-                Quarter = "Leilões Terminados",
+                Quarter = "Finished Auctions",
                 Revenue = l3
             },
         };
