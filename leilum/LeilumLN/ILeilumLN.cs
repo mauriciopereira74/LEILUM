@@ -39,6 +39,8 @@ namespace leilum.LeilumLN
         
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 
+        public Utilizador getVencedor(int idLeilao);
+
         public int quantidadeArtigos();
 
         public int quantidadeLotes();
@@ -47,6 +49,8 @@ namespace leilum.LeilumLN
 
         public Leilao getLeilao(int idLeilao);
 
+        public void UpdateDataFinal(int idLeilao, string newDataFinal);
+
         public List<Categoria> GetAllCategorias();
 
         public Categoria GetCategoriaByDesignacao(string s);
@@ -54,7 +58,7 @@ namespace leilum.LeilumLN
 
         public void adicionaLeilao(Leilao leilao);
 
-
+        public void terminaLeilao(int idLeilao);
         public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador);
 
         public void adicionaNotificacao(Notificacao notificacao);

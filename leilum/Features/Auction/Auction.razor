@@ -19,9 +19,16 @@
                 <h4>Current Bid</h4>
                 <p style="font-size: 18px; color: #4CAF50;">@String.Format(new System.Globalization.CultureInfo("pt-PT"), "{0:C}", leilao.getvalorAtual())</p>
             </div>
-            <div style="flex: 1; text-align: right;">
-                <p><b>Time Remaining:</b> <span id="remainingTime"></span></p>
-            </div>
+            @if (leilao.getEstado() == 1){
+                <div style="flex: 1; text-align: right;">
+                    <p><b>Time Remaining:</b> <span id="remainingTime"></span></p>
+                </div>
+            }
+            else{
+                <div style="flex: 1; text-align: right;">
+                    <p><b>CLOSED</b></p>
+                </div>      
+            }
         </div>
         <RadzenRow Gap="1rem" Style="margin-top: 20px;">
             <RadzenColumn Size="8" SizeSM="6">
@@ -129,7 +136,6 @@ else
 </script>
 
 @code {
-
     Utilizador user = CurrentUser.getCurrentUser();
     ILeilumLN ln = new LeilumLNFacade();
     Leilao leilao;
@@ -150,10 +156,13 @@ else
             artigos= leilao.getLote().getArtigos();
             ValorDoLance = leilao.getvalorAtual();
             valorMinimoLance = leilao.getvalorAtual()+1;
-            var timer = new Timer(100);
-            timer.Elapsed += (sender, e) => { InvokeAsync(UpdateTimeRemaining); };
-            timer.AutoReset = true;
-            timer.Start();
+
+            if(leilao.getEstado()==1){
+                var timer = new Timer(1000);
+                timer.Elapsed += (sender, e) => { InvokeAsync(UpdateTimeRemaining); };
+                timer.AutoReset = true;
+                timer.Start();
+            }
 
             await base.OnInitializedAsync();
         }
@@ -185,8 +194,11 @@ else
 
             // Se o leilão já terminou, exibir "Encerrado"
             if (timeRemaining.TotalSeconds < 0)
-            {
-                SetRemainingTime("Encerrado");
+            {   
+                if(leilao.getEstado() == 1){
+                    SetRemainingTime("Closed");
+                    closeAuction(leilao);
+                }
             }
             else
             {
@@ -211,12 +223,29 @@ else
         NavigationManager.NavigateTo("/");
     }
 
+    private void closeAuction(Leilao leilao){
+        leilao.setEstado(0);
+        ln.terminaLeilao(leilao.getNrLeilao());
+        Utilizador vencedor = ln.getVencedor(leilao.getNrLeilao());
+        this.ln.adicionaNotificacao(new Notificacao(vencedor.getEmail(),"You Win the Auction with Title:" +leilao.getTitulo() + "(Auction #" + leilao.getNrLeilao() + ")", DateTime.Now));
+    }
+
     private void bid()
     {   
         if (leilao != null && user != null)
         {
             if (ValorDoLance > leilao.getvalorAtual())
             {
+                TimeSpan timeRemaining = leilao.getDataFinal() - DateTime.Now;
+                if (timeRemaining.TotalMinutes <= 1)
+                {   
+                    DateTime novaDataFinal = leilao.getDataFinal().AddMinutes(2);
+                    string novaDataFinalStr = novaDataFinal.ToString("yyyy-MM-dd HH:mm:ss");
+                    leilao.setDuracao(novaDataFinal);
+                    Console.WriteLine(novaDataFinalStr);
+                    ln.UpdateDataFinal(leilao.getNrLeilao(), leilao.getDataFinalSTR());
+                }
+
                 bool flag = ln.addLicitacao(leilao.getNrLeilao(), user.getEmail(), ValorDoLance);
                 if (flag)
                 {

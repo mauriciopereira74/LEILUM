@@ -34,9 +34,12 @@ namespace Leilum.Data
         public void atualizaPerfil(Utilizador u);
         public Leilao getLeilao(int idLeilao);
         public void addLeilao(Leilao leilao);
+
+        public void UpdateDataFinal(int idLeilao, string newDataFinal);
         public int quantidadeLeiloes();
         public bool addLicitacao(Licitacao licitacao);
         public double? getMaiorLicitacao(int idLeilao);
+        public Utilizador getVencedor(int idLeilao);
         public bool addLicitacao(double value, int idLeilao, string emailUser);
         public void removeLicitacao(int idLicitacao);
         public Categoria getCategoriaById(int idCategoria);
@@ -67,6 +70,8 @@ namespace Leilum.Data
         public void adcionaLeilao(Leilao l);
         public void atualizaValorBaseLeilaoEstado(int idLeilao, int valorBase, int valorMinimo, int valorAbertura,
             string avaliador);
+        
+        public void terminaLeilao(int idLeilao);
 
         public void rejeitaLeilao(int idLeilao, string avaliador);
         

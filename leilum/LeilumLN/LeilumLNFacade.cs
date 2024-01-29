@@ -82,6 +82,10 @@ namespace leilum.LeilumLN
         public IEnumerable<Leilao> getLeiloesRecomendados(string utilizadorEmail){
             return this.db.getLeiloesRecomendados(utilizadorEmail);
         }
+        
+        public void terminaLeilao(int idLeilao){
+            this.db.terminaLeilao(idLeilao);
+        }
 
         public double getGastosTotaisUtilizador(string utilizadorEmail)
         {
@@ -142,6 +146,10 @@ namespace leilum.LeilumLN
         public void addLeilao(Leilao leilao){
             this.db.addLeilao(leilao);
         }
+
+        public void UpdateDataFinal(int idLeilao, string newDataFinal){
+            this.db.UpdateDataFinal(idLeilao,newDataFinal);
+        }
         
         // Cria um Leilão
         public void criaLeilao(string titulo, DateTime dataFinal, double valorAbertura, double valorBase,
@@ -164,6 +172,10 @@ namespace leilum.LeilumLN
         public bool addLicitacao(int idLeilao, string userEmail, double value)
         {
             return this.db.addLicitacao(value,idLeilao,userEmail);
+        }
+
+        public Utilizador getVencedor(int idLeilao){
+            return this.db.getVencedor(idLeilao);
         }
 
         public List<Categoria> GetAllCategorias(){
