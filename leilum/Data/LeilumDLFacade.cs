@@ -191,6 +191,26 @@ namespace Leilum.Data
             this.leilaoDao.put(leilao.getNrLeilao(),leilao);
         }
 
+        public void UpdateDataFinal(int idLeilao, string newDataFinal)
+        {
+            string sql_cmd = $"UPDATE Leilao SET DataFim = '{newDataFinal}' WHERE idLeilao = {idLeilao};";
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    {
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Failed to update DataFinal for Leilao with idLeilao {idLeilao}: {e.Message}");
+            }
+        }
         // Get lista de leilões em curso e outro para leilões terminados e outro para leiloes pendentes
 
         public IEnumerable<Leilao> getLeiloesPendentes(int _categoria){
@@ -660,6 +680,42 @@ namespace Leilum.Data
                 }
             }
         }
+
+        public void terminaLeilao(int idLeilao)
+        {
+            using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+            {
+                con.Open();
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    try
+                    {
+                        var parametros = new
+                        {
+                            idLeilao
+                        };
+
+                        string sql_cmd = @"UPDATE Leilao SET Estado = '0' WHERE idLeilao = @idLeilao";
+
+                        int linhas = con.Execute(sql_cmd, parametros, transaction);
+
+                        if (linhas > 0)
+                        {
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new DAOException("terminaLeilao: " + e.Message);
+                    }
+                }
+            }
+        }
         
         // Adiciona uma Licitação
         public bool addLicitacao(Licitacao licitacao) {
@@ -700,6 +756,46 @@ namespace Leilum.Data
             catch (Exception e)
             {
                 throw new DAOException("getMaiorLicitacao: " + e.Message);
+            }
+        }
+
+        public Utilizador getVencedor(int idLeilao)
+        {
+            string sql_cmd = $"SELECT TOP 1 Licitador FROM Licitacao WHERE Leilao = {idLeilao} ORDER BY valor DESC";
+
+            string vencedorEmail = null;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+                {
+                    con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(sql_cmd, con))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read() && !reader.IsDBNull(reader.GetOrdinal("Licitador")))
+                            {
+                                vencedorEmail = reader.GetString(reader.GetOrdinal("Licitador"));
+                            }
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(vencedorEmail))
+                {
+                    // Agora, você precisa buscar o Utilizador com base no email
+                    Utilizador vencedor = getUtilizadorWithEmail(vencedorEmail);
+
+                    return vencedor;
+                }
+
+                return null; // Retorna null se não houver vencedor
+            }
+            catch (Exception e)
+            {
+                throw new DAOException("getVencedor: " + e.Message);
             }
         }
 

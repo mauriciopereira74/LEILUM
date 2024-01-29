@@ -59,8 +59,13 @@
                     </RadzenRow>
                     <RadzenRow>
                         <RadzenColumn Size="12" Class="rz-text-truncate">
-                            <RadzenText TextStyle="TextStyle.Overline" class="rz-mt-2 rz-my-0" Style="margin: 15px;">Remaining Time</RadzenText>
-                            <RadzenText TextStyle="TextStyle.Body1"><b>@CalculateTimeRemaining(leilao.getDataFinal())</b></RadzenText>
+                            @if(leilao.getEstado() == 1){
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-mt-2 rz-my-0" Style="margin: 15px;">Remaining Time</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1"><b>@CalculateTimeRemaining(leilao)</b></RadzenText>
+                            }
+                            else {
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-mt-2 rz-my-0" Style="margin: 15px;">CLOSED</RadzenText>
+                            }
                         </RadzenColumn>
                     </RadzenRow>
                 </RadzenStack>
@@ -78,18 +83,27 @@ else
 <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageNumbersCount="5" PageChanged="@PageChanged" />
 
 
+
 <style>
-  .text-center {
+.text-center {
     display: flex;
     align-items: center;
     justify-content: space-around;
-  }
-</style>
+}
 
-<style>
 .custom-card-spacing {
     margin-bottom: 4px; /* Ou qualquer valor desejado para o espaçamento vertical */
     margin-right: 2px;
+}
+
+.closed-auction-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 5px; /* Ajuste a largura conforme necessário */
+    background-color: red; /* Cor da barra vertical */
+    border-radius: 5px; /* Bordas arredondadas, opcional */
 }
 </style>
 
@@ -232,19 +246,30 @@ else
         NavigationManager.NavigateTo($"/auction/{leilaoId}");
     }
 
-    string CalculateTimeRemaining(DateTime dataFinal)
+    string CalculateTimeRemaining(Leilao leilao)
     {
         // Calcular a diferença entre a data final e a data atual
-        timeRemaining = dataFinal - DateTime.Now;
+        timeRemaining = leilao.getDataFinal() - DateTime.Now;
 
         // Se o leilão já terminou, exibir "Encerrado"
         if (timeRemaining.TotalSeconds < 0)
-        {
-            return "Closed.";
+        {   
+            if(leilao.getEstado() ==1){
+                closeAuction(leilao);
+                return "Closed";
+            }
+            else return "null";
         }
 
         // Formatar o tempo restante em dias, horas, minutos e segundos
         return $"{(int)timeRemaining.TotalDays}d {timeRemaining.Hours}h {timeRemaining.Minutes}m {timeRemaining.Seconds}s";
+    }
+
+    private void closeAuction(Leilao leilao){
+        leilao.setEstado(0);
+        ln.terminaLeilao(leilao.getNrLeilao());
+        Utilizador vencedor = ln.getVencedor(leilao.getNrLeilao());
+        ln.adicionaNotificacao(new Notificacao(vencedor.getEmail(),"You Win the Auction with Title:" +leilao.getTitulo() + "(Auction #" + leilao.getNrLeilao() + ")", DateTime.Now));
     }
 
 }
