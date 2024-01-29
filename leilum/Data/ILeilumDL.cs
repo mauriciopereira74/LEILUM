@@ -47,7 +47,7 @@ namespace Leilum.Data
         public void removeCategoria(int idCategoria);
         public int getIdCategoria(string designacao);
         public ICollection<string> getCategoriasList();
-        public IEnumerable<Leilao> getLeiloesPendentes(int _categoria);
+        public IEnumerable<Leilao> getLeiloesPendentes(int _categoria, string avaliador);
         public Regra getRegra(int idRegra);
         public void addRegra(Regra regra);
         public void removeRegra(int idRegra);

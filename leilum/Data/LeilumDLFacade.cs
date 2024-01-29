@@ -193,9 +193,9 @@ namespace Leilum.Data
 
         // Get lista de leilões em curso e outro para leilões terminados e outro para leiloes pendentes
 
-        public IEnumerable<Leilao> getLeiloesPendentes(int _categoria){
+        public IEnumerable<Leilao> getLeiloesPendentes(int _categoria, string email){
             IEnumerable<Leilao> leiloesPendentes = new HashSet<Leilao>();
-            string s_cmd = $"SELECT * FROM Leilao WHERE Estado = 2 and Categoria = {_categoria}";
+            string s_cmd = $"SELECT * FROM Leilao WHERE Estado = 2 and Categoria = {_categoria} and Comitente <> '{email}'";
             try{
                 using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
                     using (SqlCommand cmd = new SqlCommand(s_cmd,conn)){

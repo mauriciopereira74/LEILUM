@@ -1,5 +1,4 @@
 @page "/EvaluateAuction"
-@using System.Runtime.CompilerServices
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject NotificationService NotificationService
@@ -199,18 +198,24 @@
         );
     }
 
+    private IEnumerable<Leilao> getPendingAuctions()
+    {
+        return leilumLn.getLeiloesPendentesPorCategoria(categoria.getIdCategoria(), user.getEmail());
+    }
+
     private void reject()
     {
         Leilao leilao = this.auctionList.First();
         this.leilumLn.adicionaNotificacao(new Notificacao(leilao.getComitente().getEmail(), 
-            "Your Auction Ttitled: " + leilao.getTitulo() + "(Auction #" + leilao.getNrLeilao() + ") was REJECTED." + Environment.NewLine + "Motive: " + rejectionMotive,
+            "Your Auction Titled: " + leilao.getTitulo() + " (Auction #" + leilao.getNrLeilao() + ") was REJECTED." + Environment.NewLine + "Motive: " + rejectionMotive,
             DateTime.Now));
         rejectionMotive = "";
+        this.leilumLn.adicionaNotificacao(new Notificacao(user.getEmail(),"You rejected Auction titled: " + leilao.getTitulo() + " (Auction #" + leilao.getNrLeilao() + ") Motive: " + rejectionMotive, DateTime.Now));
         bvalue = 0;
         mvalue = 0;
         ovalue = 0;
         leilumLn.rejectAuction(leilao.getNrLeilao(),user.getEmail());
-        this.auctionList = leilumLn.getLeiloesPendentesPorCategoria(categoria.getIdCategoria());
+        this.auctionList = getPendingAuctions();
         this.selectedAuction.Clear();
         DialogService.Close();
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Auction was Reject Sucessfully!"});
@@ -247,13 +252,15 @@
     {
         Leilao leilao = this.auctionList.First();
         this.leilumLn.startAuction(leilao.getNrLeilao(),bvalue, mvalue, ovalue, this.user.getEmail());
+        this.leilumLn.adicionaNotificacao(new Notificacao(user.getEmail(),"You evaluated Auction titled: " + leilao.getTitulo() + " (Auction #" + leilao.getNrLeilao() + ") Base Value: " + bvalue, DateTime.Now));
+        leilumLn.adicionaNotificacao(new Notificacao(leilao.getComitente().getEmail(),"Your Auction Titled: " + leilao.getTitulo() + "(Auction #" + leilao.getNrLeilao() + ") was APPROVED.", DateTime.Now));
         bvalue = 0;
         mvalue = 0;
         ovalue = 0;
-        this.auctionList = leilumLn.getLeiloesPendentesPorCategoria(categoria.getIdCategoria());
+        this.auctionList = getPendingAuctions();
         this.selectedAuction.Clear();
         DialogService.Close();
-        leilumLn.adicionaNotificacao(new Notificacao(leilao.getComitente().getEmail(),"Your Auction Titled: " + leilao.getTitulo() + "(Auction #" + leilao.getNrLeilao() + ") was APPROVED.", DateTime.Now));
+
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Auction Evaluated Sucessfully!", Detail = "Auction initiated!" });
         StateHasChanged();
     }
@@ -268,7 +275,7 @@
                 categoria = leilumLn.getCategoriaAvaliador(user.getEmail());
                 if (categoria != null)
                 {
-                    auctionList = leilumLn.getLeiloesPendentesPorCategoria(categoria.getIdCategoria());
+                    auctionList = getPendingAuctions();
                 }
                 else
                 {
