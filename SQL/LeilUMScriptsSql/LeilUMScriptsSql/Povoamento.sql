@@ -31,8 +31,8 @@ VALUES
 
 INSERT INTO Categoria (idCategoria, Designacao, Regra)
 VALUES
-    (0, 'Jewelery', 0),
-    (1, 'Clothing', 1),
+    (1, 'Jewelery', 0),
+    (2, 'Clothing', 1),
     (3, 'Music Instruments', 3),
     (4, 'Eletronics', 2),
     (5, 'Art', 4),
