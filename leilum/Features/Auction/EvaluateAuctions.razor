@@ -137,7 +137,6 @@
 
 @code
 {
-    int position = 1;
     ILeilumLN leilumLn = new LeilumLNFacade();
     IEnumerable<Leilao> auctionList = new List<Leilao>();
     Utilizador user;
@@ -162,7 +161,7 @@
         ovalue = Convert.ToInt32(Math.Round(0.5 * bvalue));
     }
 
-    string rejectionMotive;
+    string rejectionMotive = "";
     
     private async void confirmRejection()
     {
@@ -191,7 +190,20 @@
 
     private void reject()
     {
-        throw new NotImplementedException("TODO PARA LOGO");
+        Leilao leilao = this.auctionList.First();
+        this.leilumLn.adicionaNotificacao(new Notificacao(leilao.getComitente().getEmail(), 
+            "Your Auction Ttitled: " + leilao.getTitulo() + "(Auction #" + leilao.getNrLeilao() + ") was REJECTED." + Environment.NewLine + "Motive: " + rejectionMotive,
+            DateTime.Now));
+        rejectionMotive = "";
+        bvalue = 0;
+        mvalue = 0;
+        ovalue = 0;
+        leilumLn.rejectAuction(leilao.getNrLeilao(),user.getEmail());
+        this.auctionList = leilumLn.getLeiloesPendentesPorCategoria(categoria.getIdCategoria());
+        this.selectedAuction.Clear();
+        DialogService.Close();
+        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Auction was Reject Sucessfully!"});
+        StateHasChanged();
     }
 
     private async void trySybmit()

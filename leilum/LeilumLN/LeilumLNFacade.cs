@@ -62,6 +62,11 @@ namespace leilum.LeilumLN
             this.db.atualizaValorBaseLeilaoEstado(auctionId, bvalue, mvalue, ovalue, evaluator);
         }
 
+        public void rejectAuction(int auctionId, string evaluator)
+        {
+            db.rejeitaLeilao(auctionId,evaluator);
+        }
+
         public Categoria getCategoriaAvaliador(string email)
         {
             return this.db.getCategoriaAvaliador(email);

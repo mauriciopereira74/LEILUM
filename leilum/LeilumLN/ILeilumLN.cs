@@ -27,6 +27,8 @@ namespace leilum.LeilumLN
         public Categoria getCategoriaAvaliador(string email);
 
         public void startAuction(int auctionId, int bvalue, int mvalue, int ovalue, string evaluator);
+
+        public void rejectAuction(int auctionId, string evaluator);
         
         public bool addLicitacao(int idLeilao, string userEmail, double value);
 
