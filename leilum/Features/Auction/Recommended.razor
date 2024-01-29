@@ -45,7 +45,7 @@
         </RadzenRow>
         <RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredLeiloes" TItem="Leilao">
         <Template Context="leilao">
-            <RadzenCard class="custom-card-spacing rz-mx" Style="min-width: 290px; max-width: 290px; border-radius: 10%;" @onclick="() => goTo(leilao.getNrLeilao())">
+            <RadzenCard class="custom-card-spacing rz-mx" Style="min-width: 280px; max-width: 280px; border-radius: 10%;" @onclick="() => goTo(leilao.getNrLeilao())">
                 <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
                     <RadzenImage Path="@leilao.getLote().getImagPath()" Style="width: 150px; height: 150px; border-radius: 10%;" />
                     <RadzenStack Gap="0" Style="text-align: center;">
