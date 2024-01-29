@@ -1,3 +1,4 @@
+using System.Data;
 using System.Data.SqlClient;
 using Leilum.Data.DAOS;
 using Leilum.LeilumLN.ArtigoLN;
@@ -570,6 +571,44 @@ namespace Leilum.Data
         public int quantidadeLeiloes()
         {
             return this.leilaoDao.size();
+        }
+
+        public void rejeitaLeilao(int idLeilao, string avaliador)
+        {
+            using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
+            {
+                con.Open();
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    try
+                    {
+                        var parametros = new
+                        {
+                            idLeilao,
+                            avaliador
+                        };
+                        string sqlcmd = @"UPDATE Leilao Set Avaliador = @avaliador,
+                                            Estado = '3'
+                                            Where idLeilao = @idLeilao";
+                        int linhas = con.Execute(sqlcmd, parametros, transaction);
+
+                        if (linhas > 0)
+                        {
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                            throw new DAOException(
+                                "rejeitaLeilao: Nenhuma linha da tabela leilão alterada ao rejeitar o leilão.");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new DataException("rejeitaLeilao: " + e.Message);
+                    }
+                }
+            }
         }
 
         public void atualizaValorBaseLeilaoEstado(int idLeilao, int valorBase, int valorMinimo, int valorAbertura,

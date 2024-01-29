@@ -68,6 +68,8 @@ namespace Leilum.Data
         public void atualizaValorBaseLeilaoEstado(int idLeilao, int valorBase, int valorMinimo, int valorAbertura,
             string avaliador);
 
+        public void rejeitaLeilao(int idLeilao, string avaliador);
+        
         public void setCategoriaAvaliador(string email, int categoria);
         public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador);
         public void adicionaNotificacao(Notificacao notificacao);
