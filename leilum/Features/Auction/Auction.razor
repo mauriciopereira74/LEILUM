@@ -241,9 +241,8 @@ else
                 {   
                     DateTime novaDataFinal = leilao.getDataFinal().AddMinutes(2);
                     string novaDataFinalStr = novaDataFinal.ToString("yyyy-MM-dd HH:mm:ss");
-                    leilao.setDuracao(novaDataFinal);
-                    Console.WriteLine(novaDataFinalStr);
-                    ln.UpdateDataFinal(leilao.getNrLeilao(), leilao.getDataFinalSTR());
+                    leilao.setDuracao(novaDataFinalStr);
+                    ln.UpdateDataFinal(leilao.getNrLeilao(), novaDataFinalStr);
                 }
 
                 bool flag = ln.addLicitacao(leilao.getNrLeilao(), user.getEmail(), ValorDoLance);

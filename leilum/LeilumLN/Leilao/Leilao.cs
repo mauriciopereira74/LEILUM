@@ -1,6 +1,7 @@
 using Leilum.LeilumLN.LoteLN;
 using Leilum.LeilumLN.UtilizadorLN;
 using Leilum.LeilumLN.CategoriaLN;
+using System.Globalization;
 
 namespace Leilum.LeilumLN.LeilaoLN{
 
@@ -61,9 +62,18 @@ namespace Leilum.LeilumLN.LeilaoLN{
             return this.dataFinal.ToString("yyyy-MM-dd hh:mm:ss");
         }
 
-        public void setDuracao(DateTime dataFinal){
+        public void setDuracao(string dataFinalString){
+        DateTime dataFinal;
+        if (DateTime.TryParseExact(dataFinalString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataFinal))
+        {
             this.dataFinal = dataFinal;
         }
+        else
+        {
+            // Lida com o caso em que a conversão falhou
+            throw new ArgumentException("Formato de data inválido", nameof(dataFinalString));
+        }
+    }
 
         public double getValorAbertura(){
             return valorAbertura;
