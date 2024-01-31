@@ -17,7 +17,6 @@ namespace leilum.Features.auth
         {
             try
             {
-                //await Task.Delay(5000);
                 var userSessionStorageResult = await _sessionStorage.GetAsync<UserSession>("UserSession");
                 var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;
                 if (userSession == null)

@@ -94,7 +94,6 @@
         List<int> datas = this.ln.ObterAnosComLeiloes(terminados);
         
 
-        // Initialize the revenue array after the asynchronous operation is complete
         revenue1 = new DataItem[] {
             new DataItem
             {
@@ -142,7 +141,7 @@
             foreach (var array in listaDeArrays)
             {
                 ImprimirArray(array);
-                Console.WriteLine(); // Adiciona uma linha em branco entre os arrays
+                Console.WriteLine();
             }
         }
 

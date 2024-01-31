@@ -17,22 +17,6 @@ namespace Leilum.Data.DAOS
             return singleton;
         }
 
-        // public Licitacao GetLicitacao(int idLicitacao){
-
-        //     Licitacao? resultado = null;
-        //     string s_cmd = $"SELECT * FROM db.Licitacao WHERE idLicitacao = {idLicitacao}";
-        //     try{
-        //         using (SqlConnection conn = new SqlConnection(DAOConfig.GetConnectionString())){
-        //             conn.Open();
-        //             Licitacao l = conn.QueryFirst<Licitacao>(s_cmd);
-        //             resultado = l;
-        //         }
-        //     } catch (Exception e){
-        //         throw new DAOException(e.Message);
-        //     }
-        //     return resultado;
-        // }
-
         public Licitacao? get(int idLicitacao)
         {
             Licitacao? result = null;

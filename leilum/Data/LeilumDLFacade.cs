@@ -102,7 +102,6 @@ namespace Leilum.Data
                 using(SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString())) {
                     con.Open();
 
-                    // Obter Tipo
                     using(SqlCommand cmdSelect = new SqlCommand(sql_cmd, con)) {
                         using (SqlDataReader reader = cmdSelect.ExecuteReader()) {
                             if (reader.Read()) {
@@ -142,8 +141,6 @@ namespace Leilum.Data
             removeUtilizador(u.getEmail());
             addUtilizador(u);
         }
-
-        // Atualiza tipo de utilizador (Admin)
         
 
         // Get Leilao
@@ -211,8 +208,8 @@ namespace Leilum.Data
                 throw new Exception($"Failed to update DataFinal for Leilao with idLeilao {idLeilao}: {e.Message}");
             }
         }
+        
         // Get lista de leilões em curso e outro para leilões terminados e outro para leiloes pendentes
-
         public IEnumerable<Leilao> getLeiloesPendentes(int _categoria, string email){
             IEnumerable<Leilao> leiloesPendentes = new HashSet<Leilao>();
             string s_cmd = $"SELECT * FROM Leilao WHERE Estado = 2 and Categoria = {_categoria} and Comitente <> '{email}'";
@@ -484,7 +481,6 @@ namespace Leilum.Data
 
                             foreach(int id in idsLeiloes){
                                 leiloesParticipados = leiloesParticipados.Append(getLeilao(id));
-                                // leiloesParticipados.Add(getLeilao(id));
                             }
                         }
                     }
@@ -584,8 +580,6 @@ namespace Leilum.Data
             return gastos;
         }
         
-        
-        // Cria Leilao inclui adicionar artigos e lotes! (Verificar se a classe do Lote tem uma lista de artigos)
         
         // Calcula o número de Leilões existentes na base de dados
         public int quantidadeLeiloes()
@@ -785,13 +779,12 @@ namespace Leilum.Data
 
                 if (!string.IsNullOrEmpty(vencedorEmail))
                 {
-                    // Agora, você precisa buscar o Utilizador com base no email
                     Utilizador vencedor = getUtilizadorWithEmail(vencedorEmail);
 
                     return vencedor;
                 }
 
-                return null; // Retorna null se não houver vencedor
+                return null;
             }
             catch (Exception e)
             {
@@ -839,16 +832,6 @@ namespace Leilum.Data
             }
             return result;
         }
-        
-        /* Get tempo restante de um leilao
-        public DateTime TempoRestante(Leilao leilao)
-        {
-            TimeSpan diferenca = leilao.getDuracao() - DateTime.Now;
-            DateTime tempoFuturo = DateTime.Now + diferenca;
-
-            return tempoFuturo;
-        }
-        */
                 
         // Get categoria pelo Id
 
@@ -1007,7 +990,6 @@ namespace Leilum.Data
             return this.regraDAO.get(idRegra);
         }
         
-        // Cria Regra (Admin)
         
         // Adiciona Regra (Admin)
         public void addRegra(Regra regra)
@@ -1021,9 +1003,6 @@ namespace Leilum.Data
             this.regraDAO.remove(idRegra);
         }
         
-        public void promoveUtilizadorAvaliador(string utilizadorEmail){
-            this.utilizadorDAO.updateParaAvaliador(utilizadorEmail);
-        }
         
         // Calcula o número de Artigos existentes na base de dados
         public int quantidadeArtigos()

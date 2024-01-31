@@ -95,7 +95,6 @@ else{
 
     public IEnumerable<string> converterParaEmails(IEnumerable<Utilizador> utilizadores)
     {
-        // Utilizando LINQ para projetar apenas os emails
         return utilizadores.Select(u => u.getEmail());
     }
 
@@ -109,7 +108,6 @@ else{
 
     public void verifica(){
         u = ln.getUtilizadorWithEmail(user);
-        @* Console.WriteLine("Email: " + u.getEmail()); *@
     }
 
     public ICollection<string> getAllCategorias(){

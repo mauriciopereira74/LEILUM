@@ -4,7 +4,6 @@ namespace leilum.TransferData
 {
     public class CurrentUser
     {
-        /*Esta é uma classe de uma única instância cujo objectivo é armazenar o utilizadot com sessão iniciada*/
         private static Utilizador? current = null;
         private CurrentUser() { }
 

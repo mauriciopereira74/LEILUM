@@ -51,7 +51,7 @@
             </RadzenProfileMenu>
         </div>
     </RadzenHeader>
-    <RadzenSidebar Responsive="false" Style="width: 150px;">
+    <RadzenSidebar Responsive="false" Style="width: 190px;">
         <RadzenPanelMenu DisplayStyle="@(sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false" IconSize="small">
             <AuthorizeView>
                 <Authorized>
@@ -61,7 +61,7 @@
                     <RadzenPanelMenuItem Text="Notifications" Icon="feedback" Click="@(() => NavigateTo("/notifications"))"/>
                     <RadzenPanelMenuItem Text="Create an Auction" Icon="gavel" Click="@(() => NavigateTo("/create-auction"))"/>
                     
-                    @if (currentUser.getTipoUtilizador() == configGerais.Avaliador || currentUser.getTipoUtilizador() == configGerais.Admin)
+                    @if (currentUser.getTipoUtilizador() == configGerais.Avaliador)
                     {
                         <RadzenPanelMenuItem Text="Evaluate Auctions" Icon="assignment_turned_in" Click="@(() => NavigateTo("/EvaluateAuction"))"/>
                     }

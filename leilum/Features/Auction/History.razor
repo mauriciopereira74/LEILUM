@@ -106,7 +106,7 @@
 
 <style>
 .custom-card-spacing {
-    margin-bottom: 4px; /* Ou qualquer valor desejado para o espaçamento vertical */
+    margin-bottom: 4px;
     margin-right: 2px;
 }
 </style>
@@ -151,7 +151,6 @@
             categorias.Insert(0, new Categoria(0, "Search Category", r));
         }
         
-        // Iniciar o temporizador a cada segundo
         var timer = new Timer(1000);
         timer.Elapsed += (sender, e) => { InvokeAsync(UpdateTimeRemaining); };
         timer.AutoReset = true;
@@ -162,7 +161,6 @@
 
     void UpdateTimeRemaining()
     {
-        // Atualizar o tempo restante a cada segundo
         if (timeRemaining.TotalSeconds > 0)
         {
             timeRemaining = timeRemaining.Subtract(TimeSpan.FromSeconds(1));
@@ -256,10 +254,10 @@
         // Calcular a diferença entre a data final e a data atual
         timeRemaining = dataFinal - DateTime.Now;
 
-        // Se o leilão já terminou, exibir "Encerrado"
+        // Se o leilão já terminou, exibir "Closed"
         if (timeRemaining.TotalSeconds < 0)
         {
-            return "Encerrado";
+            return "Closed";
         }
 
         // Formatar o tempo restante em dias, horas, minutos e segundos

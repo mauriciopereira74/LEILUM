@@ -131,7 +131,6 @@ else
 
     public IEnumerable<string> converterParaEmails(IEnumerable<Utilizador> utilizadores)
     {
-        // Utilizando LINQ para projetar apenas os emails
         return utilizadores.Select(u => u.getEmail());
     }
 
@@ -145,7 +144,6 @@ else
 
     public void verifica(){
         u = ln.getUtilizadorWithEmail(user);
-        @* Console.WriteLine("Email: " + u.getEmail()); *@
     }
 
     public int leiloesParticipados(string email){
@@ -172,8 +170,6 @@ else
     private Dictionary<string, DataItem[]> getGastosAnos(string email){
 
         string novaCultura = "en-US";
-
-        // Mude a cultura atual
         CultureInfo novaCultureInfo = new CultureInfo(novaCultura);
         CultureInfo.CurrentCulture = novaCultureInfo;
         CultureInfo.CurrentUICulture = novaCultureInfo;
@@ -198,7 +194,7 @@ else
 
                 for (int i = 0; i < 11; i++)
                 {
-                    gastosAno[variavel][i] = new DataItem(); // Certifique-se de que DataItem tenha um construtor padrão
+                    gastosAno[variavel][i] = new DataItem();
                     gastosAno[variavel][i].Mes = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i+1);
                     gastosAno[variavel][i].gastos = 0;
                 }

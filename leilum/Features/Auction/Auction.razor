@@ -115,7 +115,7 @@ else
 
 <style>
     .custom-header {
-        background-color: #001F3F !important; /* Substitua pela cor desejada */
+        background-color: #001F3F !important;
         color: white;
     }
     
@@ -192,7 +192,7 @@ else
         {
             TimeSpan timeRemaining = leilao.getDataFinal() - DateTime.Now;
 
-            // Se o leilão já terminou, exibir "Encerrado"
+            // Se o leilão já terminou, exibir "Closed"
             if (timeRemaining.TotalSeconds < 0)
             {   
                 if(leilao.getEstado() == 1){
@@ -208,7 +208,6 @@ else
     }
     void SetRemainingTime(string formattedTime)
     {
-        // Atualizar o elemento HTML com o tempo restante formatado
         JSRuntime.InvokeVoidAsync("updateRemainingTime", formattedTime);
     }
 
@@ -260,7 +259,6 @@ else
         }
         else
         {
-            // Adicione uma notificação ou manipulação de erro apropriada se leilao ou user for null
             NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Auction or user is null!", Duration = 4000 });
         }
     }

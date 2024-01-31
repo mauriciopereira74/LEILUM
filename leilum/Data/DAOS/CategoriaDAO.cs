@@ -47,26 +47,7 @@ namespace Leilum.Data.DAOS
             }
             return resultado;
         }
-
-        // public static Categoria? get(int idCategoria)
-        // {
-        //     Categoria? result = null;
-        //     string sql_cmd = $"SELECT * FROM LEILUM.Categoria WHERE idCategoria = '{idCategoria}'";
-        //     try
-        //     {
-        //         using (SqlConnection con = new(DAOConfig.GetConnectionString()))
-        //         {
-        //             con.Open();
-        //             Categoria aux = con.QueryFirst<Categoria>(sql_cmd);
-        //             result = aux;
-        //         }
-        //     } 
-        //     catch (Exception e)
-        //     {
-        //         throw new Exception(e.Message);
-        //     }
-        //     return result;
-        // }
+        
 
         public void put(int key, Categoria value)
         {

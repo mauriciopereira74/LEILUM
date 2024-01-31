@@ -29,13 +29,10 @@ namespace Leilum.Data.DAOS
                 using (SqlConnection con = new SqlConnection(DAOConfig.GetConnectionString()))
                 {
                     con.Open();
-                    // Execute the query and retrieve the result
                     var utilizadorInfo = con.QueryFirstOrDefault(s_cmd);
 
-                    // Check if a record with the specified Email exists
                     if (utilizadorInfo != null)
                     {
-                        // Manually create a Utilizador object using the retrieved values
                         result = new Utilizador();
                         result.setEmail(utilizadorInfo.Email);
                         result.setTipoUtilizador(utilizadorInfo.TipoUtilizador);
@@ -371,13 +368,10 @@ namespace Leilum.Data.DAOS
                 {
                     con.Open();
 
-                    // Execute the query and retrieve the result
                     var infoUtilizador = con.QueryFirstOrDefault(s_cmd);
 
-                    // Check if a record with the specified Contribuinte exists
                     if (infoUtilizador != null)
                     {
-                        // Manually create a Utilizador object using the retrieved values
                         Utilizador u = new Utilizador();
                         u.setEmail(infoUtilizador.idUtilizador);
                         u.setTipoUtilizador(infoUtilizador.idUtilizador);
@@ -391,7 +385,7 @@ namespace Leilum.Data.DAOS
                         u.setIban(infoUtilizador.Iban);
                         u.setFotoPerfil(infoUtilizador.FotoPerfilPath);
 
-                        result = true; // A record with the specified Contribuinte exists
+                        result = true;
                     }
                 }
             }

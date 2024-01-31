@@ -8,8 +8,6 @@ namespace Leilum.Data
 {
     public interface ILeilumDL
     {
-        // TODO Implementar metodos aqui;
-        // Utilizadores
         public bool existsUtilizador(int nif);
 
         public bool existsUtilizador(Utilizador utilizador);

@@ -11,7 +11,7 @@ namespace leilum.LeilumLN
 {
     public class LeilumLNFacade : ILeilumLN
     {
-        private ILeilumDL db; // base de dados
+        private ILeilumDL db; // Camada de Dados
 
         public LeilumLNFacade()
         {
@@ -115,27 +115,8 @@ namespace leilum.LeilumLN
             return this.db.quantidadeLeiloes();
         }
 
-        // Cria um Artigo
-        public Artigo criaArtigo(string designacao, string caracteristicas, string descricao, int idLote)
-        {
-            int idArtigo = this.db.quantidadeArtigos() + 1;
-
-            Artigo artigo = new Artigo(idArtigo, designacao, caracteristicas, descricao, idLote);
-            return artigo;
-        }
-
         public int quantidadeArtigos(){
             return this.db.quantidadeArtigos();
-        }
-        
-        // Cria um Lote
-        public Lote criaLote(Utilizador comitente, Utilizador comprador, Utilizador avaliador, string imgPath,
-            List<Artigo> artigos)
-        {
-            int idLote = this.db.quantidadeLotes() + 1;
-            Lote lote = new Lote(idLote, comitente, comprador, avaliador, artigos,imgPath);
-
-            return lote;
         }
 
         public int quantidadeLotes(){
@@ -149,23 +130,6 @@ namespace leilum.LeilumLN
 
         public void UpdateDataFinal(int idLeilao, string newDataFinal){
             this.db.UpdateDataFinal(idLeilao,newDataFinal);
-        }
-        
-        // Cria um Leilão
-        public void criaLeilao(string titulo, DateTime dataFinal, double valorAbertura, double valorBase,
-            double valorMinimo, double valorAtual, int estado, Utilizador avaliador, Utilizador comitente,
-            Lote lote, Categoria categoria)
-        {
-            int idLeilao = this.db.quantidadeLeiloes() + 1;
-            Leilao l = new Leilao(idLeilao, titulo, dataFinal, valorAbertura, valorBase, valorMinimo, valorAtual,
-                estado, avaliador, comitente, lote, categoria);
-            addLeilao(l);
-        }
-        
-        // Adiciona um Artigo a uma lista de artigos de um Lote
-        public void adicionaArtigoLote(Artigo artigo)
-        {
-            this.db.adicionaArtigo(artigo);
         }
 
         // Adiciona uma licitação a um leilão.
@@ -205,11 +169,7 @@ namespace leilum.LeilumLN
             this.db.setCategoriaAvaliador(email, c.getIdCategoria());
         }
         
-        // Função para buscar leilões em que o Utilizador foi Avaliador   (TALVEZ)  
         
-        // Função para buscar leilões em que o Utilizador ganhou
-        
-
         public List<Notificacao> getNotificacoesPorUtilizador(string idUtilizador){
             return this.db.getNotificacoesPorUtilizador(idUtilizador);
         }
@@ -223,14 +183,13 @@ namespace leilum.LeilumLN
             IEnumerable<Leilao> leiloes = this.db.getLeiloesTerminados();
             Dictionary<string, int> gastosPorMes = new Dictionary<string, int>();
 
-            // Inicializa o dicionário com gastos zero para cada mês do ano
+            
             for (int i = 1; i <= 12; i++)
             {
                 string nomeMes = $"{ano}-{i.ToString("D2")}-01";
                 gastosPorMes.Add(nomeMes, 0);
             }
 
-            // Percorre os leilões e atualiza os gastos no dicionário
             foreach (var leilao in leiloes)
             {
                 if (leilao.getDataFinal().Year == ano)
