@@ -118,18 +118,18 @@ VALUES
 INSERT INTO Leilao (idLeilao, Titulo, DataFim, ValorAbertura, ValorBase, ValorMinimo, ValorAtual, Estado, Avaliador, Comitente, Lote, Categoria)
 VALUES
     (0,'Dress of Collection Saint Laurent','2024-02-02 12:00:00',22.5,45,38.25,40,1,'marta@sapo.pt','ana.carvalho@email.pt',0,2),
-    (1,'Nikon DSLR 4K','2024-02-05 17:45:00',null,null,0,0,2,null,'ricardo.costa@email.pt',1,4),
+    (1,'Nikon DSLR 4K','2024-02-05 17:45:00',0,0,0,0,2,null,'ricardo.costa@email.pt',1,4),
     (2,'Historic Colonial Mansion','2024-07-20 18:00:00',5000000,10000000,8500000,5000000,1,'sofia@gmail.com','maria.silva@email.pt',2,6),
     (3,'Art is Eternal','2024-03-17 10:00:00',5000,10000,8500,7000,1,'xico@outlook.com','lucas@gmail.pt',3,5),
     (4,'IPhone 15 Pro Max','2024-02-25 15:00:00',300,600,510,750,1,'mauricio@gmail.com','joao.pereira@email.pt',4,4),
     (5,'Apartment to Sell','2024-01-11 11:30:00',2500000,5000000,4250000,8000000,0,'sofia@gmail.com','miguel.santos@email.pt',5,6),
-    (6,'Eletric Guitar','2024-03-12 14:50:00',null,null,0,0,2,null,'joao.pereira@email.pt',6,3),
+    (6,'Eletric Guitar','2024-03-12 14:50:00',0,0,0,0,2,null,'joao.pereira@email.pt',6,3),
     (7,'Jewerly Collection','2024-01-15 17:00:00',250,500,425,1023,0,'jose@gmail.com','ines.ribeiro@email.pt',7,1),
     (8,'Cool Jacket','2024-02-14 19:00:00',50,100,85,50,1,'marta@sapo.pt','miguel.santos@email.pt',8,2),
     (9,'Bluetooth Columns','2024-03-19 00:00:00',150,300,255,150,1,'mauricio@gmail.com','lucas@gmail.pt',9,4),
     (10,'Pearl Necklace','2024-05-01 10:00:00',250,500,425,250,1,'jose@gmail.com','maria.silva@email.pt',10,1),
     (11,'Art of Vincent van Gogh','2024-05-02 16:30:00',362500,725000,616250,400000,1,'xico@outlook.com','ines.ribeiro@email.pt',11,5),
-    (12,'Modern Warehouse','2024-11-01 14:00:00',null,null,0,0,2,null,'lucas@gmail.pt',12,6),
+    (12,'Modern Warehouse','2024-11-01 14:00:00',0,0,0,0,2,null,'lucas@gmail.pt',12,6),
     (13,'Bluetooth Phones','2024-01-14 14:14:00',240,480,408,500,0,'mauricio@gmail.com','ana.carvalho@email.pt',13,4),
     (14,'Violin by Renowned Luthier','2024-06-14 14:30:00',75000,150000,127500,75000,1,'rafa@gmail.com','miguel.santos@email.pt',14,3);
 
